@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nike.demo.core.dao.StoreMasterDao">
+  <resultMap id="BaseResultMap" type="com.nike.demo.core.entity.StoreMaster">
+    <id column="POS_ID" jdbcType="INTEGER" property="posId" />
+    <result column="ORIGINAL_POS_ID" jdbcType="INTEGER" property="originalPosId" />
+    <result column="STORE_CODE" jdbcType="VARCHAR" property="storeCode" />
+    <result column="STORE_STATUS" jdbcType="VARCHAR" property="storeStatus" />
+    <result column="ABBREV_OWNER_GROUP_NAME" jdbcType="VARCHAR" property="abbrevOwnerGroupName" />
+    <result column="SUB_TERRITORY" jdbcType="VARCHAR" property="subTerritory" />
+    <result column="LOCAL_STORE_NAME" jdbcType="VARCHAR" property="localStoreName" />
+    <result column="STORE_STORE_NAME" jdbcType="VARCHAR" property="storeStoreName" />
+    <result column="STORE_STREET_ADDRESS_1" jdbcType="VARCHAR" property="storeStreetAddress1" />
+    <result column="ENGLISH_STORE_STREET_ADDRESS_1" jdbcType="VARCHAR" property="englishStoreStreetAddress1" />
+    <result column="TEMPORARY_STORE" jdbcType="INTEGER" property="temporaryStore" />
+    <result column="STORE_SUBPARTNER_INDICATOR" jdbcType="INTEGER" property="storeSubpartnerIndicator" />
+    <result column="STORE_RECORD_TYPE" jdbcType="VARCHAR" property="storeRecordType" />
+    <result column="GLOBAL_STORE_CHANNEL_CLASS" jdbcType="VARCHAR" property="globalStoreChannelClass" />
+    <result column="STORE_SUB_TYPE" jdbcType="VARCHAR" property="storeSubType" />
+    <result column="CHINA_STORE_SUB_CHANNEL" jdbcType="VARCHAR" property="chinaStoreSubChannel" />
+    <result column="STATE_PROVINCE" jdbcType="VARCHAR" property="stateProvince" />
+    <result column="LOCAL_PROVINCE" jdbcType="VARCHAR" property="localProvince" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="LOCAL_CITY" jdbcType="VARCHAR" property="localCity" />
+    <result column="STORE_CITY_TIER_NUMBER" jdbcType="INTEGER" property="storeCityTierNumber" />
+    <result column="LOCAL_SALES_AREA_NAMES" jdbcType="VARCHAR" property="localSalesAreaNames" />
+    <result column="SALES_AREA_NAMES" jdbcType="VARCHAR" property="salesAreaNames" />
+    <result column="CHINA_TRADE_ZONE" jdbcType="VARCHAR" property="chinaTradeZone" />
+    <result column="HOTSPOT_CLUSTER" jdbcType="VARCHAR" property="hotspotCluster" />
+    <result column="STORE_HOTSPOT_TIER" jdbcType="INTEGER" property="storeHotspotTier" />
+    <result column="STORE_ENVIRONMENT_DESCRIPTION" jdbcType="VARCHAR" property="storeEnvironmentDescription" />
+    <result column="CONSUMER_LED_CONCEPT_STORE" jdbcType="INTEGER" property="consumerLedConceptStore" />
+    <result column="MPT_STORE" jdbcType="INTEGER" property="mptStore" />
+    <result column="SOLD_TO_NUMBER" jdbcType="INTEGER" property="soldToNumber" />
+    <result column="SHIP_TO_NUMBER" jdbcType="INTEGER" property="shipToNumber" />
+    <result column="CUSTOMER_SOLD_TO" jdbcType="VARCHAR" property="customerSoldTo" />
+    <result column="APPLICATION_REASON" jdbcType="VARCHAR" property="applicationReason" />
+    <result column="DISTRIBUTION_TYPE" jdbcType="VARCHAR" property="distributionType" />
+    <result column="STORE_FIRST_OPEN_DATE" jdbcType="DATE" property="storeFirstOpenDate" />
+    <result column="STORE_LAST_OPEN_DATE" jdbcType="DATE" property="storeLastOpenDate" />
+    <result column="STORE_LAST_RENOVATION_DATE" jdbcType="DATE" property="storeLastRenovationDate" />
+    <result column="STORE_CLOSE_DATE" jdbcType="DATE" property="storeCloseDate" />
+    <result column="CLOSE_REASON_PICKLIST" jdbcType="VARCHAR" property="closeReasonPicklist" />
+    <result column="STORE_TOTAL_SPACE_SIZE" jdbcType="INTEGER" property="storeTotalSpaceSize" />
+    <result column="STORE_SELLING_SPACE_SIZE" jdbcType="INTEGER" property="storeSellingSpaceSize" />
+    <result column="FLOOR_NUMBER" jdbcType="INTEGER" property="floorNumber" />
+    <result column="TOTAL_STORIES" jdbcType="INTEGER" property="totalStories" />
+    <result column="CHINA_STORE_DISTRIBUTION_TIER" jdbcType="VARCHAR" property="chinaStoreDistributionTier" />
+    <result column="CLC_STATUS" jdbcType="VARCHAR" property="clcStatus" />
+    <result column="CLC_TARGET_DATE" jdbcType="INTEGER" property="clcTargetDate" />
+    <result column="REAL_ESTATE_CATEGORY" jdbcType="VARCHAR" property="realEstateCategory" />
+    <result column="CUSTOMER_DISTRIBUTION_TIER" jdbcType="VARCHAR" property="customerDistributionTier" />
+    <result column="STORE_TIER" jdbcType="VARCHAR" property="storeTier" />
+    <result column="STORE_LEAD_CATEGORY" jdbcType="VARCHAR" property="storeLeadCategory" />
+    <result column="FIXTURE_PROGRAM" jdbcType="VARCHAR" property="fixtureProgram" />
+    <result column="LONGITUDE" jdbcType="DECIMAL" property="longitude" />
+    <result column="LATITUDE" jdbcType="DECIMAL" property="latitude" />
+    <result column="INC" jdbcType="VARCHAR" property="inc" />
+    <result column="ADDRESS_MATCH_TYPE" jdbcType="VARCHAR" property="addressMatchType" />
+    <result column="TRADE_ZONE" jdbcType="VARCHAR" property="tradeZone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    POS_ID, ORIGINAL_POS_ID, STORE_CODE, STORE_STATUS, ABBREV_OWNER_GROUP_NAME, SUB_TERRITORY, 
+    LOCAL_STORE_NAME, STORE_STORE_NAME, STORE_STREET_ADDRESS_1, ENGLISH_STORE_STREET_ADDRESS_1, 
+    TEMPORARY_STORE, STORE_SUBPARTNER_INDICATOR, STORE_RECORD_TYPE, GLOBAL_STORE_CHANNEL_CLASS, 
+    STORE_SUB_TYPE, CHINA_STORE_SUB_CHANNEL, STATE_PROVINCE, LOCAL_PROVINCE, CITY, LOCAL_CITY, 
+    STORE_CITY_TIER_NUMBER, LOCAL_SALES_AREA_NAMES, SALES_AREA_NAMES, CHINA_TRADE_ZONE, 
+    HOTSPOT_CLUSTER, STORE_HOTSPOT_TIER, STORE_ENVIRONMENT_DESCRIPTION, CONSUMER_LED_CONCEPT_STORE, 
+    MPT_STORE, SOLD_TO_NUMBER, SHIP_TO_NUMBER, CUSTOMER_SOLD_TO, APPLICATION_REASON, 
+    DISTRIBUTION_TYPE, STORE_FIRST_OPEN_DATE, STORE_LAST_OPEN_DATE, STORE_LAST_RENOVATION_DATE, 
+    STORE_CLOSE_DATE, CLOSE_REASON_PICKLIST, STORE_TOTAL_SPACE_SIZE, STORE_SELLING_SPACE_SIZE, 
+    FLOOR_NUMBER, TOTAL_STORIES, CHINA_STORE_DISTRIBUTION_TIER, CLC_STATUS, CLC_TARGET_DATE, 
+    REAL_ESTATE_CATEGORY, CUSTOMER_DISTRIBUTION_TIER, STORE_TIER, STORE_LEAD_CATEGORY, 
+    FIXTURE_PROGRAM, LONGITUDE, LATITUDE, INC, ADDRESS_MATCH_TYPE, TRADE_ZONE
+  </sql>
+  <insert id="insertSelective" parameterType="com.nike.demo.core.entity.StoreMaster">
+    insert into nk_store_master
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="posId != null">
+        POS_ID,
+      </if>
+      <if test="originalPosId != null">
+        ORIGINAL_POS_ID,
+      </if>
+      <if test="storeCode != null">
+        STORE_CODE,
+      </if>
+      <if test="storeStatus != null">
+        STORE_STATUS,
+      </if>
+      <if test="abbrevOwnerGroupName != null">
+        ABBREV_OWNER_GROUP_NAME,
+      </if>
+      <if test="subTerritory != null">
+        SUB_TERRITORY,
+      </if>
+      <if test="localStoreName != null">
+        LOCAL_STORE_NAME,
+      </if>
+      <if test="storeStoreName != null">
+        STORE_STORE_NAME,
+      </if>
+      <if test="storeStreetAddress1 != null">
+        STORE_STREET_ADDRESS_1,
+      </if>
+      <if test="englishStoreStreetAddress1 != null">
+        ENGLISH_STORE_STREET_ADDRESS_1,
+      </if>
+      <if test="temporaryStore != null">
+        TEMPORARY_STORE,
+      </if>
+      <if test="storeSubpartnerIndicator != null">
+        STORE_SUBPARTNER_INDICATOR,
+      </if>
+      <if test="storeRecordType != null">
+        STORE_RECORD_TYPE,
+      </if>
+      <if test="globalStoreChannelClass != null">
+        GLOBAL_STORE_CHANNEL_CLASS,
+      </if>
+      <if test="storeSubType != null">
+        STORE_SUB_TYPE,
+      </if>
+      <if test="chinaStoreSubChannel != null">
+        CHINA_STORE_SUB_CHANNEL,
+      </if>
+      <if test="stateProvince != null">
+        STATE_PROVINCE,
+      </if>
+      <if test="localProvince != null">
+        LOCAL_PROVINCE,
+      </if>
+      <if test="city != null">
+        CITY,
+      </if>
+      <if test="localCity != null">
+        LOCAL_CITY,
+      </if>
+      <if test="storeCityTierNumber != null">
+        STORE_CITY_TIER_NUMBER,
+      </if>
+      <if test="localSalesAreaNames != null">
+        LOCAL_SALES_AREA_NAMES,
+      </if>
+      <if test="salesAreaNames != null">
+        SALES_AREA_NAMES,
+      </if>
+      <if test="chinaTradeZone != null">
+        CHINA_TRADE_ZONE,
+      </if>
+      <if test="hotspotCluster != null">
+        HOTSPOT_CLUSTER,
+      </if>
+      <if test="storeHotspotTier != null">
+        STORE_HOTSPOT_TIER,
+      </if>
+      <if test="storeEnvironmentDescription != null">
+        STORE_ENVIRONMENT_DESCRIPTION,
+      </if>
+      <if test="consumerLedConceptStore != null">
+        CONSUMER_LED_CONCEPT_STORE,
+      </if>
+      <if test="mptStore != null">
+        MPT_STORE,
+      </if>
+      <if test="soldToNumber != null">
+        SOLD_TO_NUMBER,
+      </if>
+      <if test="shipToNumber != null">
+        SHIP_TO_NUMBER,
+      </if>
+      <if test="customerSoldTo != null">
+        CUSTOMER_SOLD_TO,
+      </if>
+      <if test="applicationReason != null">
+        APPLICATION_REASON,
+      </if>
+      <if test="distributionType != null">
+        DISTRIBUTION_TYPE,
+      </if>
+      <if test="storeFirstOpenDate != null">
+        STORE_FIRST_OPEN_DATE,
+      </if>
+      <if test="storeLastOpenDate != null">
+        STORE_LAST_OPEN_DATE,
+      </if>
+      <if test="storeLastRenovationDate != null">
+        STORE_LAST_RENOVATION_DATE,
+      </if>
+      <if test="storeCloseDate != null">
+        STORE_CLOSE_DATE,
+      </if>
+      <if test="closeReasonPicklist != null">
+        CLOSE_REASON_PICKLIST,
+      </if>
+      <if test="storeTotalSpaceSize != null">
+        STORE_TOTAL_SPACE_SIZE,
+      </if>
+      <if test="storeSellingSpaceSize != null">
+        STORE_SELLING_SPACE_SIZE,
+      </if>
+      <if test="floorNumber != null">
+        FLOOR_NUMBER,
+      </if>
+      <if test="totalStories != null">
+        TOTAL_STORIES,
+      </if>
+      <if test="chinaStoreDistributionTier != null">
+        CHINA_STORE_DISTRIBUTION_TIER,
+      </if>
+      <if test="clcStatus != null">
+        CLC_STATUS,
+      </if>
+      <if test="clcTargetDate != null">
+        CLC_TARGET_DATE,
+      </if>
+      <if test="realEstateCategory != null">
+        REAL_ESTATE_CATEGORY,
+      </if>
+      <if test="customerDistributionTier != null">
+        CUSTOMER_DISTRIBUTION_TIER,
+      </if>
+      <if test="storeTier != null">
+        STORE_TIER,
+      </if>
+      <if test="storeLeadCategory != null">
+        STORE_LEAD_CATEGORY,
+      </if>
+      <if test="fixtureProgram != null">
+        FIXTURE_PROGRAM,
+      </if>
+      <if test="longitude != null">
+        LONGITUDE,
+      </if>
+      <if test="latitude != null">
+        LATITUDE,
+      </if>
+      <if test="inc != null">
+        INC,
+      </if>
+      <if test="addressMatchType != null">
+        ADDRESS_MATCH_TYPE,
+      </if>
+      <if test="addressMatchType != null">
+        TRADE_ZONE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="posId != null">
+        #{posId,jdbcType=INTEGER},
+      </if>
+      <if test="originalPosId != null">
+        #{originalPosId,jdbcType=INTEGER},
+      </if>
+      <if test="storeCode != null">
+        #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeStatus != null">
+        #{storeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="abbrevOwnerGroupName != null">
+        #{abbrevOwnerGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="subTerritory != null">
+        #{subTerritory,jdbcType=VARCHAR},
+      </if>
+      <if test="localStoreName != null">
+        #{localStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeStoreName != null">
+        #{storeStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeStreetAddress1 != null">
+        #{storeStreetAddress1,jdbcType=VARCHAR},
+      </if>
+      <if test="englishStoreStreetAddress1 != null">
+        #{englishStoreStreetAddress1,jdbcType=VARCHAR},
+      </if>
+      <if test="temporaryStore != null">
+        #{temporaryStore,jdbcType=INTEGER},
+      </if>
+      <if test="storeSubpartnerIndicator != null">
+        #{storeSubpartnerIndicator,jdbcType=INTEGER},
+      </if>
+      <if test="storeRecordType != null">
+        #{storeRecordType,jdbcType=VARCHAR},
+      </if>
+      <if test="globalStoreChannelClass != null">
+        #{globalStoreChannelClass,jdbcType=VARCHAR},
+      </if>
+      <if test="storeSubType != null">
+        #{storeSubType,jdbcType=VARCHAR},
+      </if>
+      <if test="chinaStoreSubChannel != null">
+        #{chinaStoreSubChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="stateProvince != null">
+        #{stateProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="localProvince != null">
+        #{localProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="localCity != null">
+        #{localCity,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCityTierNumber != null">
+        #{storeCityTierNumber,jdbcType=INTEGER},
+      </if>
+      <if test="localSalesAreaNames != null">
+        #{localSalesAreaNames,jdbcType=VARCHAR},
+      </if>
+      <if test="salesAreaNames != null">
+        #{salesAreaNames,jdbcType=VARCHAR},
+      </if>
+      <if test="chinaTradeZone != null">
+        #{chinaTradeZone,jdbcType=VARCHAR},
+      </if>
+      <if test="hotspotCluster != null">
+        #{hotspotCluster,jdbcType=VARCHAR},
+      </if>
+      <if test="storeHotspotTier != null">
+        #{storeHotspotTier,jdbcType=INTEGER},
+      </if>
+      <if test="storeEnvironmentDescription != null">
+        #{storeEnvironmentDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="consumerLedConceptStore != null">
+        #{consumerLedConceptStore,jdbcType=INTEGER},
+      </if>
+      <if test="mptStore != null">
+        #{mptStore,jdbcType=INTEGER},
+      </if>
+      <if test="soldToNumber != null">
+        #{soldToNumber,jdbcType=INTEGER},
+      </if>
+      <if test="shipToNumber != null">
+        #{shipToNumber,jdbcType=INTEGER},
+      </if>
+      <if test="customerSoldTo != null">
+        #{customerSoldTo,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationReason != null">
+        #{applicationReason,jdbcType=VARCHAR},
+      </if>
+      <if test="distributionType != null">
+        #{distributionType,jdbcType=VARCHAR},
+      </if>
+      <if test="storeFirstOpenDate != null">
+        #{storeFirstOpenDate,jdbcType=DATE},
+      </if>
+      <if test="storeLastOpenDate != null">
+        #{storeLastOpenDate,jdbcType=DATE},
+      </if>
+      <if test="storeLastRenovationDate != null">
+        #{storeLastRenovationDate,jdbcType=DATE},
+      </if>
+      <if test="storeCloseDate != null">
+        #{storeCloseDate,jdbcType=DATE},
+      </if>
+      <if test="closeReasonPicklist != null">
+        #{closeReasonPicklist,jdbcType=VARCHAR},
+      </if>
+      <if test="storeTotalSpaceSize != null">
+        #{storeTotalSpaceSize,jdbcType=INTEGER},
+      </if>
+      <if test="storeSellingSpaceSize != null">
+        #{storeSellingSpaceSize,jdbcType=INTEGER},
+      </if>
+      <if test="floorNumber != null">
+        #{floorNumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalStories != null">
+        #{totalStories,jdbcType=INTEGER},
+      </if>
+      <if test="chinaStoreDistributionTier != null">
+        #{chinaStoreDistributionTier,jdbcType=VARCHAR},
+      </if>
+      <if test="clcStatus != null">
+        #{clcStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="clcTargetDate != null">
+        #{clcTargetDate,jdbcType=INTEGER},
+      </if>
+      <if test="realEstateCategory != null">
+        #{realEstateCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="customerDistributionTier != null">
+        #{customerDistributionTier,jdbcType=VARCHAR},
+      </if>
+      <if test="storeTier != null">
+        #{storeTier,jdbcType=VARCHAR},
+      </if>
+      <if test="storeLeadCategory != null">
+        #{storeLeadCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="fixtureProgram != null">
+        #{fixtureProgram,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="inc != null">
+        #{inc,jdbcType=VARCHAR},
+      </if>
+      <if test="addressMatchType != null">
+        #{addressMatchType,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeZone != null">
+        #{tradeZone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nike.demo.core.entity.StoreMaster">
+    update nk_store_master
+    <set>
+      <if test="originalPosId != null">
+        ORIGINAL_POS_ID = #{originalPosId,jdbcType=INTEGER},
+      </if>
+      <if test="storeCode != null">
+        STORE_CODE = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeStatus != null">
+        STORE_STATUS = #{storeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="abbrevOwnerGroupName != null">
+        ABBREV_OWNER_GROUP_NAME = #{abbrevOwnerGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="subTerritory != null">
+        SUB_TERRITORY = #{subTerritory,jdbcType=VARCHAR},
+      </if>
+      <if test="localStoreName != null">
+        LOCAL_STORE_NAME = #{localStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeStoreName != null">
+        STORE_STORE_NAME = #{storeStoreName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeStreetAddress1 != null">
+        STORE_STREET_ADDRESS_1 = #{storeStreetAddress1,jdbcType=VARCHAR},
+      </if>
+      <if test="englishStoreStreetAddress1 != null">
+        ENGLISH_STORE_STREET_ADDRESS_1 = #{englishStoreStreetAddress1,jdbcType=VARCHAR},
+      </if>
+      <if test="temporaryStore != null">
+        TEMPORARY_STORE = #{temporaryStore,jdbcType=INTEGER},
+      </if>
+      <if test="storeSubpartnerIndicator != null">
+        STORE_SUBPARTNER_INDICATOR = #{storeSubpartnerIndicator,jdbcType=INTEGER},
+      </if>
+      <if test="storeRecordType != null">
+        STORE_RECORD_TYPE = #{storeRecordType,jdbcType=VARCHAR},
+      </if>
+      <if test="globalStoreChannelClass != null">
+        GLOBAL_STORE_CHANNEL_CLASS = #{globalStoreChannelClass,jdbcType=VARCHAR},
+      </if>
+      <if test="storeSubType != null">
+        STORE_SUB_TYPE = #{storeSubType,jdbcType=VARCHAR},
+      </if>
+      <if test="chinaStoreSubChannel != null">
+        CHINA_STORE_SUB_CHANNEL = #{chinaStoreSubChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="stateProvince != null">
+        STATE_PROVINCE = #{stateProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="localProvince != null">
+        LOCAL_PROVINCE = #{localProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        CITY = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="localCity != null">
+        LOCAL_CITY = #{localCity,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCityTierNumber != null">
+        STORE_CITY_TIER_NUMBER = #{storeCityTierNumber,jdbcType=INTEGER},
+      </if>
+      <if test="localSalesAreaNames != null">
+        LOCAL_SALES_AREA_NAMES = #{localSalesAreaNames,jdbcType=VARCHAR},
+      </if>
+      <if test="salesAreaNames != null">
+        SALES_AREA_NAMES = #{salesAreaNames,jdbcType=VARCHAR},
+      </if>
+      <if test="chinaTradeZone != null">
+        CHINA_TRADE_ZONE = #{chinaTradeZone,jdbcType=VARCHAR},
+      </if>
+      <if test="hotspotCluster != null">
+        HOTSPOT_CLUSTER = #{hotspotCluster,jdbcType=VARCHAR},
+      </if>
+      <if test="storeHotspotTier != null">
+        STORE_HOTSPOT_TIER = #{storeHotspotTier,jdbcType=INTEGER},
+      </if>
+      <if test="storeEnvironmentDescription != null">
+        STORE_ENVIRONMENT_DESCRIPTION = #{storeEnvironmentDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="consumerLedConceptStore != null">
+        CONSUMER_LED_CONCEPT_STORE = #{consumerLedConceptStore,jdbcType=INTEGER},
+      </if>
+      <if test="mptStore != null">
+        MPT_STORE = #{mptStore,jdbcType=INTEGER},
+      </if>
+      <if test="soldToNumber != null">
+        SOLD_TO_NUMBER = #{soldToNumber,jdbcType=INTEGER},
+      </if>
+      <if test="shipToNumber != null">
+        SHIP_TO_NUMBER = #{shipToNumber,jdbcType=INTEGER},
+      </if>
+      <if test="customerSoldTo != null">
+        CUSTOMER_SOLD_TO = #{customerSoldTo,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationReason != null">
+        APPLICATION_REASON = #{applicationReason,jdbcType=VARCHAR},
+      </if>
+      <if test="distributionType != null">
+        DISTRIBUTION_TYPE = #{distributionType,jdbcType=VARCHAR},
+      </if>
+      <if test="storeFirstOpenDate != null">
+        STORE_FIRST_OPEN_DATE = #{storeFirstOpenDate,jdbcType=DATE},
+      </if>
+      <if test="storeLastOpenDate != null">
+        STORE_LAST_OPEN_DATE = #{storeLastOpenDate,jdbcType=DATE},
+      </if>
+      <if test="storeLastRenovationDate != null">
+        STORE_LAST_RENOVATION_DATE = #{storeLastRenovationDate,jdbcType=DATE},
+      </if>
+      <if test="storeCloseDate != null">
+        STORE_CLOSE_DATE = #{storeCloseDate,jdbcType=DATE},
+      </if>
+      <if test="closeReasonPicklist != null">
+        CLOSE_REASON_PICKLIST = #{closeReasonPicklist,jdbcType=VARCHAR},
+      </if>
+      <if test="storeTotalSpaceSize != null">
+        STORE_TOTAL_SPACE_SIZE = #{storeTotalSpaceSize,jdbcType=INTEGER},
+      </if>
+      <if test="storeSellingSpaceSize != null">
+        STORE_SELLING_SPACE_SIZE = #{storeSellingSpaceSize,jdbcType=INTEGER},
+      </if>
+      <if test="floorNumber != null">
+        FLOOR_NUMBER = #{floorNumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalStories != null">
+        TOTAL_STORIES = #{totalStories,jdbcType=INTEGER},
+      </if>
+      <if test="chinaStoreDistributionTier != null">
+        CHINA_STORE_DISTRIBUTION_TIER = #{chinaStoreDistributionTier,jdbcType=VARCHAR},
+      </if>
+      <if test="clcStatus != null">
+        CLC_STATUS = #{clcStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="clcTargetDate != null">
+        CLC_TARGET_DATE = #{clcTargetDate,jdbcType=INTEGER},
+      </if>
+      <if test="realEstateCategory != null">
+        REAL_ESTATE_CATEGORY = #{realEstateCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="customerDistributionTier != null">
+        CUSTOMER_DISTRIBUTION_TIER = #{customerDistributionTier,jdbcType=VARCHAR},
+      </if>
+      <if test="storeTier != null">
+        STORE_TIER = #{storeTier,jdbcType=VARCHAR},
+      </if>
+      <if test="storeLeadCategory != null">
+        STORE_LEAD_CATEGORY = #{storeLeadCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="fixtureProgram != null">
+        FIXTURE_PROGRAM = #{fixtureProgram,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        LATITUDE = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="inc != null">
+        INC = #{inc,jdbcType=VARCHAR},
+      </if>
+      <if test="addressMatchType != null">
+        ADDRESS_MATCH_TYPE = #{addressMatchType,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeZone != null">
+        TRADE_ZONE = #{tradeZone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where POS_ID = #{posId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findData" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_store_master
+		<where>
+			<if test="abbrevOwnerGroupName!=null and abbrevOwnerGroupName!='' ">
+				or ABBREV_OWNER_GROUP_NAME like #{abbrevOwnerGroupName}
+			</if>
+			<if test="storeSubType!=null and storeSubType!='' ">
+				or STORE_SUB_TYPE = #{storeSubType}
+			</if>
+			<if test="chinaStoreSubChannel!=null and chinaStoreSubChannel!='' ">
+				or CHINA_STORE_SUB_CHANNEL = #{chinaStoreSubChannel}
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+		<if test="number!=null and number!=null">
+			limit #{number}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_store_master
+		where POS_ID = #{posId}
+	</select>
+
+	<select id="getTotalCount" parameterType="Map" resultType="Long">
+		select count(*) from nk_store_master
+		<where>
+			<if test="abbrevOwnerGroupName!=null and abbrevOwnerGroupName!='' ">
+				or ABBREV_OWNER_GROUP_NAME like #{abbrevOwnerGroupName}
+			</if>
+			<if test="storeSubType!=null and storeSubType!='' ">
+				or STORE_SUB_TYPE = #{storeSubType}
+			</if>
+			<if test="chinaStoreSubChannel!=null and chinaStoreSubChannel!='' ">
+				or CHINA_STORE_SUB_CHANNEL = #{chinaStoreSubChannel}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="deleteAll">
+		delete from nk_store_master
+		where 1=1
+	</delete>
+</mapper>

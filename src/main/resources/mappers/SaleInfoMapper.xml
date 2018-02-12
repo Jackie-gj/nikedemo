@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nike.demo.core.dao.SaleInfoDao">
+  <resultMap id="BaseResultMap" type="com.nike.demo.core.entity.SaleInfo">
+    <id column="SALE_ID" jdbcType="INTEGER" property="saleId" />
+    <result column="STORE_POS_ID" jdbcType="INTEGER" property="storePosId" />
+    <result column="PROD_CODE" jdbcType="VARCHAR" property="prodCode" />
+    <result column="PROD_LONG_NAME" jdbcType="VARCHAR" property="prodLongName" />
+    <result column="NET_SALES_UNITS" jdbcType="INTEGER" property="netSalesUnits" />
+    <result column="NET_SALES_AMT" jdbcType="VARCHAR" property="netSalesAmt" />
+    <result column="EXTENDED_MSRP_SALES_AMT" jdbcType="VARCHAR" property="extendedMsrpSalesAmt" />
+    <result column="REPORT_DATE" jdbcType="DATE" property="reportDate" />
+    <result column="STORE_PROD_ID" jdbcType="VARCHAR" property="storeProdId" />
+    <result column="DISCOUNT" jdbcType="DECIMAL" property="discount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SALE_ID, STORE_POS_ID, PROD_CODE, PROD_LONG_NAME, NET_SALES_UNITS, NET_SALES_AMT, 
+    EXTENDED_MSRP_SALES_AMT, REPORT_DATE, STORE_PROD_ID, DISCOUNT
+  </sql>
+  <insert id="insertSelective" parameterType="com.nike.demo.core.entity.SaleInfo" useGeneratedKeys="true" keyProperty="saleId">
+    insert into nk_sale_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="saleId != null">
+        SALE_ID,
+      </if>
+      <if test="storePosId != null">
+        STORE_POS_ID,
+      </if>
+      <if test="prodCode != null">
+        PROD_CODE,
+      </if>
+      <if test="prodLongName != null">
+        PROD_LONG_NAME,
+      </if>
+      <if test="netSalesUnits != null">
+        NET_SALES_UNITS,
+      </if>
+      <if test="netSalesAmt != null">
+        NET_SALES_AMT,
+      </if>
+      <if test="extendedMsrpSalesAmt != null">
+        EXTENDED_MSRP_SALES_AMT,
+      </if>
+      <if test="reportDate != null">
+        REPORT_DATE,
+      </if>
+      <if test="storeProdId != null">
+        STORE_PROD_ID,
+      </if>
+      <if test="discount != null">
+        DISCOUNT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="saleId != null">
+        #{saleId,jdbcType=INTEGER},
+      </if>
+      <if test="storePosId != null">
+        #{storePosId,jdbcType=INTEGER},
+      </if>
+      <if test="prodCode != null">
+        #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prodLongName != null">
+        #{prodLongName,jdbcType=VARCHAR},
+      </if>
+      <if test="netSalesUnits != null">
+        #{netSalesUnits,jdbcType=INTEGER},
+      </if>
+      <if test="netSalesAmt != null">
+        #{netSalesAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="extendedMsrpSalesAmt != null">
+        #{extendedMsrpSalesAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null">
+        #{reportDate,jdbcType=DATE},
+      </if>
+      <if test="storeProdId != null">
+        #{storeProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nike.demo.core.entity.SaleInfo">
+    update nk_sale_info
+    <set>
+      <if test="storePosId != null">
+        STORE_POS_ID = #{storePosId,jdbcType=INTEGER},
+      </if>
+      <if test="prodCode != null">
+        PROD_CODE = #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prodLongName != null">
+        PROD_LONG_NAME = #{prodLongName,jdbcType=VARCHAR},
+      </if>
+      <if test="netSalesUnits != null">
+        NET_SALES_UNITS = #{netSalesUnits,jdbcType=INTEGER},
+      </if>
+      <if test="netSalesAmt != null">
+        NET_SALES_AMT = #{netSalesAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="extendedMsrpSalesAmt != null">
+        EXTENDED_MSRP_SALES_AMT = #{extendedMsrpSalesAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null">
+        REPORT_DATE = #{reportDate,jdbcType=DATE},
+      </if>
+      <if test="storeProdId != null">
+        STORE_PROD_ID = #{storeProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null">
+        DISCOUNT = #{discount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where SALE_ID = #{saleId,jdbcType=INTEGER}
+  </update>
+  
+   <select id="findData" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_sale_info
+		<where>
+			<if test="reportDate!=null and reportDate!='' ">
+				REPORT_DATE = #{reportDate}
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+		<if test="number!=null and number!=null">
+			limit #{number}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="int" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_sale_info
+		where SALE_ID = #{saleId}
+	</select>
+
+	<select id="getTotalCount" parameterType="Map" resultType="Long">
+		select count(*) from nk_sale_info
+		<where>
+			<if test="reportDate!=null and reportDate!='' ">
+				REPORT_DATE = #{reportDate}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="deleteAll">
+		delete from nk_sale_info
+		where 1=1
+	</delete>
+</mapper>

@@ -1,0 +1,930 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nike.demo.core.dao.CLCDoorMasterDao">
+  <resultMap id="BaseResultMap" type="com.nike.demo.core.entity.CLCDoorMaster">
+    <id column="CLC_DOOR_ID" jdbcType="INTEGER" property="clcDoorId" />
+    <result column="CLC_DOOR_CODE" jdbcType="VARCHAR" property="clcDoorCode" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="RBP_PROGRESS" jdbcType="VARCHAR" property="rbpProgress" />
+    <result column="TERRITORY" jdbcType="VARCHAR" property="territory" />
+    <result column="NEW_CONCEPT" jdbcType="VARCHAR" property="newConcept" />
+    <result column="GLOBAL_CONCEPT" jdbcType="VARCHAR" property="globalConcept" />
+    <result column="PROJECT_TYPE" jdbcType="VARCHAR" property="projectType" />
+    <result column="EXECUTION_FLOW" jdbcType="VARCHAR" property="executionFlow" />
+    <result column="EXECUTION_WEEK_SUNDAY" jdbcType="VARCHAR" property="executionWeekSunday" />
+    <result column="EXECUTION_MONTH" jdbcType="VARCHAR" property="executionMonth" />
+    <result column="EXECUTION_SEASON" jdbcType="VARCHAR" property="executionSeason" />
+    <result column="AREA" jdbcType="VARCHAR" property="area" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="LOCAL_CITY" jdbcType="VARCHAR" property="localCity" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="CITY_TIER" jdbcType="VARCHAR" property="cityTier" />
+    <result column="CITY_GROUP" jdbcType="VARCHAR" property="cityGroup" />
+    <result column="TZ_ID" jdbcType="VARCHAR" property="tzId" />
+    <result column="TZ_NAME" jdbcType="VARCHAR" property="tzName" />
+    <result column="TZ_GROUP" jdbcType="VARCHAR" property="tzGroup" />
+    <result column="TTL_SPACE_AFT_CLC" jdbcType="INTEGER" property="ttlSpaceAftClc" />
+    <result column="FOH_AFT_CLC" jdbcType="INTEGER" property="fohAftClc" />
+    <result column="BOH_AFT_CLC" jdbcType="INTEGER" property="bohAftClc" />
+    <result column="EXTRA_BOH_AFT_CLC" jdbcType="INTEGER" property="extraBohAftClc" />
+    <result column="DISTANCE_EXTRA_BOH_TO_STORE_METER" jdbcType="INTEGER" property="distanceExtraBohToStoreMeter" />
+    <result column="POS_ID_OLD" jdbcType="VARCHAR" property="posIdOld" />
+    <result column="POS_ID_NEW_POS" jdbcType="VARCHAR" property="posIdNewPos" />
+    <result column="NAME_LOCAL" jdbcType="VARCHAR" property="nameLocal" />
+    <result column="STORE_NAME_ENGLISH" jdbcType="VARCHAR" property="storeNameEnglish" />
+    <result column="STORE_ADDRESS" jdbcType="VARCHAR" property="storeAddress" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+    <result column="ACCOUNT_GROUP" jdbcType="VARCHAR" property="accountGroup" />
+    <result column="STORE_ENVIRONMENT" jdbcType="VARCHAR" property="storeEnvironment" />
+    <result column="LEAD_CATEGORY" jdbcType="VARCHAR" property="leadCategory" />
+    <result column="SECONDARY_CATEGORY" jdbcType="VARCHAR" property="secondaryCategory" />
+    <result column="SUPPORTING_CATEGORY" jdbcType="VARCHAR" property="supportingCategory" />
+    <result column="FIRST_ASSORMTNET_SEASON" jdbcType="VARCHAR" property="firstAssormtnetSeason" />
+    <result column="ASSORTMENT_TYPE" jdbcType="VARCHAR" property="assortmentType" />
+    <result column="ASSORTMENT_REV_CLUSTER" jdbcType="VARCHAR" property="assortmentRevCluster" />
+    <result column="LEASING_EXPIRING_DATE" jdbcType="VARCHAR" property="leasingExpiringDate" />
+    <result column="REV_FCST" jdbcType="INTEGER" property="revFcst" />
+    <result column="HISTORICAL_MONTHLY_REV" jdbcType="INTEGER" property="historicalMonthlyRev" />
+    <result column="FCST_VS_HISTORICAL" jdbcType="DECIMAL" property="fcstVsHistorical" />
+    <result column="TTL_SPACE_BF_CLC" jdbcType="VARCHAR" property="ttlSpaceBfClc" />
+    <result column="FOH_BF_CLC" jdbcType="VARCHAR" property="fohBfClc" />
+    <result column="FORMAT_BF_CLC" jdbcType="VARCHAR" property="formatBfClc" />
+    <result column="FIXTURE_AF_CLC" jdbcType="VARCHAR" property="fixtureAfClc" />
+    <result column="BOC_ATTACK_PVD" jdbcType="VARCHAR" property="bocAttackPvd" />
+    <result column="FA17_ORDER_WRITE" jdbcType="VARCHAR" property="fa17OrderWrite" />
+    <result column="HO17_ORDER_WRITE" jdbcType="VARCHAR" property="ho17OrderWrite" />
+    <result column="STORE_COUNT" jdbcType="INTEGER" property="storeCount" />
+    <result column="STORE_COUNT_CHECK" jdbcType="INTEGER" property="storeCountCheck" />
+    <result column="FA15" jdbcType="VARCHAR" property="fa15" />
+    <result column="HO15" jdbcType="VARCHAR" property="ho15" />
+    <result column="SP16" jdbcType="VARCHAR" property="sp16" />
+    <result column="SU16" jdbcType="VARCHAR" property="su16" />
+    <result column="FA16" jdbcType="VARCHAR" property="fa16" />
+    <result column="HO16" jdbcType="VARCHAR" property="ho16" />
+    <result column="SP17" jdbcType="VARCHAR" property="sp17" />
+    <result column="SU17" jdbcType="VARCHAR" property="su17" />
+    <result column="FA17" jdbcType="VARCHAR" property="fa17" />
+    <result column="HO17" jdbcType="VARCHAR" property="ho17" />
+    <result column="SP18" jdbcType="VARCHAR" property="sp18" />
+    <result column="SU18" jdbcType="VARCHAR" property="su18" />
+    <result column="FIRST_RPO_DATE_OR_FROM_SEP12" jdbcType="VARCHAR" property="firstRpoDateOrFromSep12" />
+    <result column="DELAY_DAY" jdbcType="INTEGER" property="delayDay" />
+    <result column="CHANGE_COUNTER_FROM_SEP12" jdbcType="DECIMAL" property="changeCounterFromSep12" />
+    <result column="LONGITUDE" jdbcType="DECIMAL" property="longitude" />
+    <result column="LATITUDE" jdbcType="DECIMAL" property="latitude" />
+    <result column="ADDRESS_MATCH_TYPE" jdbcType="VARCHAR" property="addressMatchType" />
+    <result column="FY_QUARTER" jdbcType="VARCHAR" property="fyQuarter" />
+    <result column="SUPPORT_RATE" jdbcType="VARCHAR" property="supportRate" />
+    <result column="CHANGE_TYPE" jdbcType="VARCHAR" property="changeType" />
+    <result column="UPDATED_EXECUTION_FLOW" jdbcType="VARCHAR" property="updatedExecutionFlow" />
+    <result column="REASON_DESCRIPTION" jdbcType="VARCHAR" property="reasonDescription" />
+    <result column="KEY_CATEGORIZATION_OF_DELAY_REASONS" jdbcType="VARCHAR" property="keyCategorizationOfDelayReasons" />
+    <result column="REQUESTER" jdbcType="VARCHAR" property="requester" />
+    <result column="DATE_OF_CHANGE_REQUEST" jdbcType="DATE" property="dateOfChangeRequest" />
+    <result column="END" jdbcType="VARCHAR" property="end" />
+    <result column="THIS_WEEK_OPENED" jdbcType="VARCHAR" property="thisWeekOpened" />
+    <result column="FORMAT" jdbcType="VARCHAR" property="format" />
+    <result column="AE_NAME" jdbcType="VARCHAR" property="aeName" />
+    <result column="PROJECT_FROM" jdbcType="VARCHAR" property="projectFrom" />
+    <result column="PROJECT_TO" jdbcType="VARCHAR" property="projectTo" />
+    <result column="FIRST_CLC_DATE_FOR_MI" jdbcType="DATE" property="firstClcDateForMi" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    CLC_DOOR_ID, CLC_DOOR_CODE, STATUS, RBP_PROGRESS, TERRITORY, NEW_CONCEPT, GLOBAL_CONCEPT, PROJECT_TYPE, 
+    EXECUTION_FLOW, EXECUTION_WEEK_SUNDAY, EXECUTION_MONTH, EXECUTION_SEASON, AREA, PROVINCE, 
+    LOCAL_CITY, CITY, CITY_TIER, CITY_GROUP, TZ_ID, TZ_NAME, TZ_GROUP, TTL_SPACE_AFT_CLC, 
+    FOH_AFT_CLC, BOH_AFT_CLC, EXTRA_BOH_AFT_CLC, DISTANCE_EXTRA_BOH_TO_STORE_METER, POS_ID_OLD, 
+    POS_ID_NEW_POS, NAME_LOCAL, STORE_NAME_ENGLISH, STORE_ADDRESS, ACCOUNT, ACCOUNT_GROUP, 
+    STORE_ENVIRONMENT, LEAD_CATEGORY, SECONDARY_CATEGORY, SUPPORTING_CATEGORY, FIRST_ASSORMTNET_SEASON, 
+    ASSORTMENT_TYPE, ASSORTMENT_REV_CLUSTER, LEASING_EXPIRING_DATE, REV_FCST, HISTORICAL_MONTHLY_REV, 
+    FCST_VS_HISTORICAL, TTL_SPACE_BF_CLC, FOH_BF_CLC, FORMAT_BF_CLC, FIXTURE_AF_CLC, 
+    BOC_ATTACK_PVD, FA17_ORDER_WRITE, HO17_ORDER_WRITE, STORE_COUNT, STORE_COUNT_CHECK, 
+    FA15, HO15, SP16, SU16, FA16, HO16, SP17, SU17, FA17, HO17, SP18, SU18, FIRST_RPO_DATE_OR_FROM_SEP12, 
+    DELAY_DAY, CHANGE_COUNTER_FROM_SEP12, LONGITUDE, LATITUDE, ADDRESS_MATCH_TYPE, FY_QUARTER, 
+    SUPPORT_RATE, CHANGE_TYPE, UPDATED_EXECUTION_FLOW, REASON_DESCRIPTION, KEY_CATEGORIZATION_OF_DELAY_REASONS, 
+    REQUESTER, DATE_OF_CHANGE_REQUEST, END, THIS_WEEK_OPENED, FORMAT, AE_NAME, PROJECT_FROM, 
+    PROJECT_TO, FIRST_CLC_DATE_FOR_MI
+  </sql>
+  <insert id="insertSelective" parameterType="com.nike.demo.core.entity.CLCDoorMaster" useGeneratedKeys="true" keyProperty="clcDoorId">
+    insert into nk_clc_door_master
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clcDoorId != null">
+        CLC_DOOR_ID,
+      </if>
+      <if test="clcDoorCode != null">
+        CLC_DOOR_CODE,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="rbpProgress != null">
+        RBP_PROGRESS,
+      </if>
+      <if test="territory != null">
+        TERRITORY,
+      </if>
+      <if test="newConcept != null">
+        NEW_CONCEPT,
+      </if>
+      <if test="globalConcept != null">
+        GLOBAL_CONCEPT,
+      </if>
+      <if test="projectType != null">
+        PROJECT_TYPE,
+      </if>
+      <if test="executionFlow != null">
+        EXECUTION_FLOW,
+      </if>
+      <if test="executionWeekSunday != null">
+        EXECUTION_WEEK_SUNDAY,
+      </if>
+      <if test="executionMonth != null">
+        EXECUTION_MONTH,
+      </if>
+      <if test="executionSeason != null">
+        EXECUTION_SEASON,
+      </if>
+      <if test="area != null">
+        AREA,
+      </if>
+      <if test="province != null">
+        PROVINCE,
+      </if>
+      <if test="localCity != null">
+        LOCAL_CITY,
+      </if>
+      <if test="city != null">
+        CITY,
+      </if>
+      <if test="cityTier != null">
+        CITY_TIER,
+      </if>
+      <if test="cityGroup != null">
+        CITY_GROUP,
+      </if>
+      <if test="tzId != null">
+        TZ_ID,
+      </if>
+      <if test="tzName != null">
+        TZ_NAME,
+      </if>
+      <if test="tzGroup != null">
+        TZ_GROUP,
+      </if>
+      <if test="ttlSpaceAftClc != null">
+        TTL_SPACE_AFT_CLC,
+      </if>
+      <if test="fohAftClc != null">
+        FOH_AFT_CLC,
+      </if>
+      <if test="bohAftClc != null">
+        BOH_AFT_CLC,
+      </if>
+      <if test="extraBohAftClc != null">
+        EXTRA_BOH_AFT_CLC,
+      </if>
+      <if test="distanceExtraBohToStoreMeter != null">
+        DISTANCE_EXTRA_BOH_TO_STORE_METER,
+      </if>
+      <if test="posIdOld != null">
+        POS_ID_OLD,
+      </if>
+      <if test="posIdNewPos != null">
+        POS_ID_NEW_POS,
+      </if>
+      <if test="nameLocal != null">
+        NAME_LOCAL,
+      </if>
+      <if test="storeNameEnglish != null">
+        STORE_NAME_ENGLISH,
+      </if>
+      <if test="storeAddress != null">
+        STORE_ADDRESS,
+      </if>
+      <if test="account != null">
+        ACCOUNT,
+      </if>
+      <if test="accountGroup != null">
+        ACCOUNT_GROUP,
+      </if>
+      <if test="storeEnvironment != null">
+        STORE_ENVIRONMENT,
+      </if>
+      <if test="leadCategory != null">
+        LEAD_CATEGORY,
+      </if>
+      <if test="secondaryCategory != null">
+        SECONDARY_CATEGORY,
+      </if>
+      <if test="supportingCategory != null">
+        SUPPORTING_CATEGORY,
+      </if>
+      <if test="firstAssormtnetSeason != null">
+        FIRST_ASSORMTNET_SEASON,
+      </if>
+      <if test="assortmentType != null">
+        ASSORTMENT_TYPE,
+      </if>
+      <if test="assortmentRevCluster != null">
+        ASSORTMENT_REV_CLUSTER,
+      </if>
+      <if test="leasingExpiringDate != null">
+        LEASING_EXPIRING_DATE,
+      </if>
+      <if test="revFcst != null">
+        REV_FCST,
+      </if>
+      <if test="historicalMonthlyRev != null">
+        HISTORICAL_MONTHLY_REV,
+      </if>
+      <if test="fcstVsHistorical != null">
+        FCST_VS_HISTORICAL,
+      </if>
+      <if test="ttlSpaceBfClc != null">
+        TTL_SPACE_BF_CLC,
+      </if>
+      <if test="fohBfClc != null">
+        FOH_BF_CLC,
+      </if>
+      <if test="formatBfClc != null">
+        FORMAT_BF_CLC,
+      </if>
+      <if test="fixtureAfClc != null">
+        FIXTURE_AF_CLC,
+      </if>
+      <if test="bocAttackPvd != null">
+        BOC_ATTACK_PVD,
+      </if>
+      <if test="fa17OrderWrite != null">
+        FA17_ORDER_WRITE,
+      </if>
+      <if test="ho17OrderWrite != null">
+        HO17_ORDER_WRITE,
+      </if>
+      <if test="storeCount != null">
+        STORE_COUNT,
+      </if>
+      <if test="storeCountCheck != null">
+        STORE_COUNT_CHECK,
+      </if>
+      <if test="fa15 != null">
+        FA15,
+      </if>
+      <if test="ho15 != null">
+        HO15,
+      </if>
+      <if test="sp16 != null">
+        SP16,
+      </if>
+      <if test="su16 != null">
+        SU16,
+      </if>
+      <if test="fa16 != null">
+        FA16,
+      </if>
+      <if test="ho16 != null">
+        HO16,
+      </if>
+      <if test="sp17 != null">
+        SP17,
+      </if>
+      <if test="su17 != null">
+        SU17,
+      </if>
+      <if test="fa17 != null">
+        FA17,
+      </if>
+      <if test="ho17 != null">
+        HO17,
+      </if>
+      <if test="sp18 != null">
+        SP18,
+      </if>
+      <if test="su18 != null">
+        SU18,
+      </if>
+      <if test="firstRpoDateOrFromSep12 != null">
+        FIRST_RPO_DATE_OR_FROM_SEP12,
+      </if>
+      <if test="delayDay != null">
+        DELAY_DAY,
+      </if>
+      <if test="changeCounterFromSep12 != null">
+        CHANGE_COUNTER_FROM_SEP12,
+      </if>
+      <if test="longitude != null">
+        LONGITUDE,
+      </if>
+      <if test="latitude != null">
+        LATITUDE,
+      </if>
+      <if test="addressMatchType != null">
+        ADDRESS_MATCH_TYPE,
+      </if>
+      <if test="fyQuarter != null">
+        FY_QUARTER,
+      </if>
+      <if test="supportRate != null">
+        SUPPORT_RATE,
+      </if>
+      <if test="changeType != null">
+        CHANGE_TYPE,
+      </if>
+      <if test="updatedExecutionFlow != null">
+        UPDATED_EXECUTION_FLOW,
+      </if>
+      <if test="reasonDescription != null">
+        REASON_DESCRIPTION,
+      </if>
+      <if test="keyCategorizationOfDelayReasons != null">
+        KEY_CATEGORIZATION_OF_DELAY_REASONS,
+      </if>
+      <if test="requester != null">
+        REQUESTER,
+      </if>
+      <if test="dateOfChangeRequest != null">
+        DATE_OF_CHANGE_REQUEST,
+      </if>
+      <if test="end != null">
+        END,
+      </if>
+      <if test="thisWeekOpened != null">
+        THIS_WEEK_OPENED,
+      </if>
+      <if test="format != null">
+        FORMAT,
+      </if>
+      <if test="aeName != null">
+        AE_NAME,
+      </if>
+      <if test="projectFrom != null">
+        PROJECT_FROM,
+      </if>
+      <if test="projectTo != null">
+        PROJECT_TO,
+      </if>
+      <if test="firstClcDateForMi != null">
+        FIRST_CLC_DATE_FOR_MI,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clcDoorId != null">
+        #{clcDoorId,jdbcType=Integer},
+      </if>
+      <if test="clcDoorCode != null">
+        #{clcDoorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="rbpProgress != null">
+        #{rbpProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="territory != null">
+        #{territory,jdbcType=VARCHAR},
+      </if>
+      <if test="newConcept != null">
+        #{newConcept,jdbcType=VARCHAR},
+      </if>
+      <if test="globalConcept != null">
+        #{globalConcept,jdbcType=VARCHAR},
+      </if>
+      <if test="projectType != null">
+        #{projectType,jdbcType=VARCHAR},
+      </if>
+      <if test="executionFlow != null">
+        #{executionFlow,jdbcType=VARCHAR},
+      </if>
+      <if test="executionWeekSunday != null">
+        #{executionWeekSunday,jdbcType=VARCHAR},
+      </if>
+      <if test="executionMonth != null">
+        #{executionMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="executionSeason != null">
+        #{executionSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="localCity != null">
+        #{localCity,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cityTier != null">
+        #{cityTier,jdbcType=VARCHAR},
+      </if>
+      <if test="cityGroup != null">
+        #{cityGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="tzId != null">
+        #{tzId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzName != null">
+        #{tzName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzGroup != null">
+        #{tzGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="ttlSpaceAftClc != null">
+        #{ttlSpaceAftClc,jdbcType=INTEGER},
+      </if>
+      <if test="fohAftClc != null">
+        #{fohAftClc,jdbcType=INTEGER},
+      </if>
+      <if test="bohAftClc != null">
+        #{bohAftClc,jdbcType=INTEGER},
+      </if>
+      <if test="extraBohAftClc != null">
+        #{extraBohAftClc,jdbcType=INTEGER},
+      </if>
+      <if test="distanceExtraBohToStoreMeter != null">
+        #{distanceExtraBohToStoreMeter,jdbcType=INTEGER},
+      </if>
+      <if test="posIdOld != null">
+        #{posIdOld,jdbcType=VARCHAR},
+      </if>
+      <if test="posIdNewPos != null">
+        #{posIdNewPos,jdbcType=VARCHAR},
+      </if>
+      <if test="nameLocal != null">
+        #{nameLocal,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNameEnglish != null">
+        #{storeNameEnglish,jdbcType=VARCHAR},
+      </if>
+      <if test="storeAddress != null">
+        #{storeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="accountGroup != null">
+        #{accountGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="storeEnvironment != null">
+        #{storeEnvironment,jdbcType=VARCHAR},
+      </if>
+      <if test="leadCategory != null">
+        #{leadCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="secondaryCategory != null">
+        #{secondaryCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="supportingCategory != null">
+        #{supportingCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="firstAssormtnetSeason != null">
+        #{firstAssormtnetSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentType != null">
+        #{assortmentType,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentRevCluster != null">
+        #{assortmentRevCluster,jdbcType=VARCHAR},
+      </if>
+      <if test="leasingExpiringDate != null">
+        #{leasingExpiringDate,jdbcType=VARCHAR},
+      </if>
+      <if test="revFcst != null">
+        #{revFcst,jdbcType=INTEGER},
+      </if>
+      <if test="historicalMonthlyRev != null">
+        #{historicalMonthlyRev,jdbcType=INTEGER},
+      </if>
+      <if test="fcstVsHistorical != null">
+        #{fcstVsHistorical,jdbcType=DECIMAL},
+      </if>
+      <if test="ttlSpaceBfClc != null">
+        #{ttlSpaceBfClc,jdbcType=VARCHAR},
+      </if>
+      <if test="fohBfClc != null">
+        #{fohBfClc,jdbcType=VARCHAR},
+      </if>
+      <if test="formatBfClc != null">
+        #{formatBfClc,jdbcType=VARCHAR},
+      </if>
+      <if test="fixtureAfClc != null">
+        #{fixtureAfClc,jdbcType=VARCHAR},
+      </if>
+      <if test="bocAttackPvd != null">
+        #{bocAttackPvd,jdbcType=VARCHAR},
+      </if>
+      <if test="fa17OrderWrite != null">
+        #{fa17OrderWrite,jdbcType=VARCHAR},
+      </if>
+      <if test="ho17OrderWrite != null">
+        #{ho17OrderWrite,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCount != null">
+        #{storeCount,jdbcType=INTEGER},
+      </if>
+      <if test="storeCountCheck != null">
+        #{storeCountCheck,jdbcType=INTEGER},
+      </if>
+      <if test="fa15 != null">
+        #{fa15,jdbcType=VARCHAR},
+      </if>
+      <if test="ho15 != null">
+        #{ho15,jdbcType=VARCHAR},
+      </if>
+      <if test="sp16 != null">
+        #{sp16,jdbcType=VARCHAR},
+      </if>
+      <if test="su16 != null">
+        #{su16,jdbcType=VARCHAR},
+      </if>
+      <if test="fa16 != null">
+        #{fa16,jdbcType=VARCHAR},
+      </if>
+      <if test="ho16 != null">
+        #{ho16,jdbcType=VARCHAR},
+      </if>
+      <if test="sp17 != null">
+        #{sp17,jdbcType=VARCHAR},
+      </if>
+      <if test="su17 != null">
+        #{su17,jdbcType=VARCHAR},
+      </if>
+      <if test="fa17 != null">
+        #{fa17,jdbcType=VARCHAR},
+      </if>
+      <if test="ho17 != null">
+        #{ho17,jdbcType=VARCHAR},
+      </if>
+      <if test="sp18 != null">
+        #{sp18,jdbcType=VARCHAR},
+      </if>
+      <if test="su18 != null">
+        #{su18,jdbcType=VARCHAR},
+      </if>
+      <if test="firstRpoDateOrFromSep12 != null">
+        #{firstRpoDateOrFromSep12,jdbcType=VARCHAR},
+      </if>
+      <if test="delayDay != null">
+        #{delayDay,jdbcType=INTEGER},
+      </if>
+      <if test="changeCounterFromSep12 != null">
+        #{changeCounterFromSep12,jdbcType=DECIMAL},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="addressMatchType != null">
+        #{addressMatchType,jdbcType=VARCHAR},
+      </if>
+      <if test="fyQuarter != null">
+        #{fyQuarter,jdbcType=VARCHAR},
+      </if>
+      <if test="supportRate != null">
+        #{supportRate,jdbcType=VARCHAR},
+      </if>
+      <if test="changeType != null">
+        #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedExecutionFlow != null">
+        #{updatedExecutionFlow,jdbcType=VARCHAR},
+      </if>
+      <if test="reasonDescription != null">
+        #{reasonDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="keyCategorizationOfDelayReasons != null">
+        #{keyCategorizationOfDelayReasons,jdbcType=VARCHAR},
+      </if>
+      <if test="requester != null">
+        #{requester,jdbcType=VARCHAR},
+      </if>
+      <if test="dateOfChangeRequest != null">
+        #{dateOfChangeRequest,jdbcType=DATE},
+      </if>
+      <if test="end != null">
+        #{end,jdbcType=VARCHAR},
+      </if>
+      <if test="thisWeekOpened != null">
+        #{thisWeekOpened,jdbcType=VARCHAR},
+      </if>
+      <if test="format != null">
+        #{format,jdbcType=VARCHAR},
+      </if>
+      <if test="aeName != null">
+        #{aeName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectFrom != null">
+        #{projectFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="projectTo != null">
+        #{projectTo,jdbcType=VARCHAR},
+      </if>
+      <if test="firstClcDateForMi != null">
+        #{firstClcDateForMi,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nike.demo.core.entity.CLCDoorMaster">
+    update nk_clc_door_master
+    <set>
+      <if test="clcDoorCode != null">
+        CLC_DOOR_CODE,
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="rbpProgress != null">
+        RBP_PROGRESS = #{rbpProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="territory != null">
+        TERRITORY = #{territory,jdbcType=VARCHAR},
+      </if>
+      <if test="newConcept != null">
+        NEW_CONCEPT = #{newConcept,jdbcType=VARCHAR},
+      </if>
+      <if test="globalConcept != null">
+        GLOBAL_CONCEPT = #{globalConcept,jdbcType=VARCHAR},
+      </if>
+      <if test="projectType != null">
+        PROJECT_TYPE = #{projectType,jdbcType=VARCHAR},
+      </if>
+      <if test="executionFlow != null">
+        EXECUTION_FLOW = #{executionFlow,jdbcType=VARCHAR},
+      </if>
+      <if test="executionWeekSunday != null">
+        EXECUTION_WEEK_SUNDAY = #{executionWeekSunday,jdbcType=VARCHAR},
+      </if>
+      <if test="executionMonth != null">
+        EXECUTION_MONTH = #{executionMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="executionSeason != null">
+        EXECUTION_SEASON = #{executionSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        AREA = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        PROVINCE = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="localCity != null">
+        LOCAL_CITY = #{localCity,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        CITY = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cityTier != null">
+        CITY_TIER = #{cityTier,jdbcType=VARCHAR},
+      </if>
+      <if test="cityGroup != null">
+        CITY_GROUP = #{cityGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="tzId != null">
+        TZ_ID = #{tzId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzName != null">
+        TZ_NAME = #{tzName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzGroup != null">
+        TZ_GROUP = #{tzGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="ttlSpaceAftClc != null">
+        TTL_SPACE_AFT_CLC = #{ttlSpaceAftClc,jdbcType=INTEGER},
+      </if>
+      <if test="fohAftClc != null">
+        FOH_AFT_CLC = #{fohAftClc,jdbcType=INTEGER},
+      </if>
+      <if test="bohAftClc != null">
+        BOH_AFT_CLC = #{bohAftClc,jdbcType=INTEGER},
+      </if>
+      <if test="extraBohAftClc != null">
+        EXTRA_BOH_AFT_CLC = #{extraBohAftClc,jdbcType=INTEGER},
+      </if>
+      <if test="distanceExtraBohToStoreMeter != null">
+        DISTANCE_EXTRA_BOH_TO_STORE_METER = #{distanceExtraBohToStoreMeter,jdbcType=INTEGER},
+      </if>
+      <if test="posIdOld != null">
+        POS_ID_OLD = #{posIdOld,jdbcType=VARCHAR},
+      </if>
+      <if test="posIdNewPos != null">
+        POS_ID_NEW_POS = #{posIdNewPos,jdbcType=VARCHAR},
+      </if>
+      <if test="nameLocal != null">
+        NAME_LOCAL = #{nameLocal,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNameEnglish != null">
+        STORE_NAME_ENGLISH = #{storeNameEnglish,jdbcType=VARCHAR},
+      </if>
+      <if test="storeAddress != null">
+        STORE_ADDRESS = #{storeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="accountGroup != null">
+        ACCOUNT_GROUP = #{accountGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="storeEnvironment != null">
+        STORE_ENVIRONMENT = #{storeEnvironment,jdbcType=VARCHAR},
+      </if>
+      <if test="leadCategory != null">
+        LEAD_CATEGORY = #{leadCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="secondaryCategory != null">
+        SECONDARY_CATEGORY = #{secondaryCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="supportingCategory != null">
+        SUPPORTING_CATEGORY = #{supportingCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="firstAssormtnetSeason != null">
+        FIRST_ASSORMTNET_SEASON = #{firstAssormtnetSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentType != null">
+        ASSORTMENT_TYPE = #{assortmentType,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentRevCluster != null">
+        ASSORTMENT_REV_CLUSTER = #{assortmentRevCluster,jdbcType=VARCHAR},
+      </if>
+      <if test="leasingExpiringDate != null">
+        LEASING_EXPIRING_DATE = #{leasingExpiringDate,jdbcType=VARCHAR},
+      </if>
+      <if test="revFcst != null">
+        REV_FCST = #{revFcst,jdbcType=INTEGER},
+      </if>
+      <if test="historicalMonthlyRev != null">
+        HISTORICAL_MONTHLY_REV = #{historicalMonthlyRev,jdbcType=INTEGER},
+      </if>
+      <if test="fcstVsHistorical != null">
+        FCST_VS_HISTORICAL = #{fcstVsHistorical,jdbcType=DECIMAL},
+      </if>
+      <if test="ttlSpaceBfClc != null">
+        TTL_SPACE_BF_CLC = #{ttlSpaceBfClc,jdbcType=VARCHAR},
+      </if>
+      <if test="fohBfClc != null">
+        FOH_BF_CLC = #{fohBfClc,jdbcType=VARCHAR},
+      </if>
+      <if test="formatBfClc != null">
+        FORMAT_BF_CLC = #{formatBfClc,jdbcType=VARCHAR},
+      </if>
+      <if test="fixtureAfClc != null">
+        FIXTURE_AF_CLC = #{fixtureAfClc,jdbcType=VARCHAR},
+      </if>
+      <if test="bocAttackPvd != null">
+        BOC_ATTACK_PVD = #{bocAttackPvd,jdbcType=VARCHAR},
+      </if>
+      <if test="fa17OrderWrite != null">
+        FA17_ORDER_WRITE = #{fa17OrderWrite,jdbcType=VARCHAR},
+      </if>
+      <if test="ho17OrderWrite != null">
+        HO17_ORDER_WRITE = #{ho17OrderWrite,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCount != null">
+        STORE_COUNT = #{storeCount,jdbcType=INTEGER},
+      </if>
+      <if test="storeCountCheck != null">
+        STORE_COUNT_CHECK = #{storeCountCheck,jdbcType=INTEGER},
+      </if>
+      <if test="fa15 != null">
+        FA15 = #{fa15,jdbcType=VARCHAR},
+      </if>
+      <if test="ho15 != null">
+        HO15 = #{ho15,jdbcType=VARCHAR},
+      </if>
+      <if test="sp16 != null">
+        SP16 = #{sp16,jdbcType=VARCHAR},
+      </if>
+      <if test="su16 != null">
+        SU16 = #{su16,jdbcType=VARCHAR},
+      </if>
+      <if test="fa16 != null">
+        FA16 = #{fa16,jdbcType=VARCHAR},
+      </if>
+      <if test="ho16 != null">
+        HO16 = #{ho16,jdbcType=VARCHAR},
+      </if>
+      <if test="sp17 != null">
+        SP17 = #{sp17,jdbcType=VARCHAR},
+      </if>
+      <if test="su17 != null">
+        SU17 = #{su17,jdbcType=VARCHAR},
+      </if>
+      <if test="fa17 != null">
+        FA17 = #{fa17,jdbcType=VARCHAR},
+      </if>
+      <if test="ho17 != null">
+        HO17 = #{ho17,jdbcType=VARCHAR},
+      </if>
+      <if test="sp18 != null">
+        SP18 = #{sp18,jdbcType=VARCHAR},
+      </if>
+      <if test="su18 != null">
+        SU18 = #{su18,jdbcType=VARCHAR},
+      </if>
+      <if test="firstRpoDateOrFromSep12 != null">
+        FIRST_RPO_DATE_OR_FROM_SEP12 = #{firstRpoDateOrFromSep12,jdbcType=VARCHAR},
+      </if>
+      <if test="delayDay != null">
+        DELAY_DAY = #{delayDay,jdbcType=INTEGER},
+      </if>
+      <if test="changeCounterFromSep12 != null">
+        CHANGE_COUNTER_FROM_SEP12 = #{changeCounterFromSep12,jdbcType=DECIMAL},
+      </if>
+      <if test="longitude != null">
+        LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null">
+        LATITUDE = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="addressMatchType != null">
+        ADDRESS_MATCH_TYPE = #{addressMatchType,jdbcType=VARCHAR},
+      </if>
+      <if test="fyQuarter != null">
+        FY_QUARTER = #{fyQuarter,jdbcType=VARCHAR},
+      </if>
+      <if test="supportRate != null">
+        SUPPORT_RATE = #{supportRate,jdbcType=VARCHAR},
+      </if>
+      <if test="changeType != null">
+        CHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedExecutionFlow != null">
+        UPDATED_EXECUTION_FLOW = #{updatedExecutionFlow,jdbcType=VARCHAR},
+      </if>
+      <if test="reasonDescription != null">
+        REASON_DESCRIPTION = #{reasonDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="keyCategorizationOfDelayReasons != null">
+        KEY_CATEGORIZATION_OF_DELAY_REASONS = #{keyCategorizationOfDelayReasons,jdbcType=VARCHAR},
+      </if>
+      <if test="requester != null">
+        REQUESTER = #{requester,jdbcType=VARCHAR},
+      </if>
+      <if test="dateOfChangeRequest != null">
+        DATE_OF_CHANGE_REQUEST = #{dateOfChangeRequest,jdbcType=DATE},
+      </if>
+      <if test="end != null">
+        END = #{end,jdbcType=VARCHAR},
+      </if>
+      <if test="thisWeekOpened != null">
+        THIS_WEEK_OPENED = #{thisWeekOpened,jdbcType=VARCHAR},
+      </if>
+      <if test="format != null">
+        FORMAT = #{format,jdbcType=VARCHAR},
+      </if>
+      <if test="aeName != null">
+        AE_NAME = #{aeName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectFrom != null">
+        PROJECT_FROM = #{projectFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="projectTo != null">
+        PROJECT_TO = #{projectTo,jdbcType=VARCHAR},
+      </if>
+      <if test="firstClcDateForMi != null">
+        FIRST_CLC_DATE_FOR_MI = #{firstClcDateForMi,jdbcType=DATE},
+      </if>
+    </set>
+    where CLC_DOOR_ID = #{clcDoorId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findData" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_clc_door_master
+		<where>
+			<if test="status!=null and status!='' ">
+				STATUS = #{status}
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+		<if test="number!=null and number!=null">
+			limit #{number}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="int" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_clc_door_master
+		where CLC_DOOR_ID = #{clcDoorId,jdbcType=INTEGER}
+	</select>
+
+	<select id="getTotalCount" parameterType="Map" resultType="Long">
+		select count(*) from nk_clc_door_master
+		<where>
+			<if test="status!=null and status!='' ">
+				STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="deleteAll">
+		delete from nk_clc_door_master
+		where 1=1
+	</delete>
+</mapper>

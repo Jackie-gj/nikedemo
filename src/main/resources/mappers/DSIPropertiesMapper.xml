@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nike.demo.core.dao.DSIPropertiesDao">
+	<resultMap id="BaseResultMap" type="com.nike.demo.core.entity.DSIProperties">
+		<result column="group_name" jdbcType="VARCHAR" property="groupName" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="value" jdbcType="VARCHAR" property="value" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="alias" jdbcType="VARCHAR" property="alias" />
+		<result column="column_name" jdbcType="VARCHAR" property="columnName" />
+		<result column="column_width" jdbcType="INTEGER" property="columnWidth" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		group_name, name, value, status, alias, column_name, column_width
+	</sql>
+	<insert id="insertSelective" parameterType="com.nike.demo.core.entity.DSIProperties">
+		insert into nk_dsi_properties
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="groupName != null">
+				group_name,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="value != null">
+				value,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="alias != null">
+				alias,
+			</if>
+			<if test="columnName != null">
+				column_name,
+			</if>
+			<if test="columnWidth != null">
+				column_width,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="groupName != null">
+				#{groupName,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="value != null">
+				#{value,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="alias != null">
+				#{alias,jdbcType=VARCHAR},
+			</if>
+			<if test="columnName != null">
+				#{columnName,jdbcType=VARCHAR},
+			</if>
+			<if test="columnWidth != null">
+				#{columnWidth,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateSelective" parameterType="com.nike.demo.core.entity.DSIProperties">
+		update nk_dsi_properties
+		<set>
+			<if test="groupName != null">
+				group_name = #{groupName,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="value != null">
+				value = #{value,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="alias != null">
+				alias = #{alias,jdbcType=VARCHAR},
+			</if>
+			<if test="columnName != null">
+				column_name = #{columnName,jdbcType=VARCHAR},
+			</if>
+			<if test="columnWidth != null">
+				column_width = #{columnWidth,jdbcType=INTEGER},
+			</if>
+		</set>
+		where group_name = #{groupName,jdbcType=VARCHAR}
+		and name = #{name,jdbcType=VARCHAR}
+	</update>
+
+	<select id="findByGroupName" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_dsi_properties
+		where group_name = #{groupName,jdbcType=VARCHAR}
+		and status = 1
+	</select>
+
+	<select id="findByGroupNames" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_dsi_properties
+		where group_name in
+		<foreach collection="list" item="groupName" index="index"
+			open="(" close=")" separator=",">
+			#{groupName}
+		</foreach>
+		and status = 1
+	</select>
+</mapper>

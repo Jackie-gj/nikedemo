@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nike.demo.core.dao.PreparedDataDao">
+  <resultMap id="BaseResultMap" type="com.nike.demo.core.entity.PreparedData">
+    <result column="Store_Prod_Id" jdbcType="VARCHAR" property="storeProdId" />
+    <result column="WEEKNO" jdbcType="BIGINT" property="weekno" />
+    <result column="NET_SALES_UNITS" jdbcType="INTEGER" property="netSalesUnits" />
+    <result column="Prod_id" jdbcType="VARCHAR" property="prodId" />
+    <result column="COLOR_MAIN" jdbcType="VARCHAR" property="colorMain" />
+    <result column="GBL_CAT_SUM_LONG_DESC" jdbcType="VARCHAR" property="gblCatSumLongDesc" />
+    <result column="Ctgy_Ptfm" jdbcType="VARCHAR" property="ctgyPtfm" />
+    <result column="GNDR_GROUP_NM" jdbcType="VARCHAR" property="gndrGroupNm" />
+    <result column="GBL_SILH_LONG_DESC" jdbcType="VARCHAR" property="gblSilhLongDesc" />
+    <result column="REG_MSRP" jdbcType="DECIMAL" property="regMsrp" />
+    <result column="PRICE" jdbcType="VARCHAR" property="price" />
+    <result column="FTW_PLATFORM" jdbcType="VARCHAR" property="ftwPlatform" />
+    <result column="ICON_FRANCHISE" jdbcType="VARCHAR" property="iconFranchise" />
+    <result column="POS_ID" jdbcType="INTEGER" property="posId" />
+    <result column="STORE_RECORD_TYPE" jdbcType="VARCHAR" property="storeRecordType" />
+    <result column="SUB_TERRITORY" jdbcType="VARCHAR" property="subTerritory" />
+    <result column="STORE_ENVIRONMENT_DESCRIPTION" jdbcType="VARCHAR" property="storeEnvironmentDescription" />
+    <result column="SALES_AREA_NAMES" jdbcType="VARCHAR" property="salesAreaNames" />
+    <result column="STORE_CITY_TIER_NUMBER" jdbcType="INTEGER" property="storeCityTierNumber" />
+    <result column="STORE_LEAD_CATEGORY" jdbcType="VARCHAR" property="storeLeadCategory" />
+    <result column="ABBREV_OWNER_GROUP_NAME" jdbcType="VARCHAR" property="abbrevOwnerGroupName" />
+    <result column="trade_zone" jdbcType="VARCHAR" property="tradeZone" />
+    <result column="store_type" jdbcType="VARCHAR" property="storeType" />
+    <result column="clc_status" jdbcType="VARCHAR" property="clcStatus" />
+    <result column="quart" jdbcType="VARCHAR" property="quart" />
+  </resultMap>
+  <sql id="Base_Column_List">
+		Store_Prod_Id, WEEKNO, NET_SALES_UNITS, Prod_id, COLOR_MAIN, GBL_CAT_SUM_LONG_DESC, Ctgy_Ptfm,
+		GNDR_GROUP_NM,GBL_SILH_LONG_DESC,REG_MSRP,PRICE, FTW_PLATFORM,ICON_FRANCHISE,
+		POS_ID,STORE_RECORD_TYPE,SUB_TERRITORY,STORE_ENVIRONMENT_DESCRIPTION,
+		SALES_AREA_NAMES,STORE_CITY_TIER_NUMBER,STORE_LEAD_CATEGORY,ABBREV_OWNER_GROUP_NAME,trade_zone,store_type,clc_status,quart
+	</sql>
+  <insert id="insertSelective" parameterType="com.nike.demo.core.entity.PreparedData">
+    insert into nk_prepared_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="storeProdId != null">
+        Store_Prod_Id,
+      </if>
+      <if test="weekno != null">
+        WEEKNO,
+      </if>
+      <if test="netSalesUnits != null">
+        NET_SALES_UNITS,
+      </if>
+      <if test="prodId != null">
+        Prod_id,
+      </if>
+      <if test="colorMain != null">
+        COLOR_MAIN,
+      </if>
+      <if test="gblCatSumLongDesc != null">
+        GBL_CAT_SUM_LONG_DESC,
+      </if>
+      <if test="ctgyPtfm != null">
+        Ctgy_Ptfm,
+      </if>
+      <if test="gndrGroupNm != null">
+        GNDR_GROUP_NM,
+      </if>
+      <if test="gblSilhLongDesc != null">
+        GBL_SILH_LONG_DESC,
+      </if>
+      <if test="regMsrp != null">
+        REG_MSRP,
+      </if>
+      <if test="price != null">
+        PRICE,
+      </if>
+      <if test="ftwPlatform != null">
+        FTW_PLATFORM,
+      </if>
+      <if test="iconFranchise != null">
+        ICON_FRANCHISE,
+      </if>
+      <if test="posId != null">
+        POS_ID,
+      </if>
+      <if test="storeRecordType != null">
+        STORE_RECORD_TYPE,
+      </if>
+      <if test="subTerritory != null">
+        SUB_TERRITORY,
+      </if>
+      <if test="storeEnvironmentDescription != null">
+        STORE_ENVIRONMENT_DESCRIPTION,
+      </if>
+      <if test="salesAreaNames != null">
+        SALES_AREA_NAMES,
+      </if>
+      <if test="storeCityTierNumber != null">
+        STORE_CITY_TIER_NUMBER,
+      </if>
+      <if test="storeLeadCategory != null">
+        STORE_LEAD_CATEGORY,
+      </if>
+      <if test="abbrevOwnerGroupName != null">
+        ABBREV_OWNER_GROUP_NAME,
+      </if>
+      <if test="tradeZone != null">
+        trade_zone,
+      </if>
+      <if test="storeType != null">
+        store_type,
+      </if>
+      <if test="clcStatus != null">
+        clc_status,
+      </if>
+      <if test="quart != null">
+        quart,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="storeProdId != null">
+        #{storeProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="weekno != null">
+        #{weekno,jdbcType=BIGINT},
+      </if>
+      <if test="netSalesUnits != null">
+        #{netSalesUnits,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="colorMain != null">
+        #{colorMain,jdbcType=VARCHAR},
+      </if>
+      <if test="gblCatSumLongDesc != null">
+        #{gblCatSumLongDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="ctgyPtfm != null">
+        #{ctgyPtfm,jdbcType=VARCHAR},
+      </if>
+      <if test="gndrGroupNm != null">
+        #{gndrGroupNm,jdbcType=VARCHAR},
+      </if>
+      <if test="gblSilhLongDesc != null">
+        #{gblSilhLongDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="regMsrp != null">
+        #{regMsrp,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="ftwPlatform != null">
+        #{ftwPlatform,jdbcType=VARCHAR},
+      </if>
+      <if test="iconFranchise != null">
+        #{iconFranchise,jdbcType=VARCHAR},
+      </if>
+      <if test="posId != null">
+        #{posId,jdbcType=INTEGER},
+      </if>
+      <if test="storeRecordType != null">
+        #{storeRecordType,jdbcType=VARCHAR},
+      </if>
+      <if test="subTerritory != null">
+        #{subTerritory,jdbcType=VARCHAR},
+      </if>
+      <if test="storeEnvironmentDescription != null">
+        #{storeEnvironmentDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="salesAreaNames != null">
+        #{salesAreaNames,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCityTierNumber != null">
+        #{storeCityTierNumber,jdbcType=INTEGER},
+      </if>
+      <if test="storeLeadCategory != null">
+        #{storeLeadCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="abbrevOwnerGroupName != null">
+        #{abbrevOwnerGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeZone != null">
+        #{tradeZone,jdbcType=VARCHAR},
+      </if>
+      <if test="storeType != null">
+        #{storeType,jdbcType=VARCHAR},
+      </if>
+      <if test="clcStatus != null">
+        #{clcStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="quart != null">
+        #{quart,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="findByQuart" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_prepared_data
+		where quart = #{quart,jdbcType=VARCHAR}
+	</select>
+</mapper>

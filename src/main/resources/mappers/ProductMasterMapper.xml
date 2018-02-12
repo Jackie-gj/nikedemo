@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nike.demo.core.dao.ProductMasterDao">
+	<resultMap id="BaseResultMap" type="com.nike.demo.core.entity.ProductMaster">
+		<result column="MATL_NBR" jdbcType="VARCHAR" property="matlNbr" />
+		<result column="SEASON" jdbcType="VARCHAR" property="season" />
+		<result column="STYLE_CD" jdbcType="VARCHAR" property="styleCd" />
+		<result column="PROD_ENGN_DESC" jdbcType="VARCHAR" property="prodEngnDesc" />
+		<result column="MATL_LONG_NM" jdbcType="VARCHAR" property="matlLongNm" />
+		<result column="COLOR_CD" jdbcType="VARCHAR" property="colorCd" />
+		<result column="COLOR_DESC" jdbcType="VARCHAR" property="colorDesc" />
+		<result column="GBL_CAT_SUM_LONG_DESC" jdbcType="VARCHAR"
+			property="gblCatSumLongDesc" />
+		<result column="GBL_CAT_CORE_FOCS_LONG_DESC" jdbcType="VARCHAR"
+			property="gblCatCoreFocsLongDesc" />
+		<result column="GBL_PROD_SUB_CAT_LONG_DESC" jdbcType="VARCHAR"
+			property="gblProdSubCatLongDesc" />
+		<result column="SUB_CAT_DESC" jdbcType="VARCHAR" property="subCatDesc" />
+		<result column="REG_CAT_LONG_DESC_SLS_ORG" jdbcType="VARCHAR"
+			property="regCatLongDescSlsOrg" />
+		<result column="GNDR_GROUP_NM" jdbcType="VARCHAR" property="gndrGroupNm" />
+		<result column="Gender_Details" jdbcType="VARCHAR" property="genderDetails" />
+		<result column="KIDS_AGE" jdbcType="VARCHAR" property="kidsAge" />
+		<result column="GBL_SILH_LONG_DESC" jdbcType="VARCHAR"
+			property="gblSilhLongDesc" />
+		<result column="GBL_SILH_SHRT_DESC" jdbcType="VARCHAR"
+			property="gblSilhShrtDesc" />
+		<result column="TOP_BOTTOM" jdbcType="VARCHAR" property="topBottom" />
+		<result column="REG_MSRP" jdbcType="DECIMAL" property="regMsrp" />
+		<result column="MODEL" jdbcType="VARCHAR" property="model" />
+		<result column="BM_CLASSIFICATION" jdbcType="VARCHAR" property="bmClassification" />
+		<result column="BM_CLASSIFICATION_DETAIL" jdbcType="VARCHAR"
+			property="bmClassificationDetail" />
+		<result column="FTW_PLATFORM" jdbcType="VARCHAR" property="ftwPlatform" />
+		<result column="EQP_Product_Type" jdbcType="VARCHAR" property="eqpProductType" />
+		<result column="REG_3PE_CAT" jdbcType="VARCHAR" property="reg3peCat" />
+		<result column="OMD" jdbcType="DATE" property="omd" />
+		<result column="SILO" jdbcType="VARCHAR" property="silo" />
+		<result column="BRAND_STORY_NM" jdbcType="VARCHAR" property="brandStoryNm" />
+		<result column="CTRY_RETAIL_SIZE_RANGE" jdbcType="VARCHAR"
+			property="ctryRetailSizeRange" />
+		<result column="ICON_FRANCHISE" jdbcType="VARCHAR" property="iconFranchise" />
+		<result column="PRIMARY_STORY" jdbcType="VARCHAR" property="primaryStory" />
+		<result column="SECONDARY_STORY" jdbcType="VARCHAR" property="secondaryStory" />
+		<result column="SEASONAL_STORY" jdbcType="VARCHAR" property="seasonalStory" />
+		<result column="RETAIL_MATL_PRC_ZONE" jdbcType="VARCHAR"
+			property="retailMatlPrcZone" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		MATL_NBR, SEASON, STYLE_CD, PROD_ENGN_DESC, MATL_LONG_NM, COLOR_CD,
+		COLOR_DESC, GBL_CAT_SUM_LONG_DESC, GBL_CAT_CORE_FOCS_LONG_DESC,
+		GBL_PROD_SUB_CAT_LONG_DESC,
+		SUB_CAT_DESC, REG_CAT_LONG_DESC_SLS_ORG, GNDR_GROUP_NM, Gender_Details, KIDS_AGE,
+		GBL_SILH_LONG_DESC, GBL_SILH_SHRT_DESC, TOP_BOTTOM, REG_MSRP, MODEL,
+		BM_CLASSIFICATION,
+		BM_CLASSIFICATION_DETAIL, FTW_PLATFORM, EQP_Product_Type, REG_3PE_CAT, OMD, SILO,
+		BRAND_STORY_NM, CTRY_RETAIL_SIZE_RANGE, ICON_FRANCHISE, PRIMARY_STORY,
+		SECONDARY_STORY,
+		SEASONAL_STORY, RETAIL_MATL_PRC_ZONE
+	</sql>
+	<select id="findData" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_prod_master
+		<where>
+			<if test="season!=null and season!='' ">
+				or season like #{season}
+			</if>
+			<if test="prodEngnDesc!=null and prodEngnDesc!='' ">
+				or PROD_ENGN_DESC = #{prodEngnDesc}
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+		<if test="number!=null and number!=null">
+			limit #{number}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from nk_prod_master
+		where MATL_NBR = #{matlNbr}
+	</select>
+
+	<select id="getTotalCount" parameterType="Map" resultType="Long">
+		select count(*) from nk_prod_master
+		<where>
+			<if test="season!=null and season!='' ">
+				or season like #{season}
+			</if>
+			<if test="prodEngnDesc!=null and prodEngnDesc!='' ">
+				or PROD_ENGN_DESC = #{prodEngnDesc}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertSelective" parameterType="com.nike.demo.core.entity.ProductMaster">
+		insert into nk_prod_master
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="matlNbr != null">
+				MATL_NBR,
+			</if>
+			<if test="season != null">
+				SEASON,
+			</if>
+			<if test="styleCd != null">
+				STYLE_CD,
+			</if>
+			<if test="prodEngnDesc != null">
+				PROD_ENGN_DESC,
+			</if>
+			<if test="matlLongNm != null">
+				MATL_LONG_NM,
+			</if>
+			<if test="colorCd != null">
+				COLOR_CD,
+			</if>
+			<if test="colorDesc != null">
+				COLOR_DESC,
+			</if>
+			<if test="gblCatSumLongDesc != null">
+				GBL_CAT_SUM_LONG_DESC,
+			</if>
+			<if test="gblCatCoreFocsLongDesc != null">
+				GBL_CAT_CORE_FOCS_LONG_DESC,
+			</if>
+			<if test="gblProdSubCatLongDesc != null">
+				GBL_PROD_SUB_CAT_LONG_DESC,
+			</if>
+			<if test="subCatDesc != null">
+				SUB_CAT_DESC,
+			</if>
+			<if test="regCatLongDescSlsOrg != null">
+				REG_CAT_LONG_DESC_SLS_ORG,
+			</if>
+			<if test="gndrGroupNm != null">
+				GNDR_GROUP_NM,
+			</if>
+			<if test="genderDetails != null">
+				Gender_Details,
+			</if>
+			<if test="kidsAge != null">
+				KIDS_AGE,
+			</if>
+			<if test="gblSilhLongDesc != null">
+				GBL_SILH_LONG_DESC,
+			</if>
+			<if test="gblSilhShrtDesc != null">
+				GBL_SILH_SHRT_DESC,
+			</if>
+			<if test="topBottom != null">
+				TOP_BOTTOM,
+			</if>
+			<if test="regMsrp != null">
+				REG_MSRP,
+			</if>
+			<if test="model != null">
+				MODEL,
+			</if>
+			<if test="bmClassification != null">
+				BM_CLASSIFICATION,
+			</if>
+			<if test="bmClassificationDetail != null">
+				BM_CLASSIFICATION_DETAIL,
+			</if>
+			<if test="ftwPlatform != null">
+				FTW_PLATFORM,
+			</if>
+			<if test="eqpProductType != null">
+				EQP_Product_Type,
+			</if>
+			<if test="reg3peCat != null">
+				REG_3PE_CAT,
+			</if>
+			<if test="omd != null">
+				OMD,
+			</if>
+			<if test="silo != null">
+				SILO,
+			</if>
+			<if test="brandStoryNm != null">
+				BRAND_STORY_NM,
+			</if>
+			<if test="ctryRetailSizeRange != null">
+				CTRY_RETAIL_SIZE_RANGE,
+			</if>
+			<if test="iconFranchise != null">
+				ICON_FRANCHISE,
+			</if>
+			<if test="primaryStory != null">
+				PRIMARY_STORY,
+			</if>
+			<if test="secondaryStory != null">
+				SECONDARY_STORY,
+			</if>
+			<if test="seasonalStory != null">
+				SEASONAL_STORY,
+			</if>
+			<if test="retailMatlPrcZone != null">
+				RETAIL_MATL_PRC_ZONE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="matlNbr != null">
+				#{matlNbr,jdbcType=VARCHAR},
+			</if>
+			<if test="season != null">
+				#{season,jdbcType=VARCHAR},
+			</if>
+			<if test="styleCd != null">
+				#{styleCd,jdbcType=VARCHAR},
+			</if>
+			<if test="prodEngnDesc != null">
+				#{prodEngnDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="matlLongNm != null">
+				#{matlLongNm,jdbcType=VARCHAR},
+			</if>
+			<if test="colorCd != null">
+				#{colorCd,jdbcType=VARCHAR},
+			</if>
+			<if test="colorDesc != null">
+				#{colorDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="gblCatSumLongDesc != null">
+				#{gblCatSumLongDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="gblCatCoreFocsLongDesc != null">
+				#{gblCatCoreFocsLongDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="gblProdSubCatLongDesc != null">
+				#{gblProdSubCatLongDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="subCatDesc != null">
+				#{subCatDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="regCatLongDescSlsOrg != null">
+				#{regCatLongDescSlsOrg,jdbcType=VARCHAR},
+			</if>
+			<if test="gndrGroupNm != null">
+				#{gndrGroupNm,jdbcType=VARCHAR},
+			</if>
+			<if test="genderDetails != null">
+				#{genderDetails,jdbcType=VARCHAR},
+			</if>
+			<if test="kidsAge != null">
+				#{kidsAge,jdbcType=VARCHAR},
+			</if>
+			<if test="gblSilhLongDesc != null">
+				#{gblSilhLongDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="gblSilhShrtDesc != null">
+				#{gblSilhShrtDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="topBottom != null">
+				#{topBottom,jdbcType=VARCHAR},
+			</if>
+			<if test="regMsrp != null">
+				#{regMsrp,jdbcType=DECIMAL},
+			</if>
+			<if test="model != null">
+				#{model,jdbcType=VARCHAR},
+			</if>
+			<if test="bmClassification != null">
+				#{bmClassification,jdbcType=VARCHAR},
+			</if>
+			<if test="bmClassificationDetail != null">
+				#{bmClassificationDetail,jdbcType=VARCHAR},
+			</if>
+			<if test="ftwPlatform != null">
+				#{ftwPlatform,jdbcType=VARCHAR},
+			</if>
+			<if test="eqpProductType != null">
+				#{eqpProductType,jdbcType=VARCHAR},
+			</if>
+			<if test="reg3peCat != null">
+				#{reg3peCat,jdbcType=VARCHAR},
+			</if>
+			<if test="omd != null">
+				#{omd,jdbcType=DATE},
+			</if>
+			<if test="silo != null">
+				#{silo,jdbcType=VARCHAR},
+			</if>
+			<if test="brandStoryNm != null">
+				#{brandStoryNm,jdbcType=VARCHAR},
+			</if>
+			<if test="ctryRetailSizeRange != null">
+				#{ctryRetailSizeRange,jdbcType=VARCHAR},
+			</if>
+			<if test="iconFranchise != null">
+				#{iconFranchise,jdbcType=VARCHAR},
+			</if>
+			<if test="primaryStory != null">
+				#{primaryStory,jdbcType=VARCHAR},
+			</if>
+			<if test="secondaryStory != null">
+				#{secondaryStory,jdbcType=VARCHAR},
+			</if>
+			<if test="seasonalStory != null">
+				#{seasonalStory,jdbcType=VARCHAR},
+			</if>
+			<if test="retailMatlPrcZone != null">
+				#{retailMatlPrcZone,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.nike.demo.core.entity.ProductMaster">
+		update nk_prod_master
+		<set>
+			<if test="season != null">
+				SEASON = #{season,jdbcType=VARCHAR},
+			</if>
+			<if test="styleCd != null">
+				STYLE_CD = #{styleCd,jdbcType=VARCHAR},
+			</if>
+			<if test="prodEngnDesc != null">
+				PROD_ENGN_DESC = #{prodEngnDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="matlLongNm != null">
+				MATL_LONG_NM = #{matlLongNm,jdbcType=VARCHAR},
+			</if>
+			<if test="colorCd != null">
+				COLOR_CD = #{colorCd,jdbcType=VARCHAR},
+			</if>
+			<if test="colorDesc != null">
+				COLOR_DESC = #{colorDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="gblCatSumLongDesc != null">
+				GBL_CAT_SUM_LONG_DESC = #{gblCatSumLongDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="gblCatCoreFocsLongDesc != null">
+				GBL_CAT_CORE_FOCS_LONG_DESC = #{gblCatCoreFocsLongDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="gblProdSubCatLongDesc != null">
+				GBL_PROD_SUB_CAT_LONG_DESC = #{gblProdSubCatLongDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="subCatDesc != null">
+				SUB_CAT_DESC = #{subCatDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="regCatLongDescSlsOrg != null">
+				REG_CAT_LONG_DESC_SLS_ORG = #{regCatLongDescSlsOrg,jdbcType=VARCHAR},
+			</if>
+			<if test="gndrGroupNm != null">
+				GNDR_GROUP_NM = #{gndrGroupNm,jdbcType=VARCHAR},
+			</if>
+			<if test="genderDetails != null">
+				Gender_Details = #{genderDetails,jdbcType=VARCHAR},
+			</if>
+			<if test="kidsAge != null">
+				KIDS_AGE = #{kidsAge,jdbcType=VARCHAR},
+			</if>
+			<if test="gblSilhLongDesc != null">
+				GBL_SILH_LONG_DESC = #{gblSilhLongDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="gblSilhShrtDesc != null">
+				GBL_SILH_SHRT_DESC = #{gblSilhShrtDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="topBottom != null">
+				TOP_BOTTOM = #{topBottom,jdbcType=VARCHAR},
+			</if>
+			<if test="regMsrp != null">
+				REG_MSRP = #{regMsrp,jdbcType=DECIMAL},
+			</if>
+			<if test="model != null">
+				MODEL = #{model,jdbcType=VARCHAR},
+			</if>
+			<if test="bmClassification != null">
+				BM_CLASSIFICATION = #{bmClassification,jdbcType=VARCHAR},
+			</if>
+			<if test="bmClassificationDetail != null">
+				BM_CLASSIFICATION_DETAIL = #{bmClassificationDetail,jdbcType=VARCHAR},
+			</if>
+			<if test="ftwPlatform != null">
+				FTW_PLATFORM = #{ftwPlatform,jdbcType=VARCHAR},
+			</if>
+			<if test="eqpProductType != null">
+				EQP_Product_Type = #{eqpProductType,jdbcType=VARCHAR},
+			</if>
+			<if test="reg3peCat != null">
+				REG_3PE_CAT = #{reg3peCat,jdbcType=VARCHAR},
+			</if>
+			<if test="omd != null">
+				OMD = #{omd,jdbcType=DATE},
+			</if>
+			<if test="silo != null">
+				SILO = #{silo,jdbcType=VARCHAR},
+			</if>
+			<if test="brandStoryNm != null">
+				BRAND_STORY_NM = #{brandStoryNm,jdbcType=VARCHAR},
+			</if>
+			<if test="ctryRetailSizeRange != null">
+				CTRY_RETAIL_SIZE_RANGE = #{ctryRetailSizeRange,jdbcType=VARCHAR},
+			</if>
+			<if test="iconFranchise != null">
+				ICON_FRANCHISE = #{iconFranchise,jdbcType=VARCHAR},
+			</if>
+			<if test="primaryStory != null">
+				PRIMARY_STORY = #{primaryStory,jdbcType=VARCHAR},
+			</if>
+			<if test="secondaryStory != null">
+				SECONDARY_STORY = #{secondaryStory,jdbcType=VARCHAR},
+			</if>
+			<if test="seasonalStory != null">
+				SEASONAL_STORY = #{seasonalStory,jdbcType=VARCHAR},
+			</if>
+			<if test="retailMatlPrcZone != null">
+				RETAIL_MATL_PRC_ZONE = #{retailMatlPrcZone,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where MATL_NBR = #{matlNbr,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		nk_prod_master
+		where MATL_NBR = #{matlNbr,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteAll">
+		delete from nk_prod_master
+		where 1=1
+	</delete>
+
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into nk_prod_master
+		(MATL_NBR,
+		SEASON,
+		STYLE_CD,
+		PROD_ENGN_DESC,
+		MATL_LONG_NM,
+		COLOR_CD,
+		COLOR_DESC,
+		GBL_CAT_SUM_LONG_DESC,
+		GBL_CAT_CORE_FOCS_LONG_DESC,
+		GBL_PROD_SUB_CAT_LONG_DESC,
+		SUB_CAT_DESC,
+		REG_CAT_LONG_DESC_SLS_ORG,
+		GNDR_GROUP_NM,
+		Gender_Details,
+		KIDS_AGE,
+		GBL_SILH_LONG_DESC,
+		GBL_SILH_SHRT_DESC,
+		TOP_BOTTOM,
+		REG_MSRP,
+		MODEL,
+		BM_CLASSIFICATION,
+		BM_CLASSIFICATION_DETAIL,
+		FTW_PLATFORM,
+		EQP_Product_Type,
+		REG_3PE_CAT,
+		OMD,
+		SILO,
+		BRAND_STORY_NM,
+		CTRY_RETAIL_SIZE_RANGE,
+		ICON_FRANCHISE,
+		PRIMARY_STORY,
+		SECONDARY_STORY,
+		SEASONAL_STORY,
+		RETAIL_MATL_PRC_ZONE)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.matlNbr},
+			#{item.season},
+			#{item.styleCd},
+			#{item.prodEngnDesc},
+			#{item.matlLongNm},
+			#{item.colorCd},
+			#{item.colorDesc},
+			#{item.gblCatSumLongDesc},
+			#{item.gblCatCoreFocsLongDesc},
+			#{item.gblProdSubCatLongDesc},
+			#{item.subCatDesc},
+			#{item.regCatLongDescSlsOrg},
+			#{item.gndrGroupNm},
+			#{item.genderDetails},
+			#{item.kidsAge},
+			#{item.gblSilhLongDesc},
+			#{item.gblSilhShrtDesc},
+			#{item.topBottom},
+			#{item.regMsrp},
+			#{item.model},
+			#{item.bmClassification},
+			#{item.bmClassificationDetail},
+			#{item.ftwPlatform},
+			#{item.eqpProductType},
+			#{item.reg3peCat},
+			#{item.omd},
+			#{item.silo},
+			#{item.brandStoryNm},
+			#{item.ctryRetailSizeRange},
+			#{item.iconFranchise},
+			#{item.primaryStory},
+			#{item.secondaryStory},
+			#{item.seasonalStory},
+			#{item.retailMatlPrcZone}
+			)
+		</foreach>
+	</insert>
+</mapper>
