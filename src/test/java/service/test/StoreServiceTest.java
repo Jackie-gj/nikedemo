@@ -60,7 +60,7 @@ class SubProcessor implements Runnable {
 	private PreparedDataDao preparedDataDao;
 
 	public void run() {
-		preparedDataDao.findByQuart(seasonYear);
+		//preparedDataDao.findByQuart(seasonYear);
 		System.out.println(Thread.currentThread().getName() + " is done.");
 	}
 

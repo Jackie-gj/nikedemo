@@ -1,6 +1,7 @@
 package com.nike.demo.core.service.processor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,18 +22,24 @@ import org.springframework.web.context.WebApplicationContext;
 import com.nike.demo.core.entity.ExtractData;
 import com.nike.demo.core.entity.PreparedData;
 import com.nike.demo.core.service.PreparedDataService;
+import com.nike.demo.core.util.CamelCaseUtils;
 
 public class PreparedDataProcessor implements Runnable {
 
 	private String seasonYear;
 	
+	private String[] propsArray;
+
 	private Vector<CentroidCluster<ExtractData>> resultList;
 
+	private static final String DEF_COL_DELIMITER = ",";
+	
 	private static final Logger log = Logger.getLogger(PreparedDataProcessor.class);
 
-	public PreparedDataProcessor(String seasonYear, Vector<CentroidCluster<ExtractData>> resultList) {
-		super();
+	public PreparedDataProcessor(String seasonYear, String[] propsArray,
+			Vector<CentroidCluster<ExtractData>> resultList) {
 		this.seasonYear = seasonYear;
+		this.propsArray = propsArray;
 		this.resultList = resultList;
 	}
 
@@ -40,8 +47,25 @@ public class PreparedDataProcessor implements Runnable {
 	public void run() {
 		WebApplicationContext appContext = ContextLoader.getCurrentWebApplicationContext();
 		PreparedDataService preparedDataService = appContext.getBean(PreparedDataService.class);
+
 		// fetch prepared data from DB
-		List<PreparedData> dataList = preparedDataService.findByQuart(seasonYear);
+		List<PreparedData> dataList = new ArrayList<PreparedData>();
+		try {
+			Map<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("quart", "'" + seasonYear + "'");
+			String columns = "";
+			if(null != propsArray && 0 < propsArray.length) {
+				for (int i = 0; i < propsArray.length; i++) {
+					propsArray[i] = CamelCaseUtils.toUnderlineName(propsArray[i]);
+				}
+				columns = String.join(DEF_COL_DELIMITER, propsArray);
+			}
+			paramMap.put("columns", columns);
+			dataList = preparedDataService.findByQuart(paramMap);
+		} catch (Exception e1) {
+			log.error(e1);
+			return;
+		}
 
 		// group by store + prod id
 		List<ExtractData> extractDataList = new ArrayList<ExtractData>();
@@ -87,9 +111,6 @@ public class PreparedDataProcessor implements Runnable {
 			extractDataList.add(extractData);
 		}
 
-		// sort by store_prod_id
-		// extractDataList.sort((a, b) -> a.getStoreProdId().compareTo(b.getStoreProdId()));
-
 		// first round for clustering
 		KMeansPlusPlusClusterer<ExtractData> kMeansPlusPlusClusterer = new KMeansPlusPlusClusterer<ExtractData>(6, 800,
 				new EuclideanDistance());
@@ -105,9 +126,8 @@ public class PreparedDataProcessor implements Runnable {
 			System.out.println(Thread.currentThread().getName() + ": " + clusterName + ": " + cl.getPoints().size());
 			k++;
 		}
-		
+
 		resultList.addAll(sortedList);
-		
 	}
 
 	public PreparedDataProcessor() {

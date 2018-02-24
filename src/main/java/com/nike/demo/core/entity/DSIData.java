@@ -31,6 +31,8 @@ public class DSIData {
 	private Integer diffsum;
 	
 	private Integer sampSize;
+	
+	private Integer salesNum;
 
 	public String getProperty1() {
 		return property1;
@@ -142,6 +144,14 @@ public class DSIData {
 
 	public void setSampSize(Integer sampSize) {
 		this.sampSize = sampSize;
+	}
+
+	public Integer getSalesNum() {
+		return salesNum;
+	}
+
+	public void setSalesNum(Integer salesNum) {
+		this.salesNum = salesNum;
 	}
 
 	public DSIData(String property1, String property2, String property3, String property4, String property5,

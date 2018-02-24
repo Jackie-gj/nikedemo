@@ -1,5 +1,10 @@
 package com.nike.demo.core.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,16 +21,25 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.ml.clustering.CentroidCluster;
 import org.apache.commons.math3.ml.clustering.KMeansPlusPlusClusterer;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nike.demo.core.entity.DSIData;
 import com.nike.demo.core.entity.DSIProperties;
@@ -34,15 +48,18 @@ import com.nike.demo.core.entity.enums.SeasonYear;
 import com.nike.demo.core.service.DSIPropertiesService;
 import com.nike.demo.core.service.PreparedDataService;
 import com.nike.demo.core.service.UserService;
+import com.nike.demo.core.service.processor.CSVWriterProcessor;
 import com.nike.demo.core.service.processor.PreparedDataProcessor;
 import com.nike.demo.core.util.ResponseUtil;
+import com.opencsv.bean.ColumnPositionMappingStrategy;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import shapeless.newtype;
 
 @Controller
 @RequestMapping("/module")
-@Scope("prototype")
+//@Scope("prototype")
 public class ModuleResultController {
 
 	@Resource
@@ -58,7 +75,7 @@ public class ModuleResultController {
 	
 	private static final String DEFAULT_STR_SEPARATOR = "_";
 	
-	private static final int DEFAULT_THREAD_POOL_SIZE = 1;
+	private static final int DEFAULT_THREAD_POOL_SIZE = 2;
 	
 	private static final int DEFAULT_WAIT_EXECUTOR_MINS = 5;
 	
@@ -69,11 +86,14 @@ public class ModuleResultController {
 	private static final String STR_CLUSTER_C = "Cluster C";
 	private static final String STR_CLUSTER_D = "Cluster D";
 	
-	private Vector<CentroidCluster<ExtractData>> processedList = new Vector<>();
-
+	private static final String STR_CSV_ATTR = "csv";
+	private static final String STR_CSV_PATH = "/csv/";
+	private static final String STR_CSV_EXTENTION = ".csv";
+	private static final String STR_CSV_PREFIX = "Export_";
+	
 	@SuppressWarnings("serial")
 	@RequestMapping("/generate")
-	public String generate(String dsiProperties, String seasonYear, String prodType, HttpServletResponse response) throws Exception {
+	public String generate(String dsiProperties, String seasonYear, String prodType, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// check params
 		if (null == seasonYear || null == prodType || null == dsiProperties || dsiProperties.isEmpty()) {
 			return null;
@@ -96,6 +116,10 @@ public class ModuleResultController {
 		Set<String> keySet = dsiPropertiesMap.keySet();
 		Integer mapSize = keySet.stream().mapToInt(key -> dsiPropertiesMap.get(key).size()).reduce((left, right) -> left * right).getAsInt();
 		log.debug("properties size: " + mapSize);
+		if (333 > mapSize) {
+			// TODO return to front-end 
+			// 333 need to be configured on DB or properties
+		}
 		
 		// final output list
 		List<DSIData> outputList = new ArrayList<DSIData>(mapSize);
@@ -143,7 +167,6 @@ public class ModuleResultController {
 		} else {
 			return null; // TODO error message
 		}
-		outputList.stream().forEach(item -> log.debug(item));
 		
 		// do not use clone method since the reference list will not be duplicated
 		HashMap<String, List<ExtractData>> totalDataMap = outputList.stream().collect(HashMap::new,
@@ -161,11 +184,14 @@ public class ModuleResultController {
 		HashMap<String, List<ExtractData>> dataMap4 = outputList.stream().collect(HashMap::new,
 				(map, d) -> map.put(concatPropertyNames(d.getProperties()), new ArrayList<ExtractData>()), Map::putAll);
 
-		// start 4(default) thread to fetch data from db and combine into one list
+		// start 4(default) threads to fetch data from db and combine into one list
+		Vector<CentroidCluster<ExtractData>> processedList = new Vector<CentroidCluster<ExtractData>>();
 		ExecutorService threadPool =  Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
 		SeasonYear selectSeasonYear = SeasonYear.valueOf(seasonYear);
 		for (int i = 0; i <= DEFAULT_BACKWARD_SEASONS; i++) {
-			threadPool.submit(new PreparedDataProcessor(SeasonYear.getByIndex(selectSeasonYear.getIndex() - i).name(), processedList));
+			String[] propsArrayCopy = new String[propsArray.length];
+			System.arraycopy(propsArray, 0, propsArrayCopy, 0, propsArray.length);
+			threadPool.submit(new PreparedDataProcessor(SeasonYear.getByIndex(selectSeasonYear.getIndex() - i).name(), propsArrayCopy, processedList));
 		}
 		threadPool.shutdown();
 		threadPool.awaitTermination(DEFAULT_WAIT_EXECUTOR_MINS, TimeUnit.MINUTES);
@@ -216,7 +242,7 @@ public class ModuleResultController {
 					}
 					totalDataMap.get(key).add(a);
 				} else {
-					log.info(key + "is not existing in the final output list");
+					log.info(key + " is not existing in the final output list");
 				}
 			});
 		}
@@ -267,6 +293,7 @@ public class ModuleResultController {
 				item.setSd(sdArray[3]);
 			}
 			item.setSampSize(totalDataMap.get(key).size());
+			item.setSalesNum(totalDataMap.get(key).stream().mapToInt(t -> t.getNetSalesUnits()).sum());
 			
 			//sample size < 300 case, force set Cluster C
 			if (item.getSampSize() <= 300) {
@@ -276,6 +303,27 @@ public class ModuleResultController {
 		});
 		
 		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
+		
+		ExecutorService threadPool2 =  Executors.newCachedThreadPool();
+		String path = request.getServletContext().getRealPath(STR_CSV_PATH);
+		String fileName = STR_CSV_PREFIX + System.currentTimeMillis() + STR_CSV_EXTENTION;
+		String fullPath = path + File.separator + fileName;
+		CSVWriterProcessor<DSIData> csvWriterProcessor = new CSVWriterProcessor<DSIData>(outputList, fullPath);
+		ColumnPositionMappingStrategy<DSIData> mapper = new ColumnPositionMappingStrategy<DSIData>();
+		String[] columnMapping = new String[propsArray.length + 4];
+		for (int i = 0; i < propsArray.length; i++) {
+			columnMapping[i] = "property" + (i +1);
+		}
+		columnMapping[propsArray.length] = "cluster";
+		columnMapping[propsArray.length + 1] = "sd";
+		columnMapping[propsArray.length + 2] = "salesNum";
+		columnMapping[propsArray.length + 3] = "sampSize";
+		mapper.setType(DSIData.class);
+		mapper.setColumnMapping(columnMapping);
+		csvWriterProcessor.setMapper(mapper);
+		threadPool2.submit(csvWriterProcessor);
+		request.getSession().setAttribute(STR_CSV_ATTR, fileName);
+		threadPool2.shutdown();
 		
 		// 0. Test use
 		/*outputList.forEach(item -> {
@@ -327,9 +375,11 @@ public class ModuleResultController {
 				for (DSIData data : dsiDatas) {
 					String clusterValue = data.getCluster();
 					if (clusterDisMap.containsKey(clusterValue)) {
-						clusterDisMap.put(clusterValue, clusterDisMap.get(clusterValue) + data.getSampSize());
+						//clusterDisMap.put(clusterValue, clusterDisMap.get(clusterValue) + data.getSampSize());
+						clusterDisMap.put(clusterValue, clusterDisMap.get(clusterValue) + data.getSalesNum());
 					} else {
-						clusterDisMap.put(clusterValue, data.getSampSize());
+						//clusterDisMap.put(clusterValue, data.getSampSize());
+						clusterDisMap.put(clusterValue, data.getSalesNum());
 					}
 				}
 				clusterDisList.add(clusterDisMap);
@@ -358,6 +408,44 @@ public class ModuleResultController {
 	public String getSeasonYear(HttpServletResponse response) throws Exception {
 		ResponseUtil.write(response, SeasonYear.convertToJSONArray());
 		return null;
+	}
+	
+	@RequestMapping(value="/export" , method = RequestMethod.GET)
+	public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String utf = "UTF-8";
+		String fileName = String.valueOf(request.getSession().getAttribute(STR_CSV_ATTR));
+		String path = request.getServletContext().getRealPath(STR_CSV_PATH);
+		File file = new File(path + File.separator + fileName);
+		String downloadFileName = new String(fileName.getBytes(utf), "iso-8859-1");
+
+		response.setContentType("text/csv");
+		response.setCharacterEncoding(utf);
+		response.setHeader("Pragma", "public");
+		response.setHeader("Cache-Control", "max-age=30");
+		response.setHeader("Content-Disposition", "attachment; filename=" + downloadFileName);
+
+		byte[] buffer = new byte[4096];
+		BufferedOutputStream output = null;
+		BufferedInputStream input = null;
+		try {
+			output = new BufferedOutputStream(response.getOutputStream());
+			input = new BufferedInputStream(new FileInputStream(file));
+			int n = -1;
+			while ((n = input.read(buffer, 0, 4096)) != -1) {
+				output.write(buffer, 0, n);
+			}
+			output.flush();
+			response.flushBuffer();
+		} catch (Exception e) {
+			System.out.println("error" + e);
+		} finally {
+			if (input != null) {
+				input.close();
+			}
+			if (output != null) {
+				output.close();
+			}
+		}
 	}
 	
 	private String concatPropertyNames(String[] properties) {

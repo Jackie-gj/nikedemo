@@ -34,11 +34,8 @@ CREATE TABLE `nk_prod_master` (
   `SECONDARY_STORY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `SEASONAL_STORY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `RETAIL_MATL_PRC_ZONE` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`prod_master_id`),
-  KEY `index_matl_nbr` (`MATL_NBR`),
-  KEY `index_omd` (`OMD`),
-  KEY `index_season_engn` (`SEASON`,`PROD_ENGN_DESC`)
-) ENGINE=InnoDB AUTO_INCREMENT=415329 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+  PRIMARY KEY (`prod_master_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=415329 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `nk_store_master` (
   `POS_ID` int(16) NOT NULL,
@@ -122,12 +119,9 @@ CREATE TABLE `nk_sale_info` (
   `NET_SALES_AMT` int(10) DEFAULT NULL,
   `EXTENDED_MSRP_SALES_AMT` int(10) DEFAULT NULL,
   `REPORT_DATE` date NOT NULL,
-  `STORE_PROD_ID` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `DISCOUNT` decimal(8,4) DEFAULT NULL,
   PRIMARY KEY (`SALE_ID`,`REPORT_DATE`),
-  KEY `index_prod_pos` (`PROD_CODE`,`STORE_POS_ID`),
-  KEY `INDEX_STORE_PROD_ID` (`STORE_PROD_ID`,`DISCOUNT`)
-) ENGINE=InnoDB AUTO_INCREMENT=29684889 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+  KEY `index_report_date` (`REPORT_DATE`)
+) ENGINE=InnoDB AUTO_INCREMENT=11819549 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 /*!50100 PARTITION BY RANGE (to_days(report_date))
 (PARTITION p160601 VALUES LESS THAN (736481) ENGINE = InnoDB,
  PARTITION p160701 VALUES LESS THAN (736511) ENGINE = InnoDB,
@@ -183,7 +177,6 @@ CREATE TABLE `nk_key_launch` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 
 CREATE TABLE `nk_clc_door_master` (
-  `CLC_DOOR_ID` int(12) NOT NULL AUTO_INCREMENT,
   `CLC_DOOR_CODE` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `STATUS` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
   `RBP_PROGRESS` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -268,10 +261,8 @@ CREATE TABLE `nk_clc_door_master` (
   `AE_NAME` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `PROJECT_FROM` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
   `PROJECT_TO` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FIRST_CLC_DATE_FOR_MI` date DEFAULT NULL,
-  PRIMARY KEY (`CLC_DOOR_ID`),
-  KEY `index_pos_id` (`POS_ID_NEW_POS`)
-) ENGINE=InnoDB AUTO_INCREMENT=8290 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+  `FIRST_CLC_DATE_FOR_MI` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 
 CREATE TABLE `nk_prepared_data` (
   `Store_Prod_Id` varchar(29) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -284,7 +275,6 @@ CREATE TABLE `nk_prepared_data` (
   `GNDR_GROUP_NM` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   `GBL_SILH_LONG_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `REG_MSRP` decimal(8,2) NOT NULL DEFAULT '0.00',
-  `PRICE` varchar(8) COLLATE utf8_unicode_ci NOT NULL DEFAULT '中',
   `FTW_PLATFORM` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ICON_FRANCHISE` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `POS_ID` int(16) NOT NULL,
@@ -302,45 +292,279 @@ CREATE TABLE `nk_prepared_data` (
   KEY `index_quarter` (`quart`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 
-CREATE TABLE `nk_dsi_properties` (
-  `group_name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `value` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `status` int(1) DEFAULT '1',
-  `alias` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `column_name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `column_width` int(4) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('storeType', '大', '1000', '店铺大小', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('storeType', '小', '0', '店铺大小', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('tradeZone', '大', 'MW', '店铺商圈', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('tradeZone', '中', 'CA,LP', '店铺商圈', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('tradeZone', '小', 'default', '店铺商圈', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('gndrGroupNm', '男', 'MENS', '性别', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('gndrGroupNm', '女', 'WOMENS', '性别', 15);
-insert into nk_dsi_properties(group_name, name, value, status, column_name,column_width) values('gndrGroupNm', '儿童', 'KIDS', 0, '性别', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('price', '高', '899', '价格高低', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('price', '低', '600', '价格高低', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('price', '中', 'default', '价格高低', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('colorMain', '黑', 'BLACK', '颜色', 15);
-insert into nk_dsi_properties(group_name, name, value, status, column_name,column_width) values('colorMain', '白', 'WHITE', 0, '颜色', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('colorMain', '其它', 'OTHERS', '颜色', 15);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('ctgyPtfm', 'BASKETBALL/JD', 'BASKETBALL/JD', '商品类别', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('ctgyPtfm', 'RUNNING/Non-MAX', 'RUNNING/Non-MAX', '商品类别', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('ctgyPtfm', 'NSW/Non-MAX', 'NSW/Non-MAX', '商品类别', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('ctgyPtfm', 'MAX', 'MAX', '商品类别', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('ctgyPtfm', 'Others', 'Others', '商品类别', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('salesAreaNames', '东北', 'Heiji,Liaoning', '地区', 20);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('salesAreaNames', '华北', 'Huabei,Luyu,Jingjin', '地区', 20);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('salesAreaNames', '西北', 'Xibei', '地区', 20);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('salesAreaNames', '华东', 'JiangsuAnhui,Zhejiang,Shanghai,HunanHubei', '地区', 20);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('salesAreaNames', '华南', 'FujianJiangxi,Guangzhou,Guangdong,GuangxiHainan', '地区', 20);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('salesAreaNames', '西南', 'Chuanyu,Yungui', '地区', 20);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('city', '上海', '上海', '城市', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('city', '浙江', '杭州,宁波,绍兴,嘉兴,台州', '城市', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('city', '北京', '北京', '城市', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('storeRecordType', 'Nike Only Store', 'Nike Only Store', '店铺类型', 40);
-insert into nk_dsi_properties(group_name, name, value, column_name,column_width) values('storeRecordType', 'Wholesale / Multi-Brand', 'Wholesale / Multi-Brand', '店铺类型', 40);
 
 
+
+
+
+
+
+
+
+
+
+/* ************************************* */
+
+SELECT 
+    Store_Prod_Id, SUM(WeeklySales), COUNT(Store_Prod_Id)
+FROM
+    (SELECT 
+        CONCAT(si.STORE_POS_ID, '_', si.PROD_CODE) Store_Prod_Id,
+            TIMESTAMPDIFF(WEEK, DATE '2017-06-11', si.REPORT_DATE) + 1 weekno1,
+            si.STORE_POS_ID,
+            si.PROD_CODE,
+            si.NET_SALES_UNITS WeeklySales,
+            si.NET_SALES_AMT / si.EXTENDED_MSRP_SALES_AMT discount
+    FROM
+        nk_sale_info si, (SELECT 
+        pm.MATL_NBR, pm.PROD_ENGN_DESC, pm.season, pm.omd
+    FROM
+        nike.nk_prod_master pm
+    WHERE
+        pm.season = 'FA2017'
+            AND pm.PROD_ENGN_DESC = 'FTW'
+            AND pm.omd < DATE '2017-07-10'
+            AND NOT EXISTS( SELECT 
+                1
+            FROM
+                nk_quick_strike qs
+            WHERE
+                pm.MATL_NBR = qs.PROD_CD
+                    AND qs.CCD_DT_BUS_SEASN_YR_CD = 'FA2017')) vpm, (SELECT 
+        sm.POS_ID,
+            sm.STORE_SUB_TYPE,
+            sm.ABBREV_OWNER_GROUP_NAME,
+            sm.CHINA_STORE_SUB_CHANNEL
+    FROM
+        nk_store_master sm
+    WHERE
+        LOWER(sm.STORE_SUB_TYPE) = 'wholesale'
+            AND sm.CHINA_STORE_SUB_CHANNEL IS NOT NULL
+            AND sm.ABBREV_OWNER_GROUP_NAME IS NOT NULL
+            AND LOWER(sm.CHINA_STORE_SUB_CHANNEL) NOT IN ('clearance' , 'factory store')
+            AND LOWER(sm.ABBREV_OWNER_GROUP_NAME) IN ('belle' , 'topsports', 'pousheng', 'really', 'goodbaby', 'faya', 'sanse', 'highwave sports')
+            AND NOT EXISTS( SELECT 
+                1
+            FROM
+                nk_con_adc_pos cap
+            WHERE
+                cap.ADC_POS_ID = sm.POS_ID)) vsm
+    WHERE
+        si.report_date >= DATE '2017-06-11'
+            AND si.REPORT_DATE <= DATE_ADD(DATE '2017-06-11', INTERVAL 12 WEEK)
+            AND si.NET_SALES_UNITS > 0
+            AND si.STORE_POS_ID IS NOT NULL
+            AND si.store_pos_id = vsm.POS_ID
+            AND si.PROD_CODE = vpm.MATL_NBR) vdata
+        LEFT JOIN
+    (SELECT 
+        kl.PRODUCT_CODE,
+            TIMESTAMPDIFF(WEEK, '2017-06-11', kl.LAUNCH_DATE) + 1 weekno2
+    FROM
+        nk_key_launch kl
+    WHERE
+        kl.LAUNCH_DATE IS NOT NULL
+            AND kl.SEASON = 'FA17') vkl ON vdata.PROD_CODE = vkl.PRODUCT_CODE
+WHERE
+    discount >= 0.7
+        AND (weekno2 IS NULL OR weekno1 > weekno2)
+GROUP BY Store_Prod_Id
+HAVING COUNT(Store_Prod_Id) >= 8
+    AND SUM(WeeklySales) > 0;
+	
+	
+SELECT 
+    CONCAT(si.STORE_POS_ID, '_', si.PROD_CODE) Store_Prod_Id,
+    -- TIMESTAMPDIFF(WEEK, DATE '2017-06-11', si.REPORT_DATE) + 1 WEEKNO,
+    si.STORE_POS_ID,
+    si.NET_SALES_UNITS,
+    vpm.*,
+    vsm.*,
+    vst.store_type,
+    /* ifnull((SELECT 
+		IF(cdm.GLOBAL_CONCEPT IN ('BEACON-L2 EXTENDED' , 'BEACON-L2',
+				'Running Amplified',
+				'NIKE RUNNING-L1',
+				'NIKE RUNNING-L2',
+				'KICKS LOUNGE-L1',
+				'KICKS LOUNGE-L2'),
+			'Key_CLC',
+			'Other_CLC') type
+	FROM
+		nk_clc_door_master cdm
+	WHERE
+		UPPER(cdm.STATUS) = 'OPENED'
+        and cdm.POS_ID_NEW_POS = si.STORE_POS_ID
+        limit 1), 'Non-CLC') clc_status, */
+    'FA17' QUART
+FROM
+    nk_sale_info si,
+        
+    (SELECT 
+        pm.MATL_NBR Prod_id,
+            IF(SUBSTRING_INDEX(pm.color_desc, '/', 1) IN ('BLCK' , 'BLK'), 'BLACK', IF(SUBSTRING_INDEX(pm.color_desc, '/', 1) IN ('WHT' , 'SUMMIT WHITE'), 'WHITE', 'Others')) COLOR_MAIN,
+            pm.GBL_CAT_SUM_LONG_DESC,
+            if (pm.GBL_CAT_SUM_LONG_DESC = 'BASKETBALL' or pm.GBL_CAT_CORE_FOCS_LONG_DESC = 'JORDAN BRAND', 'BASKETBALL/JD',
+			if (pm.GBL_CAT_SUM_LONG_DESC = 'RUNNING', 'RUNNING/Non-MAX', 
+			if (pm.GBL_CAT_SUM_LONG_DESC = 'NIKE SPORTSWEAR', 'NSW/Non-MAX',
+			if (pm.FTW_PLATFORM = 'MAX', 'MAX', 'Others')))) Ctgy_Ptfm,
+            pm.GNDR_GROUP_NM,
+            pm.GBL_SILH_LONG_DESC,
+            pm.REG_MSRP,
+            pm.FTW_PLATFORM,
+            pm.ICON_FRANCHISE
+    FROM
+        nike.nk_prod_master pm
+    WHERE
+        pm.season = 'FA2017'
+            AND pm.PROD_ENGN_DESC = 'FTW'
+            AND pm.omd < DATE '2017-07-10'
+			and pm.GNDR_GROUP_NM in ('MENS', 'WOMENS', 'KIDS')
+            AND NOT EXISTS( SELECT 
+                1
+            FROM
+                nk_quick_strike qs
+            WHERE
+                pm.MATL_NBR = qs.PROD_CD
+                    AND qs.CCD_DT_BUS_SEASN_YR_CD = 'FA2017')) vpm,
+    (SELECT 
+        sm.POS_ID,
+            sm.STORE_RECORD_TYPE,
+            sm.SUB_TERRITORY,
+            sm.STORE_SUB_TYPE,
+            sm.STORE_ENVIRONMENT_DESCRIPTION,
+            sm.SALES_AREA_NAMES,
+            sm.STORE_CITY_TIER_NUMBER,
+            sm.STATE_PROVINCE,
+            sm.CITY,
+            sm.CHINA_STORE_SUB_CHANNEL,
+            sm.STORE_LEAD_CATEGORY,
+            if (lower(sm.ABBREV_OWNER_GROUP_NAME) = 'topsports', 'BELLE', upper(sm.ABBREV_OWNER_GROUP_NAME)) ABBREV_OWNER_GROUP_NAME
+    FROM
+        nk_store_master sm
+    WHERE
+        LOWER(sm.STORE_SUB_TYPE) = 'wholesale'
+            AND sm.CHINA_STORE_SUB_CHANNEL IS NOT NULL
+            AND sm.ABBREV_OWNER_GROUP_NAME IS NOT NULL
+            AND LOWER(sm.CHINA_STORE_SUB_CHANNEL) NOT IN ('clearance' , 'factory store')
+            AND LOWER(sm.ABBREV_OWNER_GROUP_NAME) IN ('belle' , 'topsports', 'pousheng', 'really', 'goodbaby', 'faya', 'sanse', 'highwave sports')
+            AND NOT EXISTS( SELECT 
+                1
+            FROM
+                nk_con_adc_pos cap
+            WHERE
+                cap.ADC_POS_ID = sm.POS_ID)) vsm,
+                (SELECT 
+					sii.STORE_POS_ID,
+					IF(SUM(sii.NET_SALES_UNITS) > 1000,
+						'Large',
+						'Small') store_type
+				FROM
+					nk_sale_info sii
+				GROUP BY sii.STORE_POS_ID) vst
+WHERE
+    si.report_date >= DATE '2017-06-11'
+        AND si.REPORT_DATE <= DATE_ADD(DATE '2017-06-11',
+        INTERVAL 12 WEEK)
+        AND IFNULL(si.NET_SALES_UNITS, 0) > 0
+        AND si.STORE_POS_ID IS NOT NULL
+        AND si.store_pos_id = vsm.POS_ID
+        AND si.PROD_CODE = vpm.Prod_id
+        AND si.NET_SALES_AMT / si.EXTENDED_MSRP_SALES_AMT > 0.7
+        and vst.STORE_POS_ID = si.store_pos_id
+		and not exists (
+		SELECT 1
+    FROM
+        nk_key_launch kl
+    WHERE
+        kl.LAUNCH_DATE IS NOT NULL
+            AND kl.SEASON = 'FA17'
+			and kl.PRODUCT_CODE = si.PROD_CODE
+			and kl.LAUNCH_DATE > si.REPORT_DATE);
+
+SELECT 
+    CONCAT(si.STORE_POS_ID, '_', si.PROD_CODE) Store_Prod_Id,
+    TIMESTAMPDIFF(WEEK,
+        DATE '2017-06-11',
+        si.REPORT_DATE) + 1 WEEKNO,
+    si.STORE_POS_ID,
+    si.NET_SALES_UNITS,
+    vpm.*,
+    vsm.*,
+    vst.store_type,
+    'FA17' QUART
+FROM
+    nk_sale_info si,
+    (SELECT 
+        pm.MATL_NBR Prod_id,
+            IF(SUBSTRING_INDEX(pm.color_desc, '/', 1) IN ('BLCK' , 'BLK'), 'BLACK', IF(SUBSTRING_INDEX(pm.color_desc, '/', 1) IN ('WHT' , 'SUMMIT WHITE'), 'WHITE', 'Others')) COLOR_MAIN,
+            pm.GBL_CAT_SUM_LONG_DESC,
+            IF(pm.GBL_CAT_SUM_LONG_DESC = 'BASKETBALL'
+                OR pm.GBL_CAT_CORE_FOCS_LONG_DESC = 'JORDAN BRAND', 'BASKETBALL/JD', IF(pm.GBL_CAT_SUM_LONG_DESC = 'RUNNING', 'RUNNING/Non-MAX', IF(pm.GBL_CAT_SUM_LONG_DESC = 'NIKE SPORTSWEAR', 'NSW/Non-MAX', IF(pm.FTW_PLATFORM = 'MAX', 'MAX', 'Others')))) Ctgy_Ptfm,
+            pm.GNDR_GROUP_NM,
+            pm.GBL_SILH_LONG_DESC,
+            pm.REG_MSRP,
+            pm.FTW_PLATFORM,
+            pm.ICON_FRANCHISE
+    FROM
+        nike.nk_prod_master pm
+    WHERE
+        pm.season = 'FA2017'
+            AND pm.PROD_ENGN_DESC = 'FTW'
+            AND pm.omd < DATE '2017-07-10'
+            AND pm.GNDR_GROUP_NM IN ('MENS' , 'WOMENS', 'KIDS')
+            AND NOT EXISTS( SELECT 
+                1
+            FROM
+                nk_quick_strike qs
+            WHERE
+                pm.MATL_NBR = qs.PROD_CD
+                    AND qs.CCD_DT_BUS_SEASN_YR_CD = 'FA2017')) vpm,
+    (SELECT 
+        sm.POS_ID,
+            sm.STORE_RECORD_TYPE,
+            sm.SUB_TERRITORY,
+            sm.STORE_ENVIRONMENT_DESCRIPTION,
+            sm.SALES_AREA_NAMES,
+            sm.STORE_CITY_TIER_NUMBER,
+            sm.STORE_LEAD_CATEGORY,
+            IF(LOWER(sm.ABBREV_OWNER_GROUP_NAME) = 'topsports', 'BELLE', UPPER(sm.ABBREV_OWNER_GROUP_NAME)) ABBREV_OWNER_GROUP_NAME
+    FROM
+        nk_store_master sm
+    WHERE
+        LOWER(sm.STORE_SUB_TYPE) = 'wholesale'
+            AND sm.CHINA_STORE_SUB_CHANNEL IS NOT NULL
+            AND sm.ABBREV_OWNER_GROUP_NAME IS NOT NULL
+            AND LOWER(sm.CHINA_STORE_SUB_CHANNEL) NOT IN ('clearance' , 'factory store')
+            AND LOWER(sm.ABBREV_OWNER_GROUP_NAME) IN ('belle' , 'topsports', 'pousheng', 'really', 'goodbaby', 'faya', 'sanse', 'highwave sports')
+            AND NOT EXISTS( SELECT 
+                1
+            FROM
+                nk_con_adc_pos cap
+            WHERE
+                cap.ADC_POS_ID = sm.POS_ID)) vsm,
+    (SELECT 
+        sii.STORE_POS_ID,
+            IF(SUM(sii.NET_SALES_UNITS) > 1000, 'Large', 'Small') store_type
+    FROM
+        nk_sale_info sii
+    GROUP BY sii.STORE_POS_ID) vst
+WHERE
+    si.report_date >= DATE '2017-06-11'
+        AND si.REPORT_DATE <= DATE_ADD(DATE '2017-06-11',
+        INTERVAL 12 WEEK)
+        AND IFNULL(si.NET_SALES_UNITS, 0) > 0
+        AND si.STORE_POS_ID IS NOT NULL
+        AND si.store_pos_id = vsm.POS_ID
+        AND si.PROD_CODE = vpm.Prod_id
+        AND si.NET_SALES_AMT / si.EXTENDED_MSRP_SALES_AMT > 0.7
+        AND vst.STORE_POS_ID = si.store_pos_id
+        AND NOT EXISTS( SELECT 
+            1
+        FROM
+            nk_key_launch kl
+        WHERE
+            kl.LAUNCH_DATE IS NOT NULL
+                AND kl.SEASON = 'FA17'
+                AND kl.PRODUCT_CODE = si.PROD_CODE
+                AND kl.LAUNCH_DATE > si.REPORT_DATE);

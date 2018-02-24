@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,20 +93,56 @@ public class TestJDBC {
 		
 		featuresList.sort((a, b) -> a.getStoreProdId().compareTo(b.getStoreProdId()));
 		
+		KMeansPlusPlusClusterer<ExtractData> kMeansPlusPlusClusterer = new KMeansPlusPlusClusterer<ExtractData>(6, 800,
+				new EuclideanDistance());
+		List<CentroidCluster<ExtractData>> cluster = kMeansPlusPlusClusterer.cluster(extractDataList);
+		System.out.println(cluster.size());
+		List<CentroidCluster<ExtractData>> sortedList = cluster.stream()
+				.sorted((a, b) -> a.getPoints().size() >= b.getPoints().size() ? 1 : -1).skip(3)
+				.collect(Collectors.toList());
+		int i = 0;
+		for (CentroidCluster<ExtractData> cl : sortedList) {
+			String clusterName = "cluster" + i;
+			System.out.println(clusterName + ": " + cl.getPoints().size());
+			i++;
+		}
+		List<ExtractData> filteredList = sortedList.stream().collect(ArrayList::new,
+				(list, item) -> list.addAll(item.getPoints()), List::addAll);
+		System.out.println(filteredList.size());
+		
+		KMeansPlusPlusClusterer<ExtractData> kMeansPlusPlusClusterer2 = new KMeansPlusPlusClusterer<ExtractData>(4, 2000,
+				new EuclideanDistance());
+		List<CentroidCluster<ExtractData>> cluster2 = kMeansPlusPlusClusterer2.cluster(filteredList);
+		i = 0;
+		for (CentroidCluster<ExtractData> cl : cluster2) {
+			String clusterName = "cluster" + i;
+			System.out.println(clusterName + ": " + cl.getPoints().size());
+			i++;
+		}
+		i = 0;
+		List<ExtractData> extractDatas = new ArrayList<ExtractData>();
+		for (CentroidCluster<ExtractData> cl : cluster2) {
+			final int si = i + 1;
+			extractDatas.addAll(cl.getPoints().stream().map(p -> {
+				p.setCluster("Cluster" + String.valueOf(si));
+				return p;
+			}).collect(Collectors.toList()));
+			i ++;
+		}
+		
 		String[] columnMapping = { "storeProdId", "mean", "sd", "diffsum" };
 		ColumnPositionMappingStrategy<Features> mapper = new ColumnPositionMappingStrategy<Features>();
 		mapper.setType(Features.class);
 		mapper.setColumnMapping(columnMapping);
-
-		Writer writer = new FileWriter("features.csv");
+		
+		Writer writer = new FileWriter("extractData.csv");
 		CSVWriter csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER,
 				CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
 		String[] header = { "storeProdId", "mean", "sd", "diffsum" };
-		csvWriter.writeNext(header);
-		StatefulBeanToCsv<Features> beanToCsv = new StatefulBeanToCsvBuilder<Features>(writer)
-				.withMappingStrategy(mapper)
-				.build();
-		beanToCsv.write(featuresList);
+//		csvWriter.writeNext(header);
+//		StatefulBeanToCsv<Features> beanToCsv = new StatefulBeanToCsvBuilder<Features>(writer).withMappingStrategy(mapper).build();
+		StatefulBeanToCsv<ExtractData> beanToCsv = new StatefulBeanToCsvBuilder<ExtractData>(writer).build();
+		beanToCsv.write(extractDatas);
 		csvWriter.close();
 		writer.close();
 		
@@ -133,33 +170,6 @@ public class TestJDBC {
 /*		NormalDistribution normalDistributioin = new NormalDistribution(0,1); 
 		double s_diffsum = normalDistributioin.cumulativeProbability(featuresList.get(0).getDiffsum());
 		System.out.println("Scaled s_diffsum: " + s_diffsum);*/
-		
-		KMeansPlusPlusClusterer<ExtractData> kMeansPlusPlusClusterer = new KMeansPlusPlusClusterer<ExtractData>(6, 800,
-				new EuclideanDistance());
-		List<CentroidCluster<ExtractData>> cluster = kMeansPlusPlusClusterer.cluster(extractDataList);
-		System.out.println(cluster.size());
-		List<CentroidCluster<ExtractData>> sortedList = cluster.stream()
-				.sorted((a, b) -> a.getPoints().size() >= b.getPoints().size() ? 1 : -1).skip(3)
-				.collect(Collectors.toList());
-		int i = 0;
-		for (CentroidCluster<ExtractData> cl : sortedList) {
-			String clusterName = "cluster" + i;
-			System.out.println(clusterName + ": " + cl.getPoints().size());
-			i++;
-		}
-		List<ExtractData> filteredList = sortedList.stream().collect(ArrayList::new,
-				(list, item) -> list.addAll(item.getPoints()), List::addAll);
-		System.out.println(filteredList.size());
-		
-		KMeansPlusPlusClusterer<ExtractData> kMeansPlusPlusClusterer2 = new KMeansPlusPlusClusterer<ExtractData>(4, 2000,
-				new EuclideanDistance());
-		List<CentroidCluster<ExtractData>> cluster2 = kMeansPlusPlusClusterer2.cluster(filteredList);
-		i = 0;
-		for (CentroidCluster<ExtractData> cl : cluster2) {
-			String clusterName = "cluster" + i;
-			System.out.println(clusterName + ": " + cl.getPoints().size());
-			i++;
-		}
 	}
 
 }

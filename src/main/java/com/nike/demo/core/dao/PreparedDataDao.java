@@ -3,6 +3,7 @@ package com.nike.demo.core.dao;
 import com.nike.demo.core.entity.PreparedData;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.springframework.context.annotation.Scope;
@@ -41,5 +42,7 @@ public interface PreparedDataDao {
 
     int insertSelective(PreparedData record);
     
-    List<PreparedData> findByQuart(String quart);
+    List<PreparedData> findByQuart(Map<String, String> paramMap);
+    
+    List<PreparedData> findByQuarts(List<String> quarts);
 }

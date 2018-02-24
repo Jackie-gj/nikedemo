@@ -66,7 +66,19 @@ public class PreparedDataServiceImpl implements PreparedDataService {
 
 	@Override
 	public List<PreparedData> findByQuart(String quart) {
-		return preparedDataDao.findByQuart(quart);
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("quart", quart);
+		return preparedDataDao.findByQuart(paramMap);
+	}
+
+	@Override
+	public List<PreparedData> findByQuart(Map<String, String> paramMap) {
+		return preparedDataDao.findByQuart(paramMap);
+	}
+
+	@Override
+	public List<PreparedData> findByQuarts(List<String> quarts) {
+		return preparedDataDao.findByQuarts(quarts);
 	}
 
 	@Override
@@ -153,7 +165,7 @@ public class PreparedDataServiceImpl implements PreparedDataService {
 		ExecutorService threadPool = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
 		SeasonYear selectSeasonYear = SeasonYear.valueOf(seasonYear);
 		for (int i = 0; i <= DEFAULT_BACKWARD_SEASONS; i++) {
-			threadPool.submit(new PreparedDataProcessor(SeasonYear.getByIndex(selectSeasonYear.getIndex() - i).name(),
+			threadPool.submit(new PreparedDataProcessor(SeasonYear.getByIndex(selectSeasonYear.getIndex() - i).name(), propsArray,
 					processedList));
 		}
 		threadPool.shutdown();

@@ -86,6 +86,7 @@
 	                    		remoteSort:false,
 	                    		multiSort:false});
 	                    	dg.datagrid("loadData", data.rows);
+	                    	$('#export').show();
 	                    }
 	              });
         	}
@@ -111,7 +112,8 @@
     			        $('#seasonYear').combobox('setValue', 'FA17');
     			    }
     			}
-       		}); 
+       		});
+        	$('#export').hide();
         });
     </script>
     <style>
@@ -179,6 +181,7 @@
 		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="salesAreaNames" />地区
 		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="storeRecordType" />店铺类型
 		<a href="javascript:generate()" class="easyui-linkbutton btnMargin" iconCls="icon-search" plain="true">提交</a>
+		<a id="export" href="${pageContext.request.contextPath}/module/export.do" class="easyui-linkbutton btnMargin" plain="true">导出</a>
 	</div>
 	<!-- div id="propertiesDiv" class="checkboxSpan">
 		属性设置： 

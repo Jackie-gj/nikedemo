@@ -60,6 +60,8 @@ public class ExtractData implements Clusterable {
 	private Double sd;
 	
 	private Integer diffsum;
+	
+	private String cluster;
 
     public String getStoreProdId() {
         return storeProdId;
@@ -285,6 +287,14 @@ public class ExtractData implements Clusterable {
 		this.diffsum = diffsum;
 	}
 	
+	public String getCluster() {
+		return cluster;
+	}
+
+	public void setCluster(String cluster) {
+		this.cluster = cluster;
+	}
+
 	public void fillInFeatures(Double mean, Double sd, Integer diffsum) {
 		this.mean = mean;
 		this.sd = sd;
