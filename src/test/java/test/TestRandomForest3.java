@@ -14,7 +14,7 @@ public class TestRandomForest3 {
 				"extractData.csv");
 		
 		ExecutorService executorService = Executors.newCachedThreadPool();
-		executorService.execute(randomForestProcessor);
+		executorService.submit(randomForestProcessor);
 		executorService.shutdown();
 		executorService.awaitTermination(5, TimeUnit.MINUTES);
 	}

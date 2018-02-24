@@ -1,25 +1,19 @@
 package test;
 
-import java.util.Map;
-
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.RandomForestClassificationModel;
 import org.apache.spark.ml.classification.RandomForestClassifier;
-import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
-import org.apache.spark.ml.feature.IndexToString;
 import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.ml.feature.StringIndexerModel;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.feature.VectorIndexer;
 import org.apache.spark.ml.feature.VectorIndexerModel;
 import org.apache.spark.ml.linalg.Vector;
-import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.catalyst.expressions.Expression;
 
 public class TestRandomForest {
 
@@ -30,10 +24,12 @@ public class TestRandomForest {
 		long start = System.currentTimeMillis();
 		
 		Dataset<Row> data = spark.read().option("header", "true").option("mode", "DROPMALFORMED")
-				.option("inferSchema", true).csv("extractData.csv");
+				.option("inferSchema", true).csv("C:\\Users\\CYu33\\workspace_o\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\nikedemo\\csv\\Extract_1519460940976.csv");
 		
+		
+		data.select("gndrGroupNm", "price" , "tradeZone").show(10);
 		// filter useless columns
-		data = data.select("cluster", "tradeZone", "storeType", "gndrGroupNm", "ctgyPtfm", "price", "colorMain");
+		// data = data.select("cluster", "tradeZone", "storeType", "gndrGroupNm", "ctgyPtfm", "price", "colorMain");
 		
 		// Index labels, adding metadata to the label column.
 		// Fit on whole dataset to include all labels in index.
@@ -67,6 +63,8 @@ public class TestRandomForest {
 		Dataset<Row> trainingData = splits[0];
 		Dataset<Row> testData = splits[1];
 
+		trainingData.select("gndrGroupNm", "price" , "tradeZone", "features").show(10);
+		
 		// Train a RandomForest model.
 		RandomForestClassifier rf = new RandomForestClassifier().setLabelCol("clusterIndexLabel")
 				.setFeaturesCol("indexedFeatures").setSeed(123).setNumTrees(100);

@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,6 +15,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,21 +25,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.ml.clustering.CentroidCluster;
 import org.apache.commons.math3.ml.clustering.KMeansPlusPlusClusterer;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.apache.log4j.Logger;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nike.demo.core.entity.DSIData;
 import com.nike.demo.core.entity.DSIProperties;
@@ -50,16 +42,15 @@ import com.nike.demo.core.service.PreparedDataService;
 import com.nike.demo.core.service.UserService;
 import com.nike.demo.core.service.processor.CSVWriterProcessor;
 import com.nike.demo.core.service.processor.PreparedDataProcessor;
+import com.nike.demo.core.service.processor.RandomForestProcessor;
 import com.nike.demo.core.util.ResponseUtil;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import shapeless.newtype;
 
 @Controller
 @RequestMapping("/module")
-//@Scope("prototype")
 public class ModuleResultController {
 
 	@Resource
@@ -77,7 +68,7 @@ public class ModuleResultController {
 	
 	private static final int DEFAULT_THREAD_POOL_SIZE = 2;
 	
-	private static final int DEFAULT_WAIT_EXECUTOR_MINS = 5;
+	private static final int DEFAULT_WAIT_EXECUTOR_MINS = 10;
 	
 	private static final int DEFAULT_BACKWARD_SEASONS = 0; // except current selected season
 	
@@ -89,7 +80,8 @@ public class ModuleResultController {
 	private static final String STR_CSV_ATTR = "csv";
 	private static final String STR_CSV_PATH = "/csv/";
 	private static final String STR_CSV_EXTENTION = ".csv";
-	private static final String STR_CSV_PREFIX = "Export_";
+	private static final String STR_CSV_EXT_PREFIX = "Extract_";
+	private static final String STR_CSV_EXP_PREFIX = "Export_";
 	
 	@SuppressWarnings("serial")
 	@RequestMapping("/generate")
@@ -104,6 +96,8 @@ public class ModuleResultController {
 		
 		// start process
 		long start = System.currentTimeMillis();
+		
+		String csvFolder = request.getServletContext().getRealPath(STR_CSV_PATH);
 		
 		// get DSI Properties data from DB
 		String[] propsArray = dsiProperties.split(",");
@@ -196,9 +190,11 @@ public class ModuleResultController {
 		threadPool.shutdown();
 		threadPool.awaitTermination(DEFAULT_WAIT_EXECUTOR_MINS, TimeUnit.MINUTES);
 		
-		// second round for clustering
+		// get all the 4 quarts data
 		List<ExtractData> filteredList = processedList.stream().collect(ArrayList::new,
 				(list, item) -> list.addAll(item.getPoints()), List::addAll);
+		
+		// second round for clustering
 		KMeansPlusPlusClusterer<ExtractData> kMeansPlusPlusClusterer2 = new KMeansPlusPlusClusterer<ExtractData>(4, 2000,
 				new EuclideanDistance());
 		List<CentroidCluster<ExtractData>> cluster2 = kMeansPlusPlusClusterer2.cluster(filteredList);
@@ -244,8 +240,25 @@ public class ModuleResultController {
 				} else {
 					log.info(key + " is not existing in the final output list");
 				}
+				// add the cluster info to the list for importance incidence, it might include the key patterns which are not in the totalDataMap
+				a.setCluster(String.valueOf(si + 1));
 			});
 		}
+		
+		ExecutorService csvThreadPool =  Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
+		// Extract Data CSV for Spark
+		String extractDataFileName = STR_CSV_EXT_PREFIX + System.currentTimeMillis() + STR_CSV_EXTENTION;
+		String extractDataFullPath = csvFolder + File.separator + extractDataFileName;
+		CSVWriterProcessor<ExtractData> extractDataCSVWriterProcessor = new CSVWriterProcessor<ExtractData>(filteredList, extractDataFullPath);
+		ColumnPositionMappingStrategy<ExtractData> extractDataMapper = new ColumnPositionMappingStrategy<ExtractData>();
+		String[] extractDataColumnMapping = new String[propsArray.length + 1];
+		extractDataColumnMapping[0] = "cluster";
+		System.arraycopy(propsArray, 0, extractDataColumnMapping, 1, propsArray.length);
+		extractDataMapper.setType(ExtractData.class);
+		extractDataMapper.setColumnMapping(extractDataColumnMapping);
+		extractDataCSVWriterProcessor.setMapper(extractDataMapper);
+		extractDataCSVWriterProcessor.setHeaders(extractDataColumnMapping);
+		csvThreadPool.submit(extractDataCSVWriterProcessor);
 		
 		// calculate the probability
 		double dSize1 = dataMap1.values().stream().mapToInt(l -> l.size()).sum();
@@ -302,28 +315,31 @@ public class ModuleResultController {
 			}
 		});
 		
-		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
-		
-		ExecutorService threadPool2 =  Executors.newCachedThreadPool();
-		String path = request.getServletContext().getRealPath(STR_CSV_PATH);
-		String fileName = STR_CSV_PREFIX + System.currentTimeMillis() + STR_CSV_EXTENTION;
-		String fullPath = path + File.separator + fileName;
-		CSVWriterProcessor<DSIData> csvWriterProcessor = new CSVWriterProcessor<DSIData>(outputList, fullPath);
+		// Export CSV for download
+		String exportFileName = STR_CSV_EXP_PREFIX + System.currentTimeMillis() + STR_CSV_EXTENTION;
+		request.getSession().setAttribute(STR_CSV_ATTR, exportFileName);
+		CSVWriterProcessor<DSIData> exportCSVWriterProcessor = new CSVWriterProcessor<DSIData>(outputList, csvFolder + File.separator + exportFileName);
 		ColumnPositionMappingStrategy<DSIData> mapper = new ColumnPositionMappingStrategy<DSIData>();
-		String[] columnMapping = new String[propsArray.length + 4];
+		String[] exportCSVColumnMapping = new String[propsArray.length + 4];
+		String[] exportCSVHeaders = new String[propsArray.length + 4];
 		for (int i = 0; i < propsArray.length; i++) {
-			columnMapping[i] = "property" + (i +1);
+			exportCSVColumnMapping[i] = "property" + (i +1);
 		}
-		columnMapping[propsArray.length] = "cluster";
-		columnMapping[propsArray.length + 1] = "sd";
-		columnMapping[propsArray.length + 2] = "salesNum";
-		columnMapping[propsArray.length + 3] = "sampSize";
+		exportCSVColumnMapping[propsArray.length] = "cluster";
+		exportCSVColumnMapping[propsArray.length + 1] = "sd";
+		exportCSVColumnMapping[propsArray.length + 2] = "salesNum";
+		exportCSVColumnMapping[propsArray.length + 3] = "sampSize";
+		System.arraycopy(exportCSVColumnMapping, 0, exportCSVHeaders, 0, exportCSVColumnMapping.length);
+		System.arraycopy(propsArray, 0, exportCSVHeaders, 0, propsArray.length);
 		mapper.setType(DSIData.class);
-		mapper.setColumnMapping(columnMapping);
-		csvWriterProcessor.setMapper(mapper);
-		threadPool2.submit(csvWriterProcessor);
-		request.getSession().setAttribute(STR_CSV_ATTR, fileName);
-		threadPool2.shutdown();
+		mapper.setColumnMapping(exportCSVColumnMapping);
+		exportCSVWriterProcessor.setMapper(mapper);
+		exportCSVWriterProcessor.setHeaders(exportCSVHeaders);
+		csvThreadPool.submit(exportCSVWriterProcessor);
+		csvThreadPool.shutdown();
+		csvThreadPool.awaitTermination(DEFAULT_WAIT_EXECUTOR_MINS, TimeUnit.MINUTES);
+		
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
 		
 		// 0. Test use
 		/*outputList.forEach(item -> {
@@ -335,7 +351,15 @@ public class ModuleResultController {
 
 		// start construct output json
 		// 1. properties incidence
-			// TODO call or migrate from python ???
+		ExecutorService rfThreadPool =  Executors.newCachedThreadPool();
+		RandomForestProcessor randomForestProcessor = new RandomForestProcessor(propsArray, extractDataFullPath);
+		Future<double[]> importanceFeature = rfThreadPool.submit(randomForestProcessor);
+		double[] importances = importanceFeature.get();
+		Map<String, Double> propIncidenceMap = new HashMap<String, Double>();
+		for (int i = 0; i < propsArray.length; i++) {
+			propIncidenceMap.put(propsArray[i], importances[i]);
+		}
+		rfThreadPool.shutdown();
 		
 		// 2.sample distribution
 		List<Map<String, Integer>> sampleDisOutputList = outputList.stream()
@@ -390,12 +414,14 @@ public class ModuleResultController {
 		// 4. convert output to json object for UI
 		JSONObject result = new JSONObject();
         JSONArray tableOutputListJson = JSONArray.fromObject(outputList);
+        JSONArray propIncidenceMapJson = JSONArray.fromObject(propIncidenceMap);
         JSONArray sampleDisOutputListJson = JSONArray.fromObject(sampleDisOutputList);
         JSONArray propertyDisOutputMapJson = JSONArray.fromObject(propertyDisOutputMap);
         JSONArray columnsSubJsonArray = JSONArray.fromObject(columnSet);
         JSONArray columnsJsonArray = new JSONArray();
         columnsJsonArray.add(columnsSubJsonArray);
         result.put("rows", tableOutputListJson);
+        result.put("propIncidenceMapJson", propIncidenceMapJson);
         result.put("sampleDisOutputListJson", sampleDisOutputListJson);
         result.put("propertiesDisMapJson", propertyDisOutputMapJson);
         result.put("columns", columnsJsonArray);

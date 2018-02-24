@@ -1,7 +1,8 @@
 package com.nike.demo.core.service.processor;
 
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class CSVWriterProcessor<T> implements Runnable {
 
 	private String fileName;
 	
+	private String[] headers;
+	
 	private ColumnPositionMappingStrategy<T> mapper;
 
 	private static final Logger log = Logger.getLogger(CSVWriterProcessor.class);
@@ -32,13 +35,16 @@ public class CSVWriterProcessor<T> implements Runnable {
 		Writer writer = null;
 		CSVWriter csvWriter = null;
 		try {
-			writer = new FileWriter(fileName);
+//			writer = new FileWriter(fileName);
+			writer = new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8");
 			csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER,
 					CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
 			StatefulBeanToCsvBuilder<T> builder = new StatefulBeanToCsvBuilder<T>(writer);
 			if (null != mapper) {
-				csvWriter.writeNext(mapper.getColumnMapping());
 				builder.withMappingStrategy(mapper);
+			}
+			if (null != headers && 0 != headers.length) {
+				csvWriter.writeNext(headers);
 			}
 			StatefulBeanToCsv<T> beanToCsv = builder.build();
 			beanToCsv.write(outputDataList);
@@ -67,4 +73,9 @@ public class CSVWriterProcessor<T> implements Runnable {
 	public void setMapper(ColumnPositionMappingStrategy<T> mapper) {
 		this.mapper = mapper;
 	}
+
+	public void setHeaders(String[] headers) {
+		this.headers = headers;
+	}
+	
 }

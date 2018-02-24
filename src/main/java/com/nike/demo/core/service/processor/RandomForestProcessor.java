@@ -1,6 +1,6 @@
 package com.nike.demo.core.service.processor;
 
-import javax.annotation.Resource;
+import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.ml.Pipeline;
@@ -17,19 +17,18 @@ import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.nike.demo.core.spark.SparkHelper;
 
-public class RandomForestProcessor implements Runnable {
+public class RandomForestProcessor implements Callable<double[]> {
 
 	private String[] propertyArray;
 
 	private String[] indexLabelArray;
 
 	private String filename;
-	
-	@Resource
-	private SparkHelper sparkHelper;
 
 	private static final String DEF_CLUSTER_COL_NAME = "cluster";
 	
@@ -40,17 +39,21 @@ public class RandomForestProcessor implements Runnable {
 	private static final Logger log = Logger.getLogger(RandomForestProcessor.class);
 
 	@Override
-	public void run() {
+	public double[] call() {
 		long start = System.currentTimeMillis();
 		
 		// build session
 		log.info("build session");
+		WebApplicationContext appContext = ContextLoader.getCurrentWebApplicationContext();
+		SparkHelper sparkHelper = appContext.getBean(SparkHelper.class);
 		SparkSession spark = sparkHelper.getSparkSession();
 		
 		// read data
 		log.info("read data");
 		Dataset<Row> data = spark.read().option("header", "true").option("mode", "DROPMALFORMED")
-				.option("inferSchema", true).csv(filename).select(DEF_CLUSTER_COL_NAME, propertyArray);
+				.option("inferSchema", true).csv(filename);
+				// no need to select here since the columns have been filtered when generating csv
+				//.select(DEF_CLUSTER_COL_NAME, propertyArray);
 		
 		// indexers
 		log.info("indexer");
@@ -80,7 +83,7 @@ public class RandomForestProcessor implements Runnable {
 				.setStages(new PipelineStage[] { clusterIndexerModel, featureIndexerModel, rf });
 		
 		// Train model. This also runs the indexers.
-		System.out.println("pipeline executing");
+		log.info("pipeline executing");
 		PipelineModel model = pipeline.fit(trainingData);
 
 		RandomForestClassificationModel rfModel = (RandomForestClassificationModel) (model.stages()[2]);
@@ -89,10 +92,11 @@ public class RandomForestProcessor implements Runnable {
 		Vector fiVector = rfModel.featureImportances();
 		for (double d : fiVector.toArray()) {
 			System.out.println(d);
-			// TODO return back the data to front end
 		}
 
 		log.info("Cost : " + (System.currentTimeMillis() - start) / 1000 + " ms");
+		
+		return fiVector.toArray();
 	}
 
 	public RandomForestProcessor(String[] propertyArray, String filename) {
