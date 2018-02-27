@@ -85,7 +85,10 @@ public class PreparedDataServiceImpl implements PreparedDataService {
 	public List<DSIData> predictData(String dsiProperties, String seasonYear, String prodType) throws Exception {
 		// get DSI Properties data from DB
 		String[] propsArray = dsiProperties.split(",");
-		List<DSIProperties> dsiPropertiesFromDB = dsiPropertiesDao.findByGroupNames(Arrays.asList(propsArray));
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("groupNames", Arrays.asList(propsArray));
+		paramsMap.put("prodType", prodType);
+		List<DSIProperties> dsiPropertiesFromDB = dsiPropertiesDao.findByGroupNames(paramsMap);
 
 		// group by group_name
 		Map<String, List<DSIProperties>> dsiPropertiesMap = dsiPropertiesFromDB.stream()
@@ -165,7 +168,7 @@ public class PreparedDataServiceImpl implements PreparedDataService {
 		ExecutorService threadPool = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
 		SeasonYear selectSeasonYear = SeasonYear.valueOf(seasonYear);
 		for (int i = 0; i <= DEFAULT_BACKWARD_SEASONS; i++) {
-			threadPool.submit(new PreparedDataProcessor(SeasonYear.getByIndex(selectSeasonYear.getIndex() - i).name(), propsArray,
+			threadPool.submit(new PreparedDataProcessor(SeasonYear.getByIndex(selectSeasonYear.getIndex() - i).name(), prodType, propsArray,
 					processedList));
 		}
 		threadPool.shutdown();

@@ -27,6 +27,8 @@ import com.nike.demo.core.util.CamelCaseUtils;
 public class PreparedDataProcessor implements Runnable {
 
 	private String seasonYear;
+
+	private String prodType;
 	
 	private String[] propsArray;
 
@@ -36,8 +38,9 @@ public class PreparedDataProcessor implements Runnable {
 	
 	private static final Logger log = Logger.getLogger(PreparedDataProcessor.class);
 
-	public PreparedDataProcessor(String seasonYear, String[] propsArray,
+	public PreparedDataProcessor(String seasonYear, String prodType, String[] propsArray,
 			Vector<CentroidCluster<ExtractData>> resultList) {
+		this.prodType = prodType;
 		this.seasonYear = seasonYear;
 		this.propsArray = propsArray;
 		this.resultList = resultList;
@@ -53,6 +56,7 @@ public class PreparedDataProcessor implements Runnable {
 		try {
 			Map<String, String> paramMap = new HashMap<String, String>();
 			paramMap.put("quart", "'" + seasonYear + "'");
+			paramMap.put("prodType", "'" + prodType + "'");
 			String columns = "";
 			if(null != propsArray && 0 < propsArray.length) {
 				for (int i = 0; i < propsArray.length; i++) {

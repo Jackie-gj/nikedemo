@@ -52,6 +52,8 @@ public class PreparedData {
     private String clcStatus;
 
     private String quart;
+    
+    private String prodType;
 
     public String getStoreProdId() {
         return storeProdId;
@@ -251,5 +253,13 @@ public class PreparedData {
 
 	public void setPrice(String price) {
 		this.price = price;
+	}
+
+	public String getProdType() {
+		return prodType;
+	}
+
+	public void setProdType(String prodType) {
+		this.prodType = prodType;
 	}
 }

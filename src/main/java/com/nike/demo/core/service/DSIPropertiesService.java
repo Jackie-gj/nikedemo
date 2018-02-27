@@ -11,8 +11,8 @@ public interface DSIPropertiesService {
     
 	public int updateSelective(DSIProperties record);
     
-    public List<DSIProperties> findByGroupName(String groupName);
+    public List<DSIProperties> findByGroupName(String groupName, String prodType);
     
-    public List<DSIProperties> findByGroupNames(List<String> groupNames);
+    public List<DSIProperties> findByGroupNames(List<String> groupNames, String prodType);
 
 }

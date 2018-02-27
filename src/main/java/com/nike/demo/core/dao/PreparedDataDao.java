@@ -24,7 +24,7 @@ public interface PreparedDataDao {
         "SALES_AREA_NAMES, STORE_CITY_TIER_NUMBER, ",
         "STORE_LEAD_CATEGORY, ABBREV_OWNER_GROUP_NAME, ",
         "trade_zone, store_type, ",
-        "clc_status, quart)",
+        "clc_status, quart, prod_engn_desc)",
         "values (#{storeProdId,jdbcType=VARCHAR}, #{weekno,jdbcType=BIGINT}, ",
         "#{netSalesUnits,jdbcType=INTEGER}, #{prodId,jdbcType=VARCHAR}, ",
         "#{colorMain,jdbcType=VARCHAR}, #{gblCatSumLongDesc,jdbcType=VARCHAR}, ",
@@ -36,7 +36,7 @@ public interface PreparedDataDao {
         "#{salesAreaNames,jdbcType=VARCHAR}, #{storeCityTierNumber,jdbcType=INTEGER}, ",
         "#{storeLeadCategory,jdbcType=VARCHAR}, #{abbrevOwnerGroupName,jdbcType=VARCHAR}, ",
         "#{tradeZone,jdbcType=VARCHAR}, #{storeType,jdbcType=VARCHAR}, ",
-        "#{clcStatus,jdbcType=VARCHAR}, #{quart,jdbcType=VARCHAR})"
+        "#{clcStatus,jdbcType=VARCHAR}, #{quart,jdbcType=VARCHAR}, #{prodType,jdbcType=VARCHAR})"
     })
     int insert(PreparedData record);
 

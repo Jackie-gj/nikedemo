@@ -70,7 +70,7 @@ public class ModuleResultController {
 	
 	private static final int DEFAULT_WAIT_EXECUTOR_MINS = 10;
 	
-	private static final int DEFAULT_BACKWARD_SEASONS = 0; // except current selected season
+	private static final int DEFAULT_BACKWARD_SEASONS = 3; // except current selected season
 	
 	private static final String STR_CLUSTER_A = "Cluster A";
 	private static final String STR_CLUSTER_B = "Cluster B";
@@ -101,8 +101,8 @@ public class ModuleResultController {
 		
 		// get DSI Properties data from DB
 		String[] propsArray = dsiProperties.split(",");
-		List<DSIProperties> dsiPropertiesFromDB = dsiPropertiesService.findByGroupNames(Arrays.asList(propsArray));
-		
+		List<DSIProperties> dsiPropertiesFromDB = dsiPropertiesService.findByGroupNames(Arrays.asList(propsArray), prodType);
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
 		// group by group_name
 		Map<String, List<DSIProperties>> dsiPropertiesMap = dsiPropertiesFromDB.stream().collect(Collectors.groupingBy(DSIProperties::getGroupName));
 		
@@ -161,7 +161,7 @@ public class ModuleResultController {
 		} else {
 			return null; // TODO error message
 		}
-		
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
 		// do not use clone method since the reference list will not be duplicated
 		HashMap<String, List<ExtractData>> totalDataMap = outputList.stream().collect(HashMap::new,
 				(map, d) -> map.put(concatPropertyNames(d.getProperties()), new ArrayList<ExtractData>()), Map::putAll);
@@ -185,11 +185,11 @@ public class ModuleResultController {
 		for (int i = 0; i <= DEFAULT_BACKWARD_SEASONS; i++) {
 			String[] propsArrayCopy = new String[propsArray.length];
 			System.arraycopy(propsArray, 0, propsArrayCopy, 0, propsArray.length);
-			threadPool.submit(new PreparedDataProcessor(SeasonYear.getByIndex(selectSeasonYear.getIndex() - i).name(), propsArrayCopy, processedList));
+			threadPool.submit(new PreparedDataProcessor(SeasonYear.getByIndex(selectSeasonYear.getIndex() - i).name(), prodType, propsArrayCopy, processedList));
 		}
 		threadPool.shutdown();
 		threadPool.awaitTermination(DEFAULT_WAIT_EXECUTOR_MINS, TimeUnit.MINUTES);
-		
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
 		// get all the 4 quarts data
 		List<ExtractData> filteredList = processedList.stream().collect(ArrayList::new,
 				(list, item) -> list.addAll(item.getPoints()), List::addAll);
@@ -209,7 +209,7 @@ public class ModuleResultController {
 			System.out.println(Thread.currentThread().getName() + ": " + clusterName + ": " + cl.getPoints().size());
 			k++;
 		}
-		
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
 		// process the clustered data
 		Double[] sdArray = new Double[finalExtractDataList.size()];
 		for (int i = 0; i < finalExtractDataList.size(); i++) {
@@ -259,7 +259,7 @@ public class ModuleResultController {
 		extractDataCSVWriterProcessor.setMapper(extractDataMapper);
 		extractDataCSVWriterProcessor.setHeaders(extractDataColumnMapping);
 		csvThreadPool.submit(extractDataCSVWriterProcessor);
-		
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
 		// calculate the probability
 		double dSize1 = dataMap1.values().stream().mapToInt(l -> l.size()).sum();
 		double dSize2 = dataMap2.values().stream().mapToInt(l -> l.size()).sum();
@@ -338,9 +338,7 @@ public class ModuleResultController {
 		csvThreadPool.submit(exportCSVWriterProcessor);
 		csvThreadPool.shutdown();
 		csvThreadPool.awaitTermination(DEFAULT_WAIT_EXECUTOR_MINS, TimeUnit.MINUTES);
-		
 		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
-		
 		// 0. Test use
 		/*outputList.forEach(item -> {
 			Integer randomInt = new Random().nextInt(500);
@@ -360,7 +358,7 @@ public class ModuleResultController {
 			propIncidenceMap.put(propsArray[i], importances[i]);
 		}
 		rfThreadPool.shutdown();
-		
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
 		// 2.sample distribution
 		List<Map<String, Integer>> sampleDisOutputList = outputList.stream()
 				.collect(Collectors.groupingBy(DSIData::getCluster)).entrySet().stream().map(item -> {
@@ -427,6 +425,10 @@ public class ModuleResultController {
         result.put("columns", columnsJsonArray);
         result.put("total", mapSize);
         ResponseUtil.write(response, result);
+        
+        // debug use
+        System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
+        
 		return null;
 	}
 

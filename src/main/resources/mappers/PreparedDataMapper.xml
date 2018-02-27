@@ -27,12 +27,13 @@
     <result column="store_type" jdbcType="VARCHAR" property="storeType" />
     <result column="clc_status" jdbcType="VARCHAR" property="clcStatus" />
     <result column="quart" jdbcType="VARCHAR" property="quart" />
+    <result column="prod_engn_desc" jdbcType="VARCHAR" property="prodType" />
   </resultMap>
   <sql id="Base_Column_List">
 		Store_Prod_Id, WEEKNO, NET_SALES_UNITS, Prod_id, COLOR_MAIN, GBL_CAT_SUM_LONG_DESC, Ctgy_Ptfm,
 		GNDR_GROUP_NM,GBL_SILH_LONG_DESC,REG_MSRP,PRICE, FTW_PLATFORM,ICON_FRANCHISE,
 		POS_ID,STORE_RECORD_TYPE,SUB_TERRITORY,STORE_ENVIRONMENT_DESCRIPTION,
-		SALES_AREA_NAMES,STORE_CITY_TIER_NUMBER,STORE_LEAD_CATEGORY,ABBREV_OWNER_GROUP_NAME,trade_zone,store_type,clc_status,quart
+		SALES_AREA_NAMES,STORE_CITY_TIER_NUMBER,STORE_LEAD_CATEGORY,ABBREV_OWNER_GROUP_NAME,trade_zone,store_type,clc_status,quart,prod_engn_desc
 	</sql>
   <insert id="insertSelective" parameterType="com.nike.demo.core.entity.PreparedData">
     insert into nk_prepared_data
@@ -112,6 +113,9 @@
       <if test="quart != null">
         quart,
       </if>
+      <if test="prodType != null">
+        prod_engn_desc,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="storeProdId != null">
@@ -189,6 +193,9 @@
       <if test="quart != null">
         #{quart,jdbcType=VARCHAR},
       </if>
+      <if test="prodType != null">
+        #{prodType,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   
@@ -198,13 +205,15 @@
 		Store_Prod_Id, NET_SALES_UNITS, ${columns}
 		from nk_prepared_data
 		where quart = ${quart}
+		and prod_engn_desc = ${prodType}
 	</select>
 	
 	<select id="findByQuarts" resultMap="BaseResultMap" fetchSize="10000">
 		select
 		<include refid="Base_Column_List" />
 		from nk_prepared_data
-		where quart IN 
+		where prod_engn_desc = ${prodType}
+		and quart IN 
 	    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
 	        #{item}
 	    </foreach>

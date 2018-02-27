@@ -1,6 +1,7 @@
 package com.nike.demo.core.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,7 @@ public interface DSIPropertiesDao {
     
     int updateSelective(DSIProperties record);
     
-    public List<DSIProperties> findByGroupName(String groupName);
+    public List<DSIProperties> findByGroupName(Map<String, Object> paramsMap);
     
-    public List<DSIProperties> findByGroupNames(List<String> groupNames);
+    public List<DSIProperties> findByGroupNames(Map<String, Object> paramsMap);
 }

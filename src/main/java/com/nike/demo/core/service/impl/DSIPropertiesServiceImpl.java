@@ -1,6 +1,8 @@
 package com.nike.demo.core.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -35,13 +37,19 @@ public class DSIPropertiesServiceImpl implements DSIPropertiesService {
 	}
 
 	@Override
-	public List<DSIProperties> findByGroupName(String groupName) {
-		return dsiPropertyDao.findByGroupName(groupName);
+	public List<DSIProperties> findByGroupName(String groupName, String prodType) {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("groupName", groupName);
+		paramsMap.put("prodType", prodType);
+		return dsiPropertyDao.findByGroupName(paramsMap);
 	}
 
 	@Override
-	public List<DSIProperties> findByGroupNames(List<String> groupNames) {
-		return dsiPropertyDao.findByGroupNames(groupNames);
+	public List<DSIProperties> findByGroupNames(List<String> groupNames, String prodType) {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("groupNames", groupNames);
+		paramsMap.put("prodType", prodType);
+		return dsiPropertyDao.findByGroupNames(paramsMap);
 	}
 
 }

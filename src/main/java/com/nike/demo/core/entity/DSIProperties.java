@@ -15,6 +15,8 @@ public class DSIProperties {
     private String columnName;
     
     private Integer columnWidth;
+    
+    private String prodType;
 
     public String getGroupName() {
         return groupName;
@@ -99,6 +101,14 @@ public class DSIProperties {
 	}
 
 	public DSIProperties() {
+	}
+
+	public String getProdType() {
+		return prodType;
+	}
+
+	public void setProdType(String prodType) {
+		this.prodType = prodType;
 	}
 
 }
