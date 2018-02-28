@@ -82,6 +82,14 @@ public class PreparedDataServiceImpl implements PreparedDataService {
 	}
 
 	@Override
+	public Integer getTotalCountByQuart(String seasonYear, String prodType) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("seasonYear", seasonYear);
+		paramMap.put("prodType", prodType);
+		return preparedDataDao.getTotalCountByQuart(paramMap);
+	}
+
+	@Override
 	public List<DSIData> predictData(String dsiProperties, String seasonYear, String prodType) throws Exception {
 		// get DSI Properties data from DB
 		String[] propsArray = dsiProperties.split(",");

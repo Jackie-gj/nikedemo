@@ -75,6 +75,8 @@ public class ModuleResultController {
 	
 	private static final int DEFAULT_SAMPLE_SIZE_CLUSTER_C = 300;
 	
+	private static final int DEFAULT_COMBINATION_COUNTS = 333;
+	
 	private static final int DEFAULT_WAIT_EXECUTOR_MINS = 10;
 	
 	private static final int DEFAULT_BACKWARD_SEASONS = 3; // except current selected season
@@ -104,12 +106,25 @@ public class ModuleResultController {
 		// start process
 		long start = System.currentTimeMillis();
 		
+		// if no data found for the selected season, return
+		if (0 >= preparedDataService.getTotalCountByQuart(seasonYear, prodType)) {
+			JSONObject result = new JSONObject();
+			result.put("message", "No data found!");
+			ResponseUtil.write(response, result);
+			return null;
+		}
+		
+		// prepare the csv output folder
 		String csvFolder = request.getServletContext().getRealPath(STR_CSV_PATH);
+		File csvFolderFile = new File(csvFolder);
+		if (!csvFolderFile.exists()) {
+			csvFolderFile.mkdirs();
+		}
 		
 		// get DSI Properties data from DB
 		String[] propsArray = dsiProperties.split(",");
 		List<DSIProperties> dsiPropertiesFromDB = dsiPropertiesService.findByGroupNames(Arrays.asList(propsArray), prodType);
-		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
+
 		// group by group_name
 		Map<String, List<DSIProperties>> dsiPropertiesMap = dsiPropertiesFromDB.stream().collect(Collectors.groupingBy(DSIProperties::getGroupName));
 		
@@ -117,9 +132,12 @@ public class ModuleResultController {
 		Set<String> keySet = dsiPropertiesMap.keySet();
 		Integer mapSize = keySet.stream().mapToInt(key -> dsiPropertiesMap.get(key).size()).reduce((left, right) -> left * right).getAsInt();
 		log.debug("properties size: " + mapSize);
-		if (333 > mapSize) {
-			// TODO return to front-end 
-			// 333 need to be configured on DB or properties
+		// 333 need to be configured on DB or properties
+		if (DEFAULT_COMBINATION_COUNTS > mapSize) {
+			JSONObject result = new JSONObject();
+			result.put("message", "The property combinations are too small, the minimum count: " + DEFAULT_COMBINATION_COUNTS);
+			ResponseUtil.write(response, result);
+			return null;
 		}
 		
 		// final output list
@@ -322,7 +340,7 @@ public class ModuleResultController {
 			}
 		});
 		
-		long default2c = outputList.stream().filter(o -> o.getSampSize() <= DEFAULT_SAMPLE_SIZE_CLUSTER_C).count();
+		int default2c = outputList.stream().filter(o -> o.getSampSize() <= DEFAULT_SAMPLE_SIZE_CLUSTER_C).mapToInt(o -> o.getSampSize()).sum();
 		
 		// Export CSV for download
 		String exportFileName = STR_CSV_EXP_PREFIX + System.currentTimeMillis() + STR_CSV_EXTENTION;
@@ -347,14 +365,7 @@ public class ModuleResultController {
 		csvThreadPool.submit(exportCSVWriterProcessor);
 		csvThreadPool.shutdown();
 		csvThreadPool.awaitTermination(DEFAULT_WAIT_EXECUTOR_MINS, TimeUnit.MINUTES);
-		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
-		// 0. Test use
-		/*outputList.forEach(item -> {
-			Integer randomInt = new Random().nextInt(500);
-			item.setCluster(randomInt % 2 == 0 ? "Cluster A" : "Cluster B");
-			item.setSd((double)System.nanoTime() % 100 / 33L);
-			item.setSampSize(randomInt);
-		});*/
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s, starting random forest calc");
 
 		// start construct output json
 		// 1. properties incidence
@@ -367,7 +378,7 @@ public class ModuleResultController {
 			propIncidenceMap.put(propsArray[i], importances[i]);
 		}
 		rfThreadPool.shutdown();
-		System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
+		System.out.println((System.currentTimeMillis() - start) / 1000 + "s, random forest calc finished");
 		// 2.sample distribution
 		List<Map<String, Integer>> sampleDisOutputList = outputList.stream()
 				.collect(Collectors.groupingBy(DSIData::getCluster)).entrySet().stream().map(item -> {
@@ -437,7 +448,7 @@ public class ModuleResultController {
         ResponseUtil.write(response, result);
         
         // debug use
-        System.out.println((System.currentTimeMillis() - start) / 1000 + "s");
+        System.out.println("total used: " + (System.currentTimeMillis() - start) / 1000 + "s");
         
 		return null;
 	}

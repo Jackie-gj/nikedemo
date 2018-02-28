@@ -19,5 +19,7 @@ public interface PreparedDataService {
 	public List<DSIData> predictData(String dsiProperties, String seasonYear, String prodType)  throws Exception;
 	
 	public List<PreparedData> findByQuarts(List<String> quarts);
+	
+	public Integer getTotalCountByQuart(String seasonYear, String prodType);
 
 }

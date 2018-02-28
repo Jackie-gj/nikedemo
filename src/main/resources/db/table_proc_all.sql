@@ -621,7 +621,14 @@ CREATE TEMPORARY TABLE tmp_vsm ENGINE = MEMORY SELECT
             sm.STORE_RECORD_TYPE,
             sm.SUB_TERRITORY,
             IF(sm.STORE_ENVIRONMENT_DESCRIPTION = '', 'OTHERS', sm.STORE_ENVIRONMENT_DESCRIPTION) STORE_ENVIRONMENT_DESCRIPTION,
-            sm.SALES_AREA_NAMES,
+            (SELECT 
+                    name
+                FROM
+                    nk_dsi_properties
+                WHERE
+                    group_name = 'salesAreaNames'
+                    and status = 1 AND prod_engn_desc = in_prod_engn_desc
+                        AND INSTR(value, sm.SALES_AREA_NAMES) > 0) SALES_AREA_NAMES,
             sm.STORE_CITY_TIER_NUMBER,
             IF(sm.STORE_LEAD_CATEGORY = '', 'OTHERS' , sm.STORE_LEAD_CATEGORY) STORE_LEAD_CATEGORY,
             IF(LOWER(sm.ABBREV_OWNER_GROUP_NAME) = 'topsports', 'BELLE', UPPER(sm.ABBREV_OWNER_GROUP_NAME)) ABBREV_OWNER_GROUP_NAME,

@@ -219,10 +219,16 @@
 		select
 		<include refid="Base_Column_List" />
 		from nk_prepared_data
-		where prod_engn_desc = ${prodType}
+		where prod_engn_desc = #{prodType}
 		and quart IN 
 	    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
 	        #{item}
 	    </foreach>
 	</select>
+	
+	<select id="getTotalCountByQuart" parameterType="java.util.Map" resultType="Integer">
+        select count(*) from nk_prepared_data
+        where quart = #{seasonYear}
+		and prod_engn_desc = #{prodType}
+    </select>
 </mapper>

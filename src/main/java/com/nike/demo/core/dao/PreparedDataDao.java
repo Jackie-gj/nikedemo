@@ -1,13 +1,12 @@
 package com.nike.demo.core.dao;
 
-import com.nike.demo.core.entity.PreparedData;
-
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
+
+import com.nike.demo.core.entity.PreparedData;
 
 @Repository("preparedDataDao")
 //@Scope("prototype")
@@ -45,4 +44,6 @@ public interface PreparedDataDao {
     List<PreparedData> findByQuart(Map<String, String> paramMap);
     
     List<PreparedData> findByQuarts(List<String> quarts);
+    
+    Integer getTotalCountByQuart(Map<String, String> paramMap);
 }
