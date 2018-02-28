@@ -11,6 +11,7 @@
     <result column="Ctgy_Ptfm" jdbcType="VARCHAR" property="ctgyPtfm" />
     <result column="GNDR_GROUP_NM" jdbcType="VARCHAR" property="gndrGroupNm" />
     <result column="GBL_SILH_LONG_DESC" jdbcType="VARCHAR" property="gblSilhLongDesc" />
+    <result column="REG_3PE_CAT" jdbcType="VARCHAR" property="reg3peCat" />
     <result column="REG_MSRP" jdbcType="DECIMAL" property="regMsrp" />
     <result column="PRICE" jdbcType="VARCHAR" property="price" />
     <result column="FTW_PLATFORM" jdbcType="VARCHAR" property="ftwPlatform" />
@@ -31,7 +32,7 @@
   </resultMap>
   <sql id="Base_Column_List">
 		Store_Prod_Id, WEEKNO, NET_SALES_UNITS, Prod_id, COLOR_MAIN, GBL_CAT_SUM_LONG_DESC, Ctgy_Ptfm,
-		GNDR_GROUP_NM,GBL_SILH_LONG_DESC,REG_MSRP,PRICE, FTW_PLATFORM,ICON_FRANCHISE,
+		GNDR_GROUP_NM,GBL_SILH_LONG_DESC,REG_3PE_CAT,REG_MSRP,PRICE, FTW_PLATFORM,ICON_FRANCHISE,
 		POS_ID,STORE_RECORD_TYPE,SUB_TERRITORY,STORE_ENVIRONMENT_DESCRIPTION,
 		SALES_AREA_NAMES,STORE_CITY_TIER_NUMBER,STORE_LEAD_CATEGORY,ABBREV_OWNER_GROUP_NAME,trade_zone,store_type,clc_status,quart,prod_engn_desc
 	</sql>
@@ -64,6 +65,9 @@
       </if>
       <if test="gblSilhLongDesc != null">
         GBL_SILH_LONG_DESC,
+      </if>
+      <if test="reg3peCat != null">
+        REG_3PE_CAT,
       </if>
       <if test="regMsrp != null">
         REG_MSRP,
@@ -144,6 +148,9 @@
       </if>
       <if test="gblSilhLongDesc != null">
         #{gblSilhLongDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="reg3peCat != null">
+        #{reg3peCat,jdbcType=VARCHAR},
       </if>
       <if test="regMsrp != null">
         #{regMsrp,jdbcType=DECIMAL},

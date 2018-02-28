@@ -55,6 +55,13 @@ public class RandomForestProcessor implements Callable<double[]> {
 				// no need to select here since the columns have been filtered when generating csv
 				//.select(DEF_CLUSTER_COL_NAME, propertyArray);
 		
+		// Split the data into training and test sets (30% held out for testing)
+		log.info("split data");
+		Dataset<Row>[] splits = data.randomSplit(new double[] { 0.7, 0.3 });
+		data = splits[0];
+		
+//		data = data.dropDuplicates();
+//		log.info("data count after dupliated: " + data.count());
 		// indexers
 		log.info("indexer");
 		StringIndexerModel clusterIndexerModel = new StringIndexer().setInputCol(DEF_CLUSTER_COL_NAME)
@@ -69,11 +76,6 @@ public class RandomForestProcessor implements Callable<double[]> {
 		VectorIndexerModel featureIndexerModel = new VectorIndexer().setInputCol(DEF_FEATURES_COL_NAME)
 				.setOutputCol(DEF_FEATURES_COL_NAME + DEF_INDEX_LABEL).setMaxCategories(6).fit(data);
 		
-		// Split the data into training and test sets (30% held out for testing)
-		log.info("split data");
-		Dataset<Row>[] splits = data.randomSplit(new double[] { 0.7, 0.3 });
-		Dataset<Row> trainingData = splits[0];
-
 		// Train a RandomForest model.
 		RandomForestClassifier rf = new RandomForestClassifier().setLabelCol(DEF_CLUSTER_COL_NAME + DEF_INDEX_LABEL)
 				.setFeaturesCol(DEF_FEATURES_COL_NAME + DEF_INDEX_LABEL).setSeed(123).setNumTrees(100);
@@ -84,7 +86,7 @@ public class RandomForestProcessor implements Callable<double[]> {
 		
 		// Train model. This also runs the indexers.
 		log.info("pipeline executing");
-		PipelineModel model = pipeline.fit(trainingData);
+		PipelineModel model = pipeline.fit(data);
 
 		RandomForestClassificationModel rfModel = (RandomForestClassificationModel) (model.stages()[2]);
 		log.info(rfModel.featureImportances());
@@ -94,7 +96,7 @@ public class RandomForestProcessor implements Callable<double[]> {
 			System.out.println(d);
 		}
 
-		log.info("Cost : " + (System.currentTimeMillis() - start) / 1000 + " ms");
+		log.info("RF Cost : " + (System.currentTimeMillis() - start) / 1000 + " s");
 		
 		return fiVector.toArray();
 	}

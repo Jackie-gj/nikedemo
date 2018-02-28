@@ -16,119 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `nk_clc_door_master`
---
-
-DROP TABLE IF EXISTS `nk_clc_door_master`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nk_clc_door_master` (
-  `CLC_DOOR_ID` int(12) NOT NULL AUTO_INCREMENT,
-  `CLC_DOOR_CODE` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `STATUS` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
-  `RBP_PROGRESS` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `TERRITORY` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `NEW_CONCEPT` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GLOBAL_CONCEPT` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `PROJECT_TYPE` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `EXECUTION_FLOW` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `EXECUTION_WEEK_SUNDAY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `EXECUTION_MONTH` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `EXECUTION_SEASON` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `AREA` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `PROVINCE` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `LOCAL_CITY` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CITY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CITY_TIER` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CITY_GROUP` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `TZ_ID` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `TZ_NAME` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `TZ_GROUP` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `TTL_SPACE_AFT_CLC` int(8) DEFAULT NULL,
-  `FOH_AFT_CLC` int(8) DEFAULT NULL,
-  `BOH_AFT_CLC` int(8) DEFAULT NULL,
-  `EXTRA_BOH_AFT_CLC` int(8) DEFAULT NULL,
-  `DISTANCE_EXTRA_BOH_TO_STORE_METER` int(8) DEFAULT NULL,
-  `POS_ID_OLD` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `POS_ID_NEW_POS` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `NAME_LOCAL` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_NAME_ENGLISH` varchar(512) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_ADDRESS` varchar(512) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ACCOUNT` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ACCOUNT_GROUP` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_ENVIRONMENT` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `LEAD_CATEGORY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SECONDARY_CATEGORY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SUPPORTING_CATEGORY` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FIRST_ASSORMTNET_SEASON` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ASSORTMENT_TYPE` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ASSORTMENT_REV_CLUSTER` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `LEASING_EXPIRING_DATE` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `REV_FCST` int(8) DEFAULT NULL,
-  `HISTORICAL_MONTHLY_REV` int(8) DEFAULT NULL,
-  `FCST_VS_HISTORICAL` decimal(10,0) DEFAULT NULL,
-  `TTL_SPACE_BF_CLC` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FOH_BF_CLC` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FORMAT_BF_CLC` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FIXTURE_AF_CLC` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `BOC_ATTACK_PVD` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FA17_ORDER_WRITE` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `HO17_ORDER_WRITE` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_COUNT` int(4) DEFAULT NULL,
-  `STORE_COUNT_CHECK` int(4) DEFAULT NULL,
-  `FA15` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `HO15` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SP16` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SU16` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FA16` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `HO16` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SP17` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SU17` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FA17` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `HO17` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SP18` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SU18` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FIRST_RPO_DATE_OR_FROM_SEP12` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `DELAY_DAY` int(8) DEFAULT NULL,
-  `CHANGE_COUNTER_FROM_SEP12` decimal(10,0) DEFAULT NULL,
-  `LONGITUDE` decimal(10,0) DEFAULT NULL,
-  `LATITUDE` decimal(10,0) DEFAULT NULL,
-  `ADDRESS_MATCH_TYPE` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FY_QUARTER` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SUPPORT_RATE` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CHANGE_TYPE` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `UPDATED_EXECUTION_FLOW` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `REASON_DESCRIPTION` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `KEY_CATEGORIZATION_OF_DELAY_REASONS` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `REQUESTER` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `DATE_OF_CHANGE_REQUEST` date DEFAULT NULL,
-  `END` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `THIS_WEEK_OPENED` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FORMAT` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `AE_NAME` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `PROJECT_FROM` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `PROJECT_TO` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FIRST_CLC_DATE_FOR_MI` date DEFAULT NULL,
-  PRIMARY KEY (`CLC_DOOR_ID`),
-  KEY `index_pos_id` (`POS_ID_NEW_POS`)
-) ENGINE=InnoDB AUTO_INCREMENT=8290 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `nk_con_adc_pos`
---
-
-DROP TABLE IF EXISTS `nk_con_adc_pos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nk_con_adc_pos` (
-  `ADC_POS_ID` int(10) NOT NULL,
-  `ACCOUNT` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  KEY `index_adc_pos_id` (`ADC_POS_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `nk_dsi_properties`
 --
 
@@ -148,234 +35,37 @@ CREATE TABLE `nk_dsi_properties` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `nk_key_launch`
+-- Dumping data for table `nk_dsi_properties`
 --
 
-DROP TABLE IF EXISTS `nk_key_launch`;
+LOCK TABLES `nk_dsi_properties` WRITE;
+/*!40000 ALTER TABLE `nk_dsi_properties` DISABLE KEYS */;
+INSERT INTO `nk_dsi_properties` VALUES ('storeType','大','1000',1,NULL,'店铺大小',15,'FTW'),('storeType','小','0',1,NULL,'店铺大小',15,'FTW'),('tradeZone','大','MW',1,NULL,'店铺商圈',15,'FTW'),('tradeZone','中','CA,LP',1,NULL,'店铺商圈',15,'FTW'),('tradeZone','小','default',1,NULL,'店铺商圈',15,'FTW'),('gndrGroupNm','男','MENS',1,NULL,'性别',15,'FTW'),('gndrGroupNm','女','WOMENS',1,NULL,'性别',15,'FTW'),('gndrGroupNm','儿童','KIDS',0,NULL,'性别',15,'FTW'),('price','高','899',1,NULL,'价格高低',15,'FTW'),('price','低','600',1,NULL,'价格高低',15,'FTW'),('price','中','-1',1,NULL,'价格高低',15,'FTW'),('colorMain','黑','BLACK',1,NULL,'产品颜色',15,'FTW'),('colorMain','白','WHITE',0,NULL,'产品颜色',15,'FTW'),('colorMain','其它','OTHERS',1,NULL,'产品颜色',15,'FTW'),('ctgyPtfm','BASKETBALL/JD','BASKETBALL/JD',1,NULL,'商品类别',40,'FTW'),('ctgyPtfm','RUNNING/Non-MAX','RUNNING/Non-MAX',1,NULL,'商品类别',40,'FTW'),('ctgyPtfm','NSW/Non-MAX','NSW/Non-MAX',1,NULL,'商品类别',40,'FTW'),('ctgyPtfm','MAX','MAX',1,NULL,'商品类别',40,'FTW'),('ctgyPtfm','Others','Others',1,NULL,'商品类别',40,'FTW'),('salesAreaNames','东北','Heiji,Liaoning',1,NULL,'销售区域',20,'FTW'),('salesAreaNames','华北','Huabei,Luyu,Jingjin',1,NULL,'销售区域',20,'FTW'),('salesAreaNames','西北','Xibei',1,NULL,'销售区域',20,'FTW'),('salesAreaNames','华东','JiangsuAnhui,Zhejiang,Shanghai,HunanHubei',1,NULL,'销售区域',20,'FTW'),('salesAreaNames','华南','FujianJiangxi,Guangzhou,Guangdong,GuangxiHainan',1,NULL,'销售区域',20,'FTW'),('salesAreaNames','西南','Chuanyu,Yungui',1,NULL,'销售区域',20,'FTW'),('storeRecordType','Nike Only Store','Nike Only Store',1,NULL,'店铺类型',40,'FTW'),('storeRecordType','Wholesale / Multi-Brand','Wholesale / Multi-Brand',1,NULL,'店铺类型',40,'FTW'),('storeType','大','300000',1,NULL,'店铺大小',15,'APP'),('storeType','小','0',1,NULL,'店铺大小',15,'APP'),('tradeZone','大','MW',1,NULL,'店铺商圈',15,'APP'),('tradeZone','中','CA,LP',1,NULL,'店铺商圈',15,'APP'),('tradeZone','小','default',1,NULL,'店铺商圈',15,'APP'),('gndrGroupNm','男','MENS',1,NULL,'性别',15,'APP'),('gndrGroupNm','女','WOMENS',1,NULL,'性别',15,'APP'),('gndrGroupNm','儿童','KIDS',0,NULL,'性别',15,'APP'),('price','高','899',1,NULL,'价格高低',15,'APP'),('price','低','600',1,NULL,'价格高低',15,'APP'),('price','中','-1',1,NULL,'价格高低',15,'APP'),('colorMain','黑','BLACK',1,NULL,'产品颜色',15,'APP'),('colorMain','白','WHITE',0,NULL,'产品颜色',15,'APP'),('colorMain','其它','OTHERS',1,NULL,'产品颜色',15,'APP'),('ctgyPtfm','NSW/BKB BOTTOMS','NSW/BKB BOTTOMS',1,NULL,'商品类别',40,'APP'),('ctgyPtfm','FLEECE/JKT/OTW','FLEECE/JKT/OTW',1,NULL,'商品类别',40,'APP'),('ctgyPtfm','RN/WT/FT,PT/BT/BL','RN/WT/FT,PT/BT/BL',1,NULL,'商品类别',40,'APP'),('ctgyPtfm','TEE/POLO','TEE/POLO',1,NULL,'商品类别',40,'APP'),('ctgyPtfm','Others','Others',1,NULL,'商品类别',40,'APP'),('salesAreaNames','东北','Heiji,Liaoning',1,NULL,'销售区域',20,'APP'),('salesAreaNames','华北','Huabei,Luyu,Jingjin',1,NULL,'销售区域',20,'APP'),('salesAreaNames','西北','Xibei',1,NULL,'销售区域',20,'APP'),('salesAreaNames','华东','JiangsuAnhui,Zhejiang,Shanghai,HunanHubei',1,NULL,'销售区域',20,'APP'),('salesAreaNames','华南','FujianJiangxi,Guangzhou,Guangdong,GuangxiHainan',1,NULL,'销售区域',20,'APP'),('salesAreaNames','西南','Chuanyu,Yungui',1,NULL,'销售区域',20,'APP'),('storeRecordType','Nike Only Store','Nike Only Store',1,NULL,'店铺类型',40,'APP'),('storeRecordType','Wholesale / Multi-Brand','Wholesale / Multi-Brand',1,NULL,'店铺类型',40,'APP'),('gblCatSumLongDesc','BASKETBALL','BASKETBALL',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','NIKE SPORTSWEAR','NIKE SPORTSWEAR',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','FOOTBALL, BASEBALL, AT','FOOTBALL, BASEBALL, AT',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','FOOTBALL/SOCCER','FOOTBALL/SOCCER',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','OTHER','OTHER',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','RUNNING','RUNNING',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','WOMEN TRAINING','WOMEN TRAINING',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','YOUNG ATHLETES','YOUNG ATHLETES',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','ACTION OUTDOOR','ACTION OUTDOOR',1,NULL,'类型描述',40,'APP'),('gblCatSumLongDesc','BASKETBALL','BASKETBALL',1,NULL,'类型描述',40,'FTW'),('gblCatSumLongDesc','NIKE SPORTSWEAR','NIKE SPORTSWEAR',1,NULL,'类型描述',40,'FTW'),('gblCatSumLongDesc','FOOTBALL, BASEBALL, AT','FOOTBALL, BASEBALL, AT',1,NULL,'类型描述',40,'FTW'),('gblCatSumLongDesc','FOOTBALL/SOCCER','FOOTBALL/SOCCER',1,NULL,'类型描述',40,'FTW'),('gblCatSumLongDesc','OTHER','OTHER',1,NULL,'类型描述',40,'FTW'),('gblCatSumLongDesc','RUNNING','RUNNING',1,NULL,'类型描述',40,'FTW'),('gblCatSumLongDesc','WOMEN TRAINING','WOMEN TRAINING',1,NULL,'类型描述',40,'FTW'),('gblCatSumLongDesc','YOUNG ATHLETES','YOUNG ATHLETES',1,NULL,'类型描述',40,'FTW'),('gblCatSumLongDesc','ACTION OUTDOOR','ACTION OUTDOOR',1,NULL,'类型描述',40,'FTW'),('subTerritory','North','North',1,NULL,'店铺子领域',40,'APP'),('subTerritory','East','East',1,NULL,'店铺子领域',40,'APP'),('subTerritory','South','South',1,NULL,'店铺子领域',40,'APP'),('subTerritory','North','North',1,NULL,'店铺子领域',40,'FTW'),('subTerritory','East','East',1,NULL,'店铺子领域',40,'FTW'),('subTerritory','South','South',1,NULL,'店铺子领域',40,'FTW'),('storeCityTierNumber','0','0',1,NULL,'店铺城市级别',20,'FTW'),('storeCityTierNumber','1','1',1,NULL,'店铺城市级别',20,'FTW'),('storeCityTierNumber','2','2',1,NULL,'店铺城市级别',20,'FTW'),('storeCityTierNumber','3','3',1,NULL,'店铺城市级别',20,'FTW'),('storeCityTierNumber','4','4',1,NULL,'店铺城市级别',20,'FTW'),('storeCityTierNumber','5','5',1,NULL,'店铺城市级别',20,'FTW'),('storeCityTierNumber','6','6',1,NULL,'店铺城市级别',20,'FTW'),('storeCityTierNumber','7','7',1,NULL,'店铺城市级别',20,'FTW'),('storeCityTierNumber','0','0',1,NULL,'店铺城市级别',20,'APP'),('storeCityTierNumber','1','1',1,NULL,'店铺城市级别',20,'APP'),('storeCityTierNumber','2','2',1,NULL,'店铺城市级别',20,'APP'),('storeCityTierNumber','3','3',1,NULL,'店铺城市级别',20,'APP'),('storeCityTierNumber','4','4',1,NULL,'店铺城市级别',20,'APP'),('storeCityTierNumber','5','5',1,NULL,'店铺城市级别',20,'APP'),('storeCityTierNumber','6','6',1,NULL,'店铺城市级别',20,'APP'),('storeCityTierNumber','7','7',1,NULL,'店铺城市级别',20,'APP'),('clcStatus','Non-CLC','Non-CLC',1,NULL,'CLC状态',20,'APP'),('clcStatus','Other_CLC','Other_CLC',1,NULL,'CLC状态',20,'APP'),('clcStatus','Key_CLC','Key_CLC',1,NULL,'CLC状态',20,'APP'),('clcStatus','Non-CLC','Non-CLC',1,NULL,'CLC状态',20,'FTW'),('clcStatus','Other_CLC','Other_CLC',1,NULL,'CLC状态',20,'FTW'),('clcStatus','Key_CLC','Key_CLC',1,NULL,'CLC状态',20,'FTW'),('storeLeadCategory','Running','Running',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Sportswear','Sportswear',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Basketball','Basketball',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Jordan','Jordan',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Other','Other',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Athletic Training','Athletic Training',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Women\'s Training','Women\'s Training',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Young Athletes','Young Athletes',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Action Sports','Action Sports',1,NULL,'店铺概念属性',20,'APP'),('storeLeadCategory','Running','Running',1,NULL,'店铺概念属性',20,'FTW'),('storeLeadCategory','Sportswear','Sportswear',1,NULL,'店铺概念属性',20,'FTW'),('storeLeadCategory','Jordan','Jordan',1,NULL,'店铺概念属性',20,'FTW'),('storeLeadCategory','Basketball','Basketball',1,NULL,'店铺概念属性',20,'FTW'),('storeLeadCategory','Other','Other',1,NULL,'店铺概念属性',20,'FTW'),('storeLeadCategory','Athletic Training','Athletic Training',1,NULL,'店铺概念属性',20,'FTW'),('storeLeadCategory','Young Athletes','Young Athletes',1,NULL,'店铺概念属性',20,'FTW'),('storeLeadCategory','Women\'s Training','Women\'s Training',1,NULL,'店铺概念属性',20,'FTW'),('storeEnvironmentDescription','STAND ALONE STREET','STAND ALONE STREET',1,NULL,'店铺环境',40,'FTW'),('storeEnvironmentDescription','DEPARTMENT STORE','DEPARTMENT STORE',1,NULL,'店铺环境',40,'FTW'),('storeEnvironmentDescription','SHOPPING MALL','SHOPPING MALL',1,NULL,'店铺环境',40,'FTW'),('storeEnvironmentDescription','OTHERS','OTHERS',1,NULL,'店铺环境',40,'FTW'),('storeEnvironmentDescription','STREET','STREET',1,NULL,'店铺环境',40,'FTW'),('storeEnvironmentDescription','SPORTS DEPARTMENT','SPORTS DEPARTMENT',1,NULL,'店铺环境',40,'FTW'),('storeEnvironmentDescription','STAND ALONE STREET','STAND ALONE STREET',1,NULL,'店铺环境',40,'APP'),('storeEnvironmentDescription','DEPARTMENT STORE','DEPARTMENT STORE',1,NULL,'店铺环境',40,'APP'),('storeEnvironmentDescription','SHOPPING MALL','SHOPPING MALL',1,NULL,'店铺环境',40,'APP'),('storeEnvironmentDescription','OTHERS','OTHERS',1,NULL,'店铺环境',40,'APP'),('storeEnvironmentDescription','STREET','STREET',1,NULL,'店铺环境',40,'APP'),('storeEnvironmentDescription','SPORTS DEPARTMENT','SPORTS DEPARTMENT',1,NULL,'店铺环境',40,'APP'),('gblSilhLongDesc','SHORT','SHORT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','TANK TOP/SINGLET','TANK TOP/SINGLET',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','SHORT SLEEVE T-SHIRT','SHORT SLEEVE T-SHIRT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','3/4 LENGTH TIGHT','3/4 LENGTH TIGHT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','SHORT SLEEVE TOP','SHORT SLEEVE TOP',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','TIGHTS','TIGHTS',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','HOODED JACKET','HOODED JACKET',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','PANT','PANT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','HOODED FULL ZIP LS TOP','HOODED FULL ZIP LS TOP',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','LONG SLEEVE TOP','LONG SLEEVE TOP',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','SHORT SLEEVE POLO','SHORT SLEEVE POLO',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','SLEEVELESS TOP','SLEEVELESS TOP',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','SHORT - 2 IN 1','SHORT - 2 IN 1',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','SLEEVELESS T SHIRT','SLEEVELESS T SHIRT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','3/4 LENGTH PANT','3/4 LENGTH PANT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','HOODED LONG SLEEVE TOP','HOODED LONG SLEEVE TOP',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','JACKET','JACKET',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','BRA','BRA',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','SKIRT','SKIRT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','CAP/HAT/VISOR','CAP/HAT/VISOR',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','TIGHT - KNEE LENGTH','TIGHT - KNEE LENGTH',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','HOODED SHORT SLEEVE TOP','HOODED SHORT SLEEVE TOP',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','3/4 SLEEVE','3/4 SLEEVE',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','PANT - KNEE LENGTH','PANT - KNEE LENGTH',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','TRACK JACKET','TRACK JACKET',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','VEST','VEST',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','LONG SLEEVE T-SHIRT','LONG SLEEVE T-SHIRT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','TEE - 3/4 SLEEVE','TEE - 3/4 SLEEVE',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','JUMP SUIT','JUMP SUIT',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','OTHER MISCELLANEOUS','OTHER MISCELLANEOUS',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','VARSITY JACKET','VARSITY JACKET',1,NULL,'细类',40,'APP'),('gblSilhLongDesc','LOW TOP','LOW TOP',1,NULL,'细类',40,'FTW'),('gblSilhLongDesc','THREE QUARTER HIGH','THREE QUARTER HIGH',1,NULL,'细类',40,'FTW'),('gblSilhLongDesc','HIGH TOP','HIGH TOP',1,NULL,'细类',40,'FTW'),('reg3peCat','OTHERS','OTHERS',1,NULL,'衣服类型',40,'APP'),('reg3peCat','ACC','ACC',1,NULL,'衣服类型',40,'APP'),('reg3peCat','BOTTOMS','BOTTOMS',1,NULL,'衣服类型',40,'APP'),('reg3peCat','PERF TOP','PERF TOP',1,NULL,'衣服类型',40,'APP'),('reg3peCat','FLEECE','FLEECE',1,NULL,'衣服类型',40,'APP'),('reg3peCat','BASELAYER','BASELAYER',1,NULL,'衣服类型',40,'APP'),('reg3peCat','POLO','POLO',1,NULL,'衣服类型',40,'APP'),('reg3peCat','JKT','JKT',1,NULL,'衣服类型',40,'APP'),('reg3peCat','OTW','OTW',1,NULL,'衣服类型',40,'APP'),('reg3peCat','TEE','TEE',1,NULL,'衣服类型',40,'APP'),('reg3peCat','BAGS','BAGS',1,NULL,'衣服类型',40,'APP'),('reg3peCat','SOCKS','SOCKS',1,NULL,'衣服类型',40,'APP'),('reg3peCat','REPLICA JERSEYS','REPLICA JERSEYS',1,NULL,'衣服类型',40,'APP'),('reg3peCat','PERFORMANCE TOPS','PERFORMANCE TOPS',1,NULL,'衣服类型',40,'APP'),('reg3peCat','OUT','OUT',1,NULL,'衣服类型',40,'APP'),('reg3peCat','DRESSES','DRESSES',1,NULL,'衣服类型',40,'APP'),('reg3peCat','POLOS','POLOS',1,NULL,'衣服类型',40,'APP'),('reg3peCat','GRAPHIC TEES','GRAPHIC TEES',1,NULL,'衣服类型',40,'APP'),('reg3peCat','PULLOVER','PULLOVER',1,NULL,'衣服类型',40,'APP');
+/*!40000 ALTER TABLE `nk_dsi_properties` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nk_prop_importance`
+--
+
+DROP TABLE IF EXISTS `nk_prop_importance`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nk_key_launch` (
-  `SEASON` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
-  `PRODUCT_CODE` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
-  `LAUNCH_DATE` date DEFAULT NULL,
-  KEY `index_prod_code` (`PRODUCT_CODE`)
+CREATE TABLE `nk_prop_importance` (
+  `property` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `importance` decimal(10,8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `nk_prepared_data`
+-- Dumping data for table `nk_prop_importance`
 --
 
-DROP TABLE IF EXISTS `nk_prepared_data`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nk_prepared_data` (
-  `Store_Prod_Id` varchar(29) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `WEEKNO` bigint(22) DEFAULT NULL,
-  `NET_SALES_UNITS` int(10) DEFAULT NULL,
-  `Prod_id` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `COLOR_MAIN` varchar(6) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `GBL_CAT_SUM_LONG_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `Ctgy_Ptfm` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `GNDR_GROUP_NM` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GBL_SILH_LONG_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `REG_MSRP` decimal(8,2) NOT NULL DEFAULT '0.00',
-  `PRICE` varchar(8) COLLATE utf8_unicode_ci NOT NULL DEFAULT '中',
-  `FTW_PLATFORM` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ICON_FRANCHISE` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `POS_ID` int(16) NOT NULL,
-  `STORE_RECORD_TYPE` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `SUB_TERRITORY` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
-  `STORE_ENVIRONMENT_DESCRIPTION` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SALES_AREA_NAMES` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `STORE_CITY_TIER_NUMBER` int(4) NOT NULL DEFAULT '0',
-  `STORE_LEAD_CATEGORY` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ABBREV_OWNER_GROUP_NAME` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `trade_zone` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `store_type` varchar(5) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `clc_status` varchar(9) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `quart` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `prod_engn_desc` varchar(6) COLLATE utf8_unicode_ci DEFAULT NULL,
-  KEY `index_quarter` (`quart`),
-  KEY `index_prod_quarter` (`quart`,`prod_engn_desc`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `nk_prod_master`
---
-
-DROP TABLE IF EXISTS `nk_prod_master`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nk_prod_master` (
-  `prod_master_id` int(8) NOT NULL AUTO_INCREMENT,
-  `MATL_NBR` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `SEASON` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
-  `STYLE_CD` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
-  `PROD_ENGN_DESC` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
-  `MATL_LONG_NM` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `COLOR_CD` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
-  `COLOR_DESC` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GBL_CAT_SUM_LONG_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GBL_CAT_CORE_FOCS_LONG_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GBL_PROD_SUB_CAT_LONG_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SUB_CAT_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `REG_CAT_LONG_DESC_SLS_ORG` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GNDR_GROUP_NM` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `Gender_Details` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `KIDS_AGE` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GBL_SILH_LONG_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GBL_SILH_SHRT_DESC` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `TOP_BOTTOM` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `REG_MSRP` decimal(8,2) NOT NULL DEFAULT '0.00',
-  `MODEL` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `BM_CLASSIFICATION` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `BM_CLASSIFICATION_DETAIL` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FTW_PLATFORM` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `EQP_Product_Type` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `REG_3PE_CAT` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `OMD` date NOT NULL,
-  `SILO` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `BRAND_STORY_NM` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CTRY_RETAIL_SIZE_RANGE` varchar(512) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ICON_FRANCHISE` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `PRIMARY_STORY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SECONDARY_STORY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `SEASONAL_STORY` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `RETAIL_MATL_PRC_ZONE` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`prod_master_id`),
-  KEY `index_matl_nbr` (`MATL_NBR`),
-  KEY `index_omd` (`OMD`),
-  KEY `index_season_engn` (`SEASON`,`PROD_ENGN_DESC`)
-) ENGINE=InnoDB AUTO_INCREMENT=415329 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `nk_quick_strike`
---
-
-DROP TABLE IF EXISTS `nk_quick_strike`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nk_quick_strike` (
-  `CCD_DT_BUS_SEASN_YR_CD` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
-  `PROD_CD` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
-  KEY `index_prod_cd` (`PROD_CD`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `nk_sale_info`
---
-
-DROP TABLE IF EXISTS `nk_sale_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nk_sale_info` (
-  `SALE_ID` int(12) NOT NULL AUTO_INCREMENT,
-  `STORE_POS_ID` int(12) DEFAULT NULL,
-  `PROD_CODE` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `PROD_LONG_NAME` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `NET_SALES_UNITS` int(10) DEFAULT NULL,
-  `NET_SALES_AMT` int(10) DEFAULT NULL,
-  `EXTENDED_MSRP_SALES_AMT` int(10) DEFAULT NULL,
-  `REPORT_DATE` date NOT NULL,
-  `STORE_PROD_ID` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `DISCOUNT` decimal(8,4) DEFAULT NULL,
-  PRIMARY KEY (`SALE_ID`,`REPORT_DATE`),
-  KEY `index_prod_pos` (`PROD_CODE`,`STORE_POS_ID`),
-  KEY `INDEX_STORE_PROD_ID` (`STORE_PROD_ID`,`DISCOUNT`)
-) ENGINE=InnoDB AUTO_INCREMENT=29684889 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-/*!50100 PARTITION BY RANGE (to_days(report_date))
-(PARTITION p160601 VALUES LESS THAN (736481) ENGINE = InnoDB,
- PARTITION p160701 VALUES LESS THAN (736511) ENGINE = InnoDB,
- PARTITION p160801 VALUES LESS THAN (736542) ENGINE = InnoDB,
- PARTITION p160901 VALUES LESS THAN (736573) ENGINE = InnoDB,
- PARTITION p161001 VALUES LESS THAN (736603) ENGINE = InnoDB,
- PARTITION p161101 VALUES LESS THAN (736634) ENGINE = InnoDB,
- PARTITION p161201 VALUES LESS THAN (736664) ENGINE = InnoDB,
- PARTITION p170101 VALUES LESS THAN (736695) ENGINE = InnoDB,
- PARTITION p170201 VALUES LESS THAN (736726) ENGINE = InnoDB,
- PARTITION p170301 VALUES LESS THAN (736754) ENGINE = InnoDB,
- PARTITION p170401 VALUES LESS THAN (736785) ENGINE = InnoDB,
- PARTITION p170501 VALUES LESS THAN (736815) ENGINE = InnoDB,
- PARTITION p170601 VALUES LESS THAN (736846) ENGINE = InnoDB,
- PARTITION p170701 VALUES LESS THAN (736876) ENGINE = InnoDB,
- PARTITION p170801 VALUES LESS THAN (736907) ENGINE = InnoDB,
- PARTITION p170901 VALUES LESS THAN (736938) ENGINE = InnoDB,
- PARTITION p171001 VALUES LESS THAN (736968) ENGINE = InnoDB,
- PARTITION pnow VALUES LESS THAN MAXVALUE ENGINE = InnoDB) */;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `nk_store_master`
---
-
-DROP TABLE IF EXISTS `nk_store_master`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nk_store_master` (
-  `POS_ID` int(16) NOT NULL,
-  `ORIGINAL_POS_ID` int(16) DEFAULT NULL,
-  `STORE_CODE` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `STORE_STATUS` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
-  `ABBREV_OWNER_GROUP_NAME` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `SUB_TERRITORY` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
-  `LOCAL_STORE_NAME` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `STORE_STORE_NAME` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `STORE_STREET_ADDRESS_1` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `ENGLISH_STORE_STREET_ADDRESS_1` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `TEMPORARY_STORE` int(4) NOT NULL DEFAULT '0',
-  `STORE_SUBPARTNER_INDICATOR` int(4) NOT NULL DEFAULT '0',
-  `STORE_RECORD_TYPE` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `GLOBAL_STORE_CHANNEL_CLASS` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `STORE_SUB_TYPE` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `CHINA_STORE_SUB_CHANNEL` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `STATE_PROVINCE` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `LOCAL_PROVINCE` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `CITY` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `LOCAL_CITY` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `STORE_CITY_TIER_NUMBER` int(4) NOT NULL DEFAULT '0',
-  `LOCAL_SALES_AREA_NAMES` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `SALES_AREA_NAMES` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `CHINA_TRADE_ZONE` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `HOTSPOT_CLUSTER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_HOTSPOT_TIER` int(4) DEFAULT NULL,
-  `STORE_ENVIRONMENT_DESCRIPTION` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CONSUMER_LED_CONCEPT_STORE` int(4) DEFAULT NULL,
-  `MPT_STORE` int(4) DEFAULT NULL,
-  `SOLD_TO_NUMBER` int(16) DEFAULT NULL,
-  `SHIP_TO_NUMBER` int(16) DEFAULT NULL,
-  `CUSTOMER_SOLD_TO` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `APPLICATION_REASON` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `DISTRIBUTION_TYPE` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_FIRST_OPEN_DATE` date DEFAULT NULL,
-  `STORE_LAST_OPEN_DATE` date DEFAULT NULL,
-  `STORE_LAST_RENOVATION_DATE` date DEFAULT NULL,
-  `STORE_CLOSE_DATE` date DEFAULT NULL,
-  `CLOSE_REASON_PICKLIST` varchar(512) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_TOTAL_SPACE_SIZE` int(8) DEFAULT NULL,
-  `STORE_SELLING_SPACE_SIZE` int(8) DEFAULT NULL,
-  `FLOOR_NUMBER` int(4) DEFAULT NULL,
-  `TOTAL_STORIES` int(4) DEFAULT NULL,
-  `CHINA_STORE_DISTRIBUTION_TIER` varchar(4) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CLC_STATUS` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CLC_TARGET_DATE` int(16) DEFAULT NULL,
-  `REAL_ESTATE_CATEGORY` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CUSTOMER_DISTRIBUTION_TIER` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_TIER` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `STORE_LEAD_CATEGORY` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `FIXTURE_PROGRAM` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `LONGITUDE` decimal(12,6) DEFAULT NULL,
-  `LATITUDE` decimal(12,6) DEFAULT NULL,
-  `INC` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ADDRESS_MATCH_TYPE` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `TRADE_ZONE` varchar(16) COLLATE utf8_unicode_ci DEFAULT '#N/A',
-  PRIMARY KEY (`POS_ID`),
-  KEY `index_ab_own_name` (`ABBREV_OWNER_GROUP_NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `nk_prop_importance` WRITE;
+/*!40000 ALTER TABLE `nk_prop_importance` DISABLE KEYS */;
+INSERT INTO `nk_prop_importance` VALUES ('storeType',0.10000000),('tradeZone',0.14000000),('price',0.05000000),('gndrGroupNm',0.20000000),('ctgyPtfm',0.10000000),('colorMain',0.10000000),('salesAreaNames',0.13000000),('storeRecordType',0.10000000),('storeEnvironmentDescription',0.01000000),('storeLeadCategory',0.01000000),('clcStatus',0.01000000),('storeCityTierNumber',0.04000000),('subTerritory',0.01000000);
+/*!40000 ALTER TABLE `nk_prop_importance` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `nk_user`
@@ -392,6 +82,16 @@ CREATE TABLE `nk_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nk_user`
+--
+
+LOCK TABLES `nk_user` WRITE;
+/*!40000 ALTER TABLE `nk_user` DISABLE KEYS */;
+INSERT INTO `nk_user` VALUES (2,'admin','e10adc3949ba59abbe56e057f20f883e','系统管理员'),(88,'clayyu','e10adc3949ba59abbe56e057f20f883e','普通管理员'),(89,'test','098f6bcd4621d373cade4e832627b4f6','普通管理员');
+/*!40000 ALTER TABLE `nk_user` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Dumping routines for database 'nike'
@@ -463,6 +163,7 @@ CREATE TEMPORARY TABLE tmp_filter_data_table ENGINE = MEMORY SELECT
     vpm.Ctgy_Ptfm,
     vpm.GNDR_GROUP_NM,
     vpm.GBL_SILH_LONG_DESC,
+    vpm.REG_3PE_CAT,
     vpm.REG_MSRP,
     vpm.PRICE,
     vpm.FTW_PLATFORM,
@@ -630,6 +331,7 @@ CREATE TEMPORARY TABLE tmp_vpm ENGINE = MEMORY SELECT
                     'Others')))) Ctgy_Ptfm,
     ifnull((select name from nk_dsi_properties where group_name = 'gndrGroupNm' and value = pm.GNDR_GROUP_NM AND prod_engn_desc = in_prod_engn_desc), '') GNDR_GROUP_NM,
     pm.GBL_SILH_LONG_DESC,
+    if(pm.REG_3PE_CAT = '' or isnull(pm.REG_3PE_CAT), 'OTHERS', pm.REG_3PE_CAT) REG_3PE_CAT, -- APP only
     pm.REG_MSRP,
     IF(pm.REG_MSRP > (SELECT 
                 value
@@ -731,6 +433,7 @@ CREATE TEMPORARY TABLE tmp_vpm ENGINE = MEMORY SELECT
                     'Others')))) Ctgy_Ptfm,
     ifnull((select name from nk_dsi_properties where group_name = 'gndrGroupNm' and value = pm.GNDR_GROUP_NM AND prod_engn_desc = in_prod_engn_desc), '') GNDR_GROUP_NM,
     pm.GBL_SILH_LONG_DESC,
+    if(pm.REG_3PE_CAT = '' or isnull(pm.REG_3PE_CAT), 'OTHERS', pm.REG_3PE_CAT) REG_3PE_CAT, -- APP only
     pm.REG_MSRP,
     IF(pm.REG_MSRP > (SELECT 
                 value
@@ -917,10 +620,10 @@ CREATE TEMPORARY TABLE tmp_vsm ENGINE = MEMORY SELECT
         sm.POS_ID,
             sm.STORE_RECORD_TYPE,
             sm.SUB_TERRITORY,
-            sm.STORE_ENVIRONMENT_DESCRIPTION,
+            IF(sm.STORE_ENVIRONMENT_DESCRIPTION = '', 'OTHERS', sm.STORE_ENVIRONMENT_DESCRIPTION) STORE_ENVIRONMENT_DESCRIPTION,
             sm.SALES_AREA_NAMES,
             sm.STORE_CITY_TIER_NUMBER,
-            sm.STORE_LEAD_CATEGORY,
+            IF(sm.STORE_LEAD_CATEGORY = '', 'OTHERS' , sm.STORE_LEAD_CATEGORY) STORE_LEAD_CATEGORY,
             IF(LOWER(sm.ABBREV_OWNER_GROUP_NAME) = 'topsports', 'BELLE', UPPER(sm.ABBREV_OWNER_GROUP_NAME)) ABBREV_OWNER_GROUP_NAME,
             -- sm.trade_zone
             IFNULL((SELECT 
@@ -1079,4 +782,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-27 10:13:01
+-- Dump completed on 2018-02-28 12:28:02

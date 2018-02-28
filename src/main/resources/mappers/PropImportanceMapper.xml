@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nike.demo.core.dao.PropImportanceDao">
+  <resultMap id="BaseResultMap" type="com.nike.demo.core.entity.PropImportance">
+    <result column="property" jdbcType="VARCHAR" property="property" />
+    <result column="importance" jdbcType="DECIMAL" property="importance" />
+  </resultMap>
+  <insert id="insertSelective" parameterType="com.nike.demo.core.entity.PropImportance">
+    insert into nk_prop_importance
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="property != null">
+        property,
+      </if>
+      <if test="importance != null">
+        importance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="property != null">
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="importance != null">
+        #{importance,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="listAll" resultMap="BaseResultMap">
+        select property,importance from nk_prop_importance
+    </select>
+</mapper>

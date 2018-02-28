@@ -113,6 +113,14 @@
     			    }
     			}
        		});
+        	$.ajax({
+                url: '${pageContext.request.contextPath}/module/getPropImportance.do',
+                type: "get",
+                dataType: "json",
+                success: function(data){
+                	console.log(data);
+                }
+        	});
         	$('#export').hide();
         });
     </script>
@@ -177,9 +185,13 @@
 		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="price" checked/>价格高低
 		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="gndrGroupNm" checked/>性别
 		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="ctgyPtfm" checked/>商品类别
-		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="colorMain" checked/>颜色
-		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="salesAreaNames" />地区
-		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="storeRecordType" />店铺类型
+		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="colorMain" checked/>产品颜色
+		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="salesAreaNames" />销售区域
+		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="storeRecordType" />店铺类型<br/>
+		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="storeEnvironmentDescription" />店铺环境
+		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="storeCityTierNumber" />店铺城市级别
+		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="subTerritory" />店铺子领域
+		<input type="checkbox" class="checkboxMargin" name="dsiProperties" value="clcStatus" />CLC状态
 		<a href="javascript:generate()" class="easyui-linkbutton btnMargin" iconCls="icon-search" plain="true">提交</a>
 		<a id="export" href="${pageContext.request.contextPath}/module/export.do" class="easyui-linkbutton btnMargin" plain="true">导出</a>
 	</div>

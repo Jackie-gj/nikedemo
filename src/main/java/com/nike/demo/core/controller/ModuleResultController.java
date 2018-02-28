@@ -36,9 +36,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.nike.demo.core.entity.DSIData;
 import com.nike.demo.core.entity.DSIProperties;
 import com.nike.demo.core.entity.ExtractData;
+import com.nike.demo.core.entity.PropImportance;
 import com.nike.demo.core.entity.enums.SeasonYear;
 import com.nike.demo.core.service.DSIPropertiesService;
 import com.nike.demo.core.service.PreparedDataService;
+import com.nike.demo.core.service.PropImportanceService;
 import com.nike.demo.core.service.UserService;
 import com.nike.demo.core.service.processor.CSVWriterProcessor;
 import com.nike.demo.core.service.processor.PreparedDataProcessor;
@@ -61,12 +63,17 @@ public class ModuleResultController {
 	
 	@Resource
 	private PreparedDataService preparedDataService;
+	
+	@Resource
+	private PropImportanceService propImportanceService;
 
 	private static final Logger log = Logger.getLogger(ModuleResultController.class);
 	
 	private static final String DEFAULT_STR_SEPARATOR = "_";
 	
 	private static final int DEFAULT_THREAD_POOL_SIZE = 2;
+	
+	private static final int DEFAULT_SAMPLE_SIZE_CLUSTER_C = 300;
 	
 	private static final int DEFAULT_WAIT_EXECUTOR_MINS = 10;
 	
@@ -309,11 +316,13 @@ public class ModuleResultController {
 			item.setSalesNum(totalDataMap.get(key).stream().mapToInt(t -> t.getNetSalesUnits()).sum());
 			
 			//sample size < 300 case, force set Cluster C
-			if (item.getSampSize() <= 300) {
+			if (item.getSampSize() <= DEFAULT_SAMPLE_SIZE_CLUSTER_C) {
 				item.setCluster(STR_CLUSTER_C);
 				item.setSd(sdArray[2]);
 			}
 		});
+		
+		long default2c = outputList.stream().filter(o -> o.getSampSize() <= DEFAULT_SAMPLE_SIZE_CLUSTER_C).count();
 		
 		// Export CSV for download
 		String exportFileName = STR_CSV_EXP_PREFIX + System.currentTimeMillis() + STR_CSV_EXTENTION;
@@ -424,6 +433,7 @@ public class ModuleResultController {
         result.put("propertiesDisMapJson", propertyDisOutputMapJson);
         result.put("columns", columnsJsonArray);
         result.put("total", mapSize);
+        result.put("default2c", default2c);
         ResponseUtil.write(response, result);
         
         // debug use
@@ -436,6 +446,15 @@ public class ModuleResultController {
 	public String getSeasonYear(HttpServletResponse response) throws Exception {
 		ResponseUtil.write(response, SeasonYear.convertToJSONArray());
 		return null;
+	}
+	
+	@RequestMapping("getPropImportance")
+	public String getPropImportance(HttpServletResponse response) throws Exception {
+		// get all 15 properties importances
+		List<PropImportance> allPropImportances = propImportanceService.listAll();
+		JSONArray allPropImportancesJson = JSONArray.fromObject(allPropImportances);
+		ResponseUtil.write(response, allPropImportancesJson);
+        return null;
 	}
 	
 	@RequestMapping(value="/export" , method = RequestMethod.GET)
