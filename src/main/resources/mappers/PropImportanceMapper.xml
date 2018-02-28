@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.nike.demo.core.entity.PropImportance">
     <result column="property" jdbcType="VARCHAR" property="property" />
     <result column="importance" jdbcType="DECIMAL" property="importance" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
   </resultMap>
   <insert id="insertSelective" parameterType="com.nike.demo.core.entity.PropImportance">
     insert into nk_prop_importance
@@ -14,6 +15,9 @@
       <if test="importance != null">
         importance,
       </if>
+       <if test="type != null">
+        type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="property != null">
@@ -22,10 +26,13 @@
       <if test="importance != null">
         #{importance,jdbcType=DECIMAL},
       </if>
+       <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   
   <select id="listAll" resultMap="BaseResultMap">
-        select property,importance from nk_prop_importance
+        select property,importance, type from nk_prop_importance
     </select>
 </mapper>

@@ -106,8 +106,9 @@ public class ModuleResultController {
 		// start process
 		long start = System.currentTimeMillis();
 		
+		int countByQuart = preparedDataService.getTotalCountByQuart(seasonYear, prodType);
 		// if no data found for the selected season, return
-		if (0 >= preparedDataService.getTotalCountByQuart(seasonYear, prodType)) {
+		if (0 >= countByQuart) {
 			JSONObject result = new JSONObject();
 			result.put("message", "No data found!");
 			ResponseUtil.write(response, result);
@@ -133,7 +134,7 @@ public class ModuleResultController {
 		Integer mapSize = keySet.stream().mapToInt(key -> dsiPropertiesMap.get(key).size()).reduce((left, right) -> left * right).getAsInt();
 		log.debug("properties size: " + mapSize);
 		// 333 need to be configured on DB or properties
-		if (DEFAULT_COMBINATION_COUNTS > mapSize) {
+		if (DEFAULT_COMBINATION_COUNTS / 4 > countByQuart / mapSize) {
 			JSONObject result = new JSONObject();
 			result.put("message", "The property combinations are too small, the minimum count: " + DEFAULT_COMBINATION_COUNTS);
 			ResponseUtil.write(response, result);
@@ -340,7 +341,8 @@ public class ModuleResultController {
 			}
 		});
 		
-		int default2c = outputList.stream().filter(o -> o.getSampSize() <= DEFAULT_SAMPLE_SIZE_CLUSTER_C).mapToInt(o -> o.getSampSize()).sum();
+		long default2c = outputList.stream().filter(o -> o.getSampSize() <= DEFAULT_SAMPLE_SIZE_CLUSTER_C).count();
+		int default2s = outputList.stream().filter(o -> o.getSampSize() <= DEFAULT_SAMPLE_SIZE_CLUSTER_C).mapToInt(o -> o.getSampSize()).sum();
 		
 		// Export CSV for download
 		String exportFileName = STR_CSV_EXP_PREFIX + System.currentTimeMillis() + STR_CSV_EXTENTION;
@@ -445,6 +447,7 @@ public class ModuleResultController {
         result.put("columns", columnsJsonArray);
         result.put("total", mapSize);
         result.put("default2c", default2c);
+        result.put("default2s", default2s);
         ResponseUtil.write(response, result);
         
         // debug use
@@ -463,7 +466,8 @@ public class ModuleResultController {
 	public String getPropImportance(HttpServletResponse response) throws Exception {
 		// get all 15 properties importances
 		List<PropImportance> allPropImportances = propImportanceService.listAll();
-		JSONArray allPropImportancesJson = JSONArray.fromObject(allPropImportances);
+		Map<String, List<PropImportance>> groupPropImportance = allPropImportances.stream().collect(Collectors.groupingBy(PropImportance::getType));
+		JSONArray allPropImportancesJson = JSONArray.fromObject(groupPropImportance);
 		ResponseUtil.write(response, allPropImportancesJson);
         return null;
 	}

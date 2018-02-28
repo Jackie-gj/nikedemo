@@ -6,6 +6,8 @@ public class PropImportance {
     private String property;
 
     private BigDecimal importance;
+    
+    private String type;
 
     public String getProperty() {
         return property;
@@ -22,4 +24,13 @@ public class PropImportance {
     public void setImportance(BigDecimal importance) {
         this.importance = importance;
     }
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+    
 }
