@@ -59,7 +59,8 @@ $(function () {
         $selectFilter = $('#selectFilter'),
         $checkedInfo = $('#checkedInfo');
 
-    var POST_URL = ctxPath + '/data/result.json', clickTimer = null;
+
+    var POST_URL = ctxPath + '/module/generate.do', clickTimer = null;
 
 
     var checked_template = '<button type="button" style="margin-right:1rem;margin-bottom:0.5rem;" class="btn btn-outline-primary btn-sm" data-key="{{key}}">{{text}}<span class="close" style="font-size:1rem;padding-left: 0.5rem;font-weight: normal;line-height: initial">x</span></button>';
@@ -268,8 +269,8 @@ $(function () {
         $('#table').bootstrapTable({
             columns: columns,
             pagination: true,
-            pageSize:20,
-            pageList:[20],
+            pageSize: 20,
+            pageList: [20],
             sortOrder: 'desc',
             data: data
         });
@@ -300,141 +301,144 @@ $(function () {
                 text: "Loading ...",
                 textPosition: "top"
             });
-            if (clickTimer) {
-                clearTimeout(clickTimer);
-            }
-            var $this = $(this),
-                getSimpleData = function () {
-                    $.ajax({
-                        url: POST_URL,
-                        data: {},
-                        type: 'post',
-                        dataType: 'json'
-                    }).done(function (data) {
-                        $('.wrapper').busyLoad("hide");
-                        var propIncidenceObj = data.propIncidenceMapJson[0],
-                            sampleDisOutputArray = data.sampleDisOutputListJson,
-                            tableData = data.rows,
-                            columns = data.columns[0],
-                            propertiesDisObj = data.propertiesDisMapJson[0],
-                            chart1Data = [],
-                            bootstrapColumns = [],
-                            chart2DataMap = {},
-                            chart3Data = [], total = 0, clusterC = 0;
+            var dsiProperties = [], prodType = $prodType.val(), account = $department.val(),
+                seasonYear = $season.val() + $year.val();
+            $properties.each(function () {
+                var $this = $(this);
+                if ($this.is(':checked')) {
+                    dsiProperties.push($this.val());
+                }
+            });
+            $.ajax({
+                url: POST_URL,
+                data: {
+                    dsiProperties: dsiProperties.join(','),
+                    prodType: prodType,
+                    account: account,
+                    seasonYear: seasonYear
+                },
+                type: 'post',
+                dataType: 'json'
+            }).done(function (data) {
+                $('.wrapper').busyLoad("hide");
+                var propIncidenceObj = data.propIncidenceMapJson[0],
+                    sampleDisOutputArray = data.sampleDisOutputListJson,
+                    tableData = data.rows,
+                    columns = data.columns[0],
+                    propertiesDisObj = data.propertiesDisMapJson[0],
+                    chart1Data = [],
+                    bootstrapColumns = [],
+                    chart2DataMap = {},
+                    chart3Data = [], total = 0, clusterC = 0;
 
-                        if (propIncidenceObj) {
-                            for (var key in propIncidenceObj) {
-                                var text = DEFAULT.KEY_TEXT_MAPPING[key].text, value = propIncidenceObj[key];
-                                chart1Data.push({name: text, y: value});
-                            }
-                        }
+                if (propIncidenceObj) {
+                    for (var key in propIncidenceObj) {
+                        var text = DEFAULT.KEY_TEXT_MAPPING[key].text, value = propIncidenceObj[key];
+                        chart1Data.push({name: text, y: value});
+                    }
+                }
 
-                        if (propertiesDisObj) {
-                            for (var property in propertiesDisObj) {
-                                var propertiesObj = propertiesDisObj[property], tempMap = {};
-                                chart2DataMap[property] = [];
-                                for (var type in propertiesObj) {
-                                    var typeDataObj = propertiesObj[type][0];
-                                    for (var cluster in typeDataObj) {
-                                        if (tempMap[cluster] && tempMap[cluster][type]) {
-                                            tempMap[cluster][type] = typeDataObj[cluster];
-                                        } else {
-                                            if (!tempMap[cluster]) {
-                                                tempMap[cluster] = {};
-                                            }
-                                            tempMap[cluster][type] = typeDataObj[cluster];
-                                        }
+                if (propertiesDisObj) {
+                    for (var property in propertiesDisObj) {
+                        var propertiesObj = propertiesDisObj[property], tempMap = {};
+                        chart2DataMap[property] = [];
+                        for (var type in propertiesObj) {
+                            var typeDataObj = propertiesObj[type][0];
+                            for (var cluster in typeDataObj) {
+                                if (tempMap[cluster] && tempMap[cluster][type]) {
+                                    tempMap[cluster][type] = typeDataObj[cluster];
+                                } else {
+                                    if (!tempMap[cluster]) {
+                                        tempMap[cluster] = {};
                                     }
-                                }
-                                for (var key in tempMap) {
-                                    var item = tempMap[key], dataArray = [];
-                                    for (var s in item) {
-                                        dataArray.push({name: s, y: item[s]});
-                                    }
-                                    chart2DataMap[property].push({
-                                        name: DEFAULT.CLUSTER_TEXT_MAPPING[key].text,
-                                        data: dataArray,
-                                        color: DEFAULT.CLUSTER_TEXT_MAPPING[key].color
-                                    });
+                                    tempMap[cluster][type] = typeDataObj[cluster];
                                 }
                             }
                         }
+                        for (var key in tempMap) {
+                            var item = tempMap[key], dataArray = [];
+                            for (var s in item) {
+                                dataArray.push({name: s, y: item[s]});
+                            }
+                            chart2DataMap[property].push({
+                                name: DEFAULT.CLUSTER_TEXT_MAPPING[key].text,
+                                data: dataArray,
+                                color: DEFAULT.CLUSTER_TEXT_MAPPING[key].color
+                            });
+                        }
+                    }
+                }
 
 
-                        if (sampleDisOutputArray) {
-                            for (var i = 0; i < sampleDisOutputArray.length; i++) {
-                                var sampleDisOutputObj = sampleDisOutputArray[i];
-                                for (var cluster in sampleDisOutputObj) {
-                                    total += sampleDisOutputObj[cluster];
-                                    chart3Data.push({
-                                        name: DEFAULT.CLUSTER_TEXT_MAPPING[cluster].text,
-                                        y: sampleDisOutputObj[cluster],
-                                        color: DEFAULT.CLUSTER_TEXT_MAPPING[cluster].color
-                                    });
+                if (sampleDisOutputArray) {
+                    for (var i = 0; i < sampleDisOutputArray.length; i++) {
+                        var sampleDisOutputObj = sampleDisOutputArray[i];
+                        for (var cluster in sampleDisOutputObj) {
+                            total += sampleDisOutputObj[cluster];
+                            chart3Data.push({
+                                name: DEFAULT.CLUSTER_TEXT_MAPPING[cluster].text,
+                                y: sampleDisOutputObj[cluster],
+                                color: DEFAULT.CLUSTER_TEXT_MAPPING[cluster].color
+                            });
 
-                                    if (cluster === 'Cluster C') {
-                                        clusterC = sampleDisOutputObj[cluster];
-                                    }
-                                }
+                            if (cluster === 'Cluster C') {
+                                clusterC = sampleDisOutputObj[cluster];
                             }
                         }
+                    }
+                }
 
-                        var selectProperties = [];
-                        for (var property in chart2DataMap) {
-                            selectProperties.push({key: property, text: DEFAULT.KEY_TEXT_MAPPING[property].text});
-                        }
+                var selectProperties = [];
+                for (var property in chart2DataMap) {
+                    selectProperties.push({key: property, text: DEFAULT.KEY_TEXT_MAPPING[property].text});
+                }
 
-                        var chartBoxHtml = template('chart_box_content', {
-                            percentage: (data.default2s / clusterC * 100).toFixed(2),
-                            default2c: data.default2c,
-                            default2s: data.default2s,
-                            properties: selectProperties,
-                            clusterC: clusterC
-                        });
-                        var detailBoxHtml = template('detail_box_content');
+                var chartBoxHtml = template('chart_box_content', {
+                    percentage: (data.default2s / clusterC * 100).toFixed(2),
+                    default2c: data.default2c,
+                    default2s: data.default2s,
+                    properties: selectProperties,
+                    clusterC: clusterC
+                });
+                var detailBoxHtml = template('detail_box_content');
 
-                        $('#chartBox').html(chartBoxHtml);
-                        $('#detailBox').html(detailBoxHtml);
-                        
-                        $('#showDetail').click(function () {
-                            $('.collapse').collapse('show');
-                        })
-                        
-                        $('#myCollapsible').click(function () {
-                            $('.collapse').collapse('toggle');
-                        })
-                        
-                        $('.collapse').on('hidden.bs.collapse', function () {
-                            $('#myCollapsible').text('展开表单');
-                        })
+                $('#chartBox').html(chartBoxHtml);
+                $('#detailBox').html(detailBoxHtml);
 
-                        $('.collapse').on('show.bs.collapse', function () {
-                            $('#myCollapsible').text('收起表单');
-                        })
+                $('#showDetail').click(function () {
+                    $('.collapse').collapse('show');
+                })
 
+                $('#myCollapsible').click(function () {
+                    $('.collapse').collapse('toggle');
+                })
 
+                $('.collapse').on('hidden.bs.collapse', function () {
+                    $('#myCollapsible').text('展开表单');
+                })
+
+                $('.collapse').on('show.bs.collapse', function () {
+                    $('#myCollapsible').text('收起表单');
+                })
 
 
-                        $('#propertiesSelect').change(function () {
-                            drawChart2(chart2DataMap[$(this).val()]);
-                        })
+                $('#propertiesSelect').change(function () {
+                    drawChart2(chart2DataMap[$(this).val()]);
+                })
 
-                        drawChart1(chart1Data);
-                        drawChart2(chart2DataMap[$('#propertiesSelect').val()]);
-                        drawChart3(chart3Data, total);
+                drawChart1(chart1Data);
+                drawChart2(chart2DataMap[$('#propertiesSelect').val()]);
+                drawChart3(chart3Data, total);
 
-                        for (var k = 0; k < columns.length; k++) {
-                            var column = columns[k];
-                            bootstrapColumns.push({field: column.field, title: column.title, sortable: true});
-                        }
+                for (var k = 0; k < columns.length; k++) {
+                    var column = columns[k];
+                    bootstrapColumns.push({field: column.field, title: column.title, sortable: true});
+                }
 
-                        buildTable(bootstrapColumns.concat(DEFAULT.DEFAULT_COLUMN), tableData);
+                buildTable(bootstrapColumns.concat(DEFAULT.DEFAULT_COLUMN), tableData);
 
-                        $this.button('reset');
-                    });
-                };
-            $this.button('loading');
-            clickTimer = setTimeout(getSimpleData, 2000);
+                $this.button('reset');
+            });
         });
 
         $clearBtn.click(function () {

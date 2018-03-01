@@ -52,18 +52,18 @@
                                    style="font-size:1.2rem;min-width: 5rem">预测年份</label>
                             <div style="margin-left: 1rem">
                                 <select class="form-control" style="width: 12rem" id="year" name="year">
-                                    <option>2018</option>
-                                    <option selected>2017</option>
+                                    <option value="18">2018</option>
+                                    <option selected value="17">2017</option>
                                 </select>
                             </div>
                             <label style="padding-left: 3rem;font-size:1.2rem;min-width: 5rem" class="col-form-label"
                                    for="season">预测季度</label>
                             <div style="margin-left: 1rem">
                                 <select class="form-control" style="width: 12rem" id="season" name="season">
-                                    <option selected value="Spring">春季</option>
-                                    <option value="Summer">夏季</option>
-                                    <option value="Fall">秋季</option>
-                                    <option value="Winter">冬季</option>
+                                    <option selected value="SP">春季</option>
+                                    <option value="SU">夏季</option>
+                                    <option value="FA">秋季</option>
+                                    <option value="HO">冬季</option>
                                 </select>
                             </div>
                             <label style="padding-left: 3rem;font-size:1.2rem;min-width: 5rem" class="col-form-label"
@@ -78,8 +78,8 @@
                                    for="department">部门选择</label>
                             <div style="margin-left: 1rem">
                                 <select class="form-control" style="width: 12rem" id="department" name="department">
-                                    <option selected>普通</option>
-                                    <option>GoodBaby</option>
+                                    <option selected value="">普通</option>
+                                    <option value="goodbaby">GoodBaby</option>
                                 </select>
                             </div>
                         </div>
