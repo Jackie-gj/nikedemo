@@ -1,0 +1,46 @@
+* {
+    font-family: Helvetica Neue,Roboto,Arial,Droid Sans,sans-serif;
+    font-size: 12px;
+    margin: 0;
+}
+
+body {
+    background-color: rgb(237, 239, 245);
+}
+
+.wrapper {
+    max-width: 1366px;
+    min-width: 86rem;
+    margin: 0 auto;
+}
+
+.wrapper .row {
+    margin: 9px 0px 0px 0px;
+}
+
+.logo-text {
+    color: #fff;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.2px;
+}
+
+#propertiesBox .custom-checkbox{
+    margin-bottom:1.5rem;
+    min-width: 9rem;
+    cursor: pointer;
+}
+
+#propertiesBox .custom-checkbox .custom-control-label,#propertiesBox .custom-checkbox .custom-control-input{
+    cursor: pointer;
+}
+
+.card .card-footer{
+    border-top:1px dashed rgba(0,0,0,.125);
+    background-color: #fff;
+    margin: 0px 1rem 0px 1rem;
+}
+
+
