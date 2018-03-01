@@ -45,17 +45,13 @@
 	                    success: function(data){
 	                    	var wrappedColumns = new Array();
 	                    	var newColumns = new Array();
-	                    	alert("start");
 	                    	for (var i = 0; i < data.columns[0].length; i++) {
-	                    		alert(i);
 	                    		var col = data.columns[0][i];
 	                    		col.styler = function cellStyler(value, row, index){ return 'background-color:#f4f4f470;'; };
-	                    		//col.formatter = function cellFormatter(value){return value[2];};
 	                    		col.align = 'center';
 	                    		col.sortable = true;
 	                    		newColumns.push(col);
 	                    	}
-	                    	alert(newColumns);
 	                    	var clusterCol = new Object();
 	                    	clusterCol.title = "归类";
 	                    	clusterCol.width = 80;
