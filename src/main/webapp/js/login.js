@@ -19,7 +19,7 @@ function login() {
             if (result.resultCode == 200) {
                 setCookie("userName", result.data.currentUser.userName);
                 setCookie("roleName", result.data.currentUser.roleName);
-                window.location.href = "main.jsp";
+                window.location.href = "index.jsp";
             }
         },
         error: function (result) {

@@ -99,11 +99,17 @@ public class ModuleResultController {
 	public String generate(String dsiProperties, String seasonYear, String prodType, String account, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// check params
 		if (null == seasonYear || null == prodType || null == dsiProperties || dsiProperties.isEmpty()) {
+			JSONObject result = new JSONObject();
+			result.put("message", "Please double check the conditions!");
+			ResponseUtil.write(response, result);
 			return null;
 		}
 		log.debug("seasonYear: " + seasonYear); // the season year might be split in the feature
 		log.debug("prodType: " + prodType);
 		log.debug("dsiProperties: " + dsiProperties);
+
+		// start process
+		long start = System.currentTimeMillis();
 		
 		// check if the account is GB or not 
 		final boolean isGB;
@@ -113,8 +119,8 @@ public class ModuleResultController {
 			isGB = STR_ACC_GOODBABY.equalsIgnoreCase(account);
 		}
 		
-		// start process
-		long start = System.currentTimeMillis();
+		// get the previous season of the selected one for the prediction
+		seasonYear = SeasonYear.getByIndex(SeasonYear.valueOf(seasonYear).getIndex() - 1).name();
 		
 		int countByQuart = preparedDataService.getTotalCountByQuart(seasonYear, prodType);
 		// if no data found for the selected season, return
