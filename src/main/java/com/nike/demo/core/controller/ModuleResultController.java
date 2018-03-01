@@ -46,6 +46,7 @@ import com.nike.demo.core.service.processor.CSVWriterProcessor;
 import com.nike.demo.core.service.processor.PreparedDataProcessor;
 import com.nike.demo.core.service.processor.RandomForestProcessor;
 import com.nike.demo.core.util.ResponseUtil;
+import com.nike.demo.core.util.StringUtil;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 
 import net.sf.json.JSONArray;
@@ -91,10 +92,11 @@ public class ModuleResultController {
 	private static final String STR_CSV_EXTENTION = ".csv";
 	private static final String STR_CSV_EXT_PREFIX = "Extract_";
 	private static final String STR_CSV_EXP_PREFIX = "Export_";
+	private static final String STR_ACC_GOODBABY = "goodbaby";
 	
 	@SuppressWarnings("serial")
 	@RequestMapping("/generate")
-	public String generate(String dsiProperties, String seasonYear, String prodType, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String generate(String dsiProperties, String seasonYear, String prodType, String account, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// check params
 		if (null == seasonYear || null == prodType || null == dsiProperties || dsiProperties.isEmpty()) {
 			return null;
@@ -102,6 +104,14 @@ public class ModuleResultController {
 		log.debug("seasonYear: " + seasonYear); // the season year might be split in the feature
 		log.debug("prodType: " + prodType);
 		log.debug("dsiProperties: " + dsiProperties);
+		
+		// check if the account is GB or not 
+		final boolean isGB;
+		if (StringUtil.isEmpty(account)) {
+			isGB = false;
+		} else {
+			isGB = STR_ACC_GOODBABY.equalsIgnoreCase(account);
+		}
 		
 		// start process
 		long start = System.currentTimeMillis();
@@ -220,6 +230,11 @@ public class ModuleResultController {
 		List<ExtractData> filteredList = processedList.stream().collect(ArrayList::new,
 				(list, item) -> list.addAll(item.getPoints()), List::addAll);
 		
+		filteredList = filteredList.stream()
+				.filter(item -> isGB ? STR_ACC_GOODBABY.equalsIgnoreCase(item.getAbbrevOwnerGroupName())
+						: !STR_ACC_GOODBABY.equalsIgnoreCase(item.getAbbrevOwnerGroupName()))
+				.collect(Collectors.toList());
+
 		// second round for clustering
 		KMeansPlusPlusClusterer<ExtractData> kMeansPlusPlusClusterer2 = new KMeansPlusPlusClusterer<ExtractData>(4, 2000,
 				new EuclideanDistance());
@@ -419,11 +434,11 @@ public class ModuleResultController {
 				for (DSIData data : dsiDatas) {
 					String clusterValue = data.getCluster();
 					if (clusterDisMap.containsKey(clusterValue)) {
-						//clusterDisMap.put(clusterValue, clusterDisMap.get(clusterValue) + data.getSampSize());
-						clusterDisMap.put(clusterValue, clusterDisMap.get(clusterValue) + data.getSalesNum());
+						clusterDisMap.put(clusterValue, clusterDisMap.get(clusterValue) + data.getSampSize());
+						//clusterDisMap.put(clusterValue, clusterDisMap.get(clusterValue) + data.getSalesNum());
 					} else {
-						//clusterDisMap.put(clusterValue, data.getSampSize());
-						clusterDisMap.put(clusterValue, data.getSalesNum());
+						clusterDisMap.put(clusterValue, data.getSampSize());
+						//clusterDisMap.put(clusterValue, data.getSalesNum());
 					}
 				}
 				clusterDisList.add(clusterDisMap);
