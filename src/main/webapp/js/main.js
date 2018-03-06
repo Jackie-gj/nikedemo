@@ -4,6 +4,7 @@ $(function () {
             thousandsSep: ','
         }
     });
+    var $year = $('#year'), $season = $('#season'), $prodType = $('#prodType'), $department = $('#department');
 
     var FORMATTER = {
         cluster_formatter: function (value) {
@@ -22,17 +23,17 @@ $(function () {
 
     var DEFAULT = {
         KEY_TEXT_MAPPING: {
-            storeType: {text: '店铺大小', selected: true, importance: 0.0167726246150384},
+            storeType: {text: '店铺大小', selected: true},
             tradeZone: {text: '店铺商圈', selected: true},
             price: {text: '价格高低', selected: true},
-            gndrGroupNm: {text: '性别', selected: true, importance: 0.0249064393149744},
-            ctgyPtfm: {text: '商品类别', selected: true, importance: 0.0416377300381609},
-            colorMain: {text: '颜色', selected: true, importance: 0.0280285175699519},
+            gndrGroupNm: {text: '性别', selected: true},
+            ctgyPtfm: {text: '商品类别', selected: true},
+            colorMain: {text: '颜色', selected: true},
             salesAreaNames: {text: '地区', selected: false},
             storeRecordType: {text: '店铺类型', selected: false},
             storeEnvironmentDescription: {text: '店铺环境', selected: false},
             storeLeadCategory: {text: '店铺概念属性', selected: false},
-            storeCityTierNumber: {text: '店铺城市级别', selected: false, importance: 0.18949699093112},
+            storeCityTierNumber: {text: '店铺城市级别', selected: false},
             subTerritory: {text: '店铺子领域', selected: false},
             clcStatus: {text: 'CLC状态', selected: false}
         },
@@ -43,24 +44,52 @@ $(function () {
             'Cluster D': {text: '不可预测型(D)', color: '#6e6e6e'}
         },
         DEFAULT_COLUMN: [
-            {field: 'cluster', title: '波动归类', sortable: true, formatter: FORMATTER.cluster_formatter},
+            {
+                field: 'cluster',
+                title: '波动归类',
+                sortable: true,
+                formatter: FORMATTER.cluster_formatter
+            },
             {field: 'sd', title: '标准差', sortable: true, formatter: FORMATTER.sd_formatter},
             {field: 'sampSize', title: '样本数', sortable: true}
         ]
     };
 
+    $prodType.change(function () {
+        var type = $prodType.val();
+
+    });
+
+    var propImportancesByprodType = propImportances[$prodType.val()];
+
+    initProperties(propImportancesByprodType);
+
+    function initProperties(propImportancesByprodType) {
+        if (propImportancesByprodType) {
+            for (var m = 0; m < propImportancesByprodType.length; m++) {
+                var propImportancesItem = propImportancesByprodType[m], pType = propImportancesItem.property,
+                    defaultItem = DEFAULT.KEY_TEXT_MAPPING[pType];
+                if (defaultItem) {
+                    defaultItem.importanceStr = ((propImportancesItem.importance === null ? 0 : propImportancesItem.importance) * 100).toFixed(2) + '%';
+                    defaultItem.importance = propImportancesItem.importance === null ? 0 : propImportancesItem.importance;
+                }
+            }
+        }
+    }
+
+
     var $propertiesBox = $('#propertiesBox'),
         htmlStr = template('properties_checkbox', {properties: DEFAULT.KEY_TEXT_MAPPING});
     $propertiesBox.html(htmlStr);
 
-    var $year = $('#year'), $season = $('#season'), $prodType = $('#prodType'), $department = $('#department'),
-        $properties = $('input[name=dsiProperties]'), $selectedInfo = $('#selectedInfo'),
+    var $properties = $('input[name=dsiProperties]'), $selectedInfo = $('#selectedInfo'),
         $clearBtn = $('#clearBtn'), $queryBtn = $('#queryBtn'),
         $selectFilter = $('#selectFilter'),
         $checkedInfo = $('#checkedInfo');
 
 
-    var POST_URL = ctxPath + '/module/generate.do', clickTimer = null;
+    var POST_URL = ctxPath + '/module/generate.do', clickTimer = null,
+        EXPORT_PATH = ctxPath + '/module/export.do';
 
 
     var checked_template = '<button type="button" style="margin-right:1rem;margin-bottom:0.5rem;" class="btn btn-outline-primary btn-sm" data-key="{{key}}">{{text}}<span class="close" style="font-size:1rem;padding-left: 0.5rem;font-weight: normal;line-height: initial">x</span></button>';
@@ -128,9 +157,9 @@ $(function () {
                     },
                     point: {
                         events: {
-                            select: function (e) {
+                            select: function () {
                                 chart.setTitle({
-                                    text: '<b>' + e.target.name + '</br>' + Highcharts.numberFormat(e.target.percentage, 1, '.', ',') + '%</b>'
+                                    text: '<b>' + this.name + '</br>' + Highcharts.numberFormat(this.percentage, 1, '.', ',') + '%</b>'
                                 });
                             }
                         }
@@ -151,6 +180,7 @@ $(function () {
                 x: -legendWidth / 2 - 5
             });
             chart = c;
+            chart.getSelectedPoints()[0].select(true);
         });
     }
 
@@ -272,6 +302,7 @@ $(function () {
             pageSize: 20,
             pageList: [20],
             sortOrder: 'desc',
+            filterControl: true,
             data: data
         });
     }
@@ -298,7 +329,7 @@ $(function () {
 
         $queryBtn.click(function () {
             $('.wrapper').busyLoad("show", {
-                text: "Loading ...",
+                text: "正在拼命计算结果中，请稍后，大概需要3分钟...",
                 textPosition: "top"
             });
             var dsiProperties = [], prodType = $prodType.val(), account = $department.val(),
@@ -329,14 +360,26 @@ $(function () {
                     chart1Data = [],
                     bootstrapColumns = [],
                     chart2DataMap = {},
-                    chart3Data = [], total = 0, clusterC = 0;
+                    chart3Data = [], total = 0, clusterC = 0, checkedTotalPercentage = 0;
 
+                $properties.each(function () {
+                    var $this = $(this);
+                    if ($this.is(':checked')) {
+                        checkedTotalPercentage += $this.data('importance');
+                        chart1Data.push({name: $this.data('label'), y: $this.data('importance')});
+                    }
+                });
+
+                if (checkedTotalPercentage !== 1) {
+                    chart1Data.push({name: '其它', y: 1 - checkedTotalPercentage, selected: true});
+                }
+                /*
                 if (propIncidenceObj) {
                     for (var key in propIncidenceObj) {
                         var text = DEFAULT.KEY_TEXT_MAPPING[key].text, value = propIncidenceObj[key];
                         chart1Data.push({name: text, y: value});
                     }
-                }
+                }*/
 
                 if (propertiesDisObj) {
                     for (var property in propertiesDisObj) {
@@ -405,6 +448,10 @@ $(function () {
                 $('#chartBox').html(chartBoxHtml);
                 $('#detailBox').html(detailBoxHtml);
 
+                $('#exportBtn').click(function () {
+                    window.open(EXPORT_PATH, '_blank');
+                })
+
                 $('#showDetail').click(function () {
                     $('.collapse').collapse('show');
                 })
@@ -432,12 +479,18 @@ $(function () {
 
                 for (var k = 0; k < columns.length; k++) {
                     var column = columns[k];
-                    bootstrapColumns.push({field: column.field, title: column.title, sortable: true});
+                    bootstrapColumns.push({
+                        field: column.field,
+                        title: column.title,
+                        sortable: true,
+                        filterStrictSearch: true,
+                        filterStartsWithSearch: true,
+                        filterControl: "select"
+                    });
                 }
 
                 buildTable(bootstrapColumns.concat(DEFAULT.DEFAULT_COLUMN), tableData);
 
-                $this.button('reset');
             });
         });
 
@@ -458,6 +511,9 @@ $(function () {
 
         $selectFilter.find('select').change(function () {
             var $this = $(this), id = $this.attr('id'), text = $this.find('option:selected').text();
+            if (id === 'prodType') {
+                initProperties($this.val());
+            }
             $selectedInfo.find('.' + id).text(text);
         });
     }

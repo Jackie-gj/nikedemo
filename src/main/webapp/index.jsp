@@ -5,12 +5,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link href="${pageContext.request.contextPath}/bower_components/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/bower_components/bootstrap-table/css/bootstrap-table.css">
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/bower_components/font-awesome/css/font-awesome.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/busy-load/dist/app.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/busy-load.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
     <title>Nike</title>
 </head>
@@ -130,7 +130,7 @@
                     </div>
                     <div class="col col-auto" style="text-align: right">
                         <button type="button" class="btn btn-link" id="myCollapsible">展开表单</button>
-                        <button type="button" class="btn btn-outline-primary">导出</button>
+                        <button type="button" class="btn btn-outline-primary" id="exportBtn">导出</button>
                     </div>
                 </div>
                 <div class="collapse">
@@ -167,9 +167,10 @@
                     <label class="card-title form-check-label"
                            style="letter-spacing: 0.1px;font-weight: bold;font-size: 1.5rem">属性波动范围分布</label>
                     <div class="col" style="text-align: right">
-                        <button type="button" class="btn btn-link" id="showDetail">结果详情<i style="font-size: 1rem;padding-left: 0.5rem"
-                                                                          class="fa fa-angle-right"
-                                                                          aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-link" id="showDetail">结果详情<i
+                                style="font-size: 1rem;padding-left: 0.5rem"
+                                class="fa fa-angle-right"
+                                aria-hidden="true"></i></button>
                     </div>
                 </div>
                 <div id="chart2" style="height:18rem"></div>
@@ -196,9 +197,12 @@
     {{if properties}}
     {{each properties val key}}
     <div class="custom-control custom-checkbox custom-control-inline">
-        <input type="checkbox" class="custom-control-input" id="{{key}}" value="{{key}}" name="dsiProperties"
+        <input type="checkbox" class="custom-control-input" data-importance="{{val.importance}}"
+               data-label="{{val.text}}" id="{{key}}" value="{{key}}" name="dsiProperties"
                {{if val.selected}}checked{{/if}}/>
-        <label class="custom-control-label" for="{{key}}">{{val.text}}</label>
+        <label class="custom-control-label" for="{{key}}">{{val.text}}(
+            <small class="text-muted">{{val.importanceStr}}</small>
+            )</label>
     </div>
     {{/each}}
     {{/if}}
@@ -206,15 +210,16 @@
 
 
 <script type="text/javascript">
-    var ctxPath = '${pageContext.request.contextPath}';
+    var ctxPath = '${pageContext.request.contextPath}', propImportances = JSON.parse('${propImportances}');
 </script>
 <script src="${pageContext.request.contextPath}/bower_components/jquery/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/highcharts.js"></script>
 <script src="${pageContext.request.contextPath}/js/artTemplate.js"></script>
 <script src="${pageContext.request.contextPath}/bower_components/bootstrap/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/busy-load/dist/app.min.js"></script>
+<script src="${pageContext.request.contextPath}/bower_components/bootstrap-table/js/bootstrap-table.min.js"></script>
+<script src="${pageContext.request.contextPath}/bower_components/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/busy-load.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>
