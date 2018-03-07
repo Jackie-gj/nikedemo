@@ -60,9 +60,9 @@
                                    for="season">预测季度</label>
                             <div style="margin-left: 1rem">
                                 <select class="form-control" style="width: 12rem" id="season" name="season">
-                                    <option selected value="SP">春季</option>
+                                    <option value="SP">春季</option>
                                     <option value="SU">夏季</option>
-                                    <option value="FA">秋季</option>
+                                    <option value="FA" selected>秋季</option>
                                     <option value="HO">冬季</option>
                                 </select>
                             </div>
@@ -195,13 +195,13 @@
 
 <script id="properties_checkbox" type="text/html">
     {{if properties}}
-    {{each properties val key}}
+    {{each properties item index}}
     <div class="custom-control custom-checkbox custom-control-inline">
-        <input type="checkbox" class="custom-control-input" data-importance="{{val.importance}}"
-               data-label="{{val.text}}" id="{{key}}" value="{{key}}" name="dsiProperties"
-               {{if val.selected}}checked{{/if}}/>
-        <label class="custom-control-label" for="{{key}}">{{val.text}}(
-            <small class="text-muted">{{val.importanceStr}}</small>
+        <input type="checkbox" class="custom-control-input" data-importance="{{item.importance}}"
+               data-label="{{item.text}}" id="{{item.pType}}" value="{{item.pType}}" name="dsiProperties"
+               {{if item.selected}}checked{{/if}}/>
+        <label class="custom-control-label" for="{{item.pType}}">{{item.text}}(
+            <small class="text-muted">{{item.importanceStr}}</small>
             )</label>
     </div>
     {{/each}}

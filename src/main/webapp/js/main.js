@@ -4,7 +4,22 @@ $(function () {
             thousandsSep: ','
         }
     });
-    var $year = $('#year'), $season = $('#season'), $prodType = $('#prodType'), $department = $('#department');
+    var $year = $('#year'), $season = $('#season'), $prodType = $('#prodType'), $department = $('#department'),
+        $selectedInfo = $('#selectedInfo'),
+        $clearBtn = $('#clearBtn'), $queryBtn = $('#queryBtn'),
+        $selectFilter = $('#selectFilter'),
+        $propertiesBox = $('#propertiesBox'),
+        $chartBox = $('#chartBox'),
+        $detailBox = $('#detailBox'),
+        $checkedInfo = $('#checkedInfo'), $properties = $('input[name=dsiProperties]'),
+        checked_template = '<button type="button" style="margin-right:1rem;margin-bottom:0.5rem;" class="btn btn-outline-primary btn-sm" data-key="{{key}}">{{text}}<span class="close" style="font-size:1rem;padding-left: 0.5rem;font-weight: normal;line-height: initial">x</span></button>';
+
+
+    var POST_URLS = {
+        GENERATE_PATH: ctxPath + '/data/result.json',
+        EXPORT_PATH: ctxPath + '/module/export.do'
+    };
+
 
     var FORMATTER = {
         cluster_formatter: function (value) {
@@ -21,21 +36,234 @@ $(function () {
         }
     };
 
+    var UTILS = {
+        addCheckedInfo: function ($target) {
+            var htmlStr = checked_template.replace('{{key}}', $target.attr('id')).replace("{{text}}", $target.next().text()),
+                $htmlStr = $(htmlStr);
+            $htmlStr.find('.close').one('click', function () {
+                var $this = $(this), $button = $this.parent(), key = $button.data('key');
+                $button.remove();
+                $('#' + key).prop("checked", false);
+            })
+            $checkedInfo.append($htmlStr);
+        },
+        drawChart1: function (data) {
+            var chart = null;
+            $('#chart1').highcharts({
+                chart: {
+                    style: {fontFamily: 'Helvetica Neue,Roboto,Arial,Droid Sans,sans-serif'},
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                colors: ['#3956ca', '#77e8cf', '#0083a9', '#27b9fa', '#fa9218', '#fad318', '#041698', '#00bb94', '#a0569a', '#90ed7d', '#5bc0de', '#00bb94', '#049fd9'],
+                credits: {
+                    enabled: false
+                },
+                legend: {
+                    enabled: true,
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    layout: 'vertical',
+                    itemStyle: {fontWeight: 'nomarl', textTransform: 'capitalize'},
+                    itemMarginTop: 4
+                },
+                title: {
+                    floating: true,
+                    useHTML: true,
+                    style: {fontSize: '1rem', textAlign: 'center'},
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '<b>{point.percentage:.2f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        showInLegend: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false,
+                            format: '{point.percentage:.2f} %',
+                        },
+                        point: {
+                            events: {
+                                select: function () {
+                                    chart.setTitle({
+                                        text: '<b>' + this.name + '</br>' + Highcharts.numberFormat(this.percentage, 2, '.', ',') + '%</b>'
+                                    });
+                                }
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    innerSize: '50%',
+                    data: data
+                }]
+            }, function (c) {
+                var centerY = c.series[0].center[1],
+                    legendWidth = c.legend.legendWidth,
+                    titleHeight = parseInt(c.title.styles.fontSize) * 2;
+                c.setTitle({
+                    y: centerY + titleHeight / 2,
+                    x: -legendWidth / 2 - 5
+                });
+                chart = c;
+                chart.getSelectedPoints()[0].select(true);
+            });
+        },
+        drawChart2: function (series) {
+            $('#chart2').highcharts({
+                chart: {
+                    style: {fontFamily: 'Helvetica Neue,Roboto,Arial,Droid Sans,sans-serif'},
+                    type: 'column'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: '',
+                    float: true
+                },
+                xAxis: {
+                    type: 'category',
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    align: 'center',
+                    verticalAlign: 'top',
+                    itemStyle: {fontWeight: 'nomarl', textTransform: 'capitalize'},
+                    itemMarginTop: 4
+                },
+                tooltip: {
+                    headerFormat: '<b style="font-size:1rem">{point.key}</b><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            allowOverlap: true,
+                            useHTML: true,
+                            style: {fontWeight: 'nomarl', color: '#6c757d'}
+                        }
+                    }
+                },
+                series: series
+            });
+        },
+        drawChart3: function (data, total) {
+            $('#chart3').highcharts({
+                chart: {
+                    style: {fontFamily: 'Helvetica Neue,Roboto,Arial,Droid Sans,sans-serif'},
+                    type: 'bar'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    float: true,
+                    text: ''
+                },
+                xAxis: {
+                    type: 'category',
+                    crosshair: true,
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    enabled: false
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true,
+                            allowOverlap: true,
+                            style: {fontWeight: 'nomarl', color: '#6c757d'},
+                            useHTML: true,
+                            formatter: function () {
+                                return Highcharts.numberFormat(this.y, 0, '.', ',') + '<b style="padding-left: 0.5rem">' + Highcharts.numberFormat(this.y / total * 100, 2, '.', ',') + '%</b>'
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    data: data
+                }]
+            });
+        },
+        buildTable: function (columns, data) {
+            $('#table').bootstrapTable({
+                columns: columns,
+                pagination: true,
+                pageSize: 20,
+                pageList: [20],
+                sortOrder: 'desc',
+                filterControl: true,
+                data: data
+            });
+        },
+        getCheckedProperties: function ($properties) {
+            var checkedProperties = [];
+            $properties.each(function () {
+                var $this = $(this);
+                if ($this.is(':checked')) {
+                    checkedProperties.push($this);
+                }
+            })
+            return $(checkedProperties);
+        },
+        sortDescByImportance: function (a, b) {
+            return b.importance - a.importance;
+        }
+    };
+
     var DEFAULT = {
         KEY_TEXT_MAPPING: {
-            storeType: {text: '店铺大小', selected: true},
-            tradeZone: {text: '店铺商圈', selected: true},
-            price: {text: '价格高低', selected: true},
-            gndrGroupNm: {text: '性别', selected: true},
-            ctgyPtfm: {text: '商品类别', selected: true},
-            colorMain: {text: '颜色', selected: true},
-            salesAreaNames: {text: '地区', selected: false},
-            storeRecordType: {text: '店铺类型', selected: false},
-            storeEnvironmentDescription: {text: '店铺环境', selected: false},
-            storeLeadCategory: {text: '店铺概念属性', selected: false},
-            storeCityTierNumber: {text: '店铺城市级别', selected: false},
-            subTerritory: {text: '店铺子领域', selected: false},
-            clcStatus: {text: 'CLC状态', selected: false}
+            storeType: {text: '店铺大小', selected: true, importance: 0, importanceStr: '0%'},
+            tradeZone: {text: '店铺商圈', selected: true, importance: 0, importanceStr: '0%'},
+            price: {text: '价格高低', selected: true, importance: 0, importanceStr: '0%'},
+            gndrGroupNm: {text: '性别', selected: true, importance: 0, importanceStr: '0%'},
+            ctgyPtfm: {text: '商品类别', selected: true, importance: 0, importanceStr: '0%'},
+            colorMain: {text: '颜色', selected: true, importance: 0, importanceStr: '0%'},
+            salesAreaNames: {text: '地区', selected: false, importance: 0, importanceStr: '0%'},
+            storeRecordType: {text: '店铺类型', selected: false, importance: 0, importanceStr: '0%'},
+            storeEnvironmentDescription: {text: '店铺环境', selected: false, importance: 0, importanceStr: '0%'},
+            storeLeadCategory: {text: '店铺概念属性', selected: false, importance: 0, importanceStr: '0%'},
+            storeCityTierNumber: {text: '店铺城市级别', selected: false, importance: 0, importanceStr: '0%'},
+            subTerritory: {text: '店铺子领域', selected: false, importance: 0, importanceStr: '0%'},
+            clcStatus: {text: 'CLC状态', selected: false, importance: 0, importanceStr: '0%'}
         },
         CLUSTER_TEXT_MAPPING: {
             'Cluster A': {text: '平稳型(A)', color: '#3956ca'},
@@ -55,16 +283,10 @@ $(function () {
         ]
     };
 
-    $prodType.change(function () {
-        var type = $prodType.val();
-
-    });
-
-    var propImportancesByprodType = propImportances[$prodType.val()];
-
-    initProperties(propImportancesByprodType);
-
-    function initProperties(propImportancesByprodType) {
+    Page.prototype.initProperties = function (prodType) {
+        $checkedInfo.html('');
+        var propImportancesByprodType = propImportances[prodType], sortedMappingArry = [];
+        propImportancesByprodType.sort(UTILS.sortDescByImportance);
         if (propImportancesByprodType) {
             for (var m = 0; m < propImportancesByprodType.length; m++) {
                 var propImportancesItem = propImportancesByprodType[m], pType = propImportancesItem.property,
@@ -72,276 +294,189 @@ $(function () {
                 if (defaultItem) {
                     defaultItem.importanceStr = ((propImportancesItem.importance === null ? 0 : propImportancesItem.importance) * 100).toFixed(2) + '%';
                     defaultItem.importance = propImportancesItem.importance === null ? 0 : propImportancesItem.importance;
+                    defaultItem.pType = pType;
+                    sortedMappingArry.push(defaultItem);
                 }
             }
         }
-    }
 
-
-    var $propertiesBox = $('#propertiesBox'),
-        htmlStr = template('properties_checkbox', {properties: DEFAULT.KEY_TEXT_MAPPING});
-    $propertiesBox.html(htmlStr);
-
-    var $properties = $('input[name=dsiProperties]'), $selectedInfo = $('#selectedInfo'),
-        $clearBtn = $('#clearBtn'), $queryBtn = $('#queryBtn'),
-        $selectFilter = $('#selectFilter'),
-        $checkedInfo = $('#checkedInfo');
-
-
-    var POST_URL = ctxPath + '/module/generate.do', clickTimer = null,
-        EXPORT_PATH = ctxPath + '/module/export.do';
-
-
-    var checked_template = '<button type="button" style="margin-right:1rem;margin-bottom:0.5rem;" class="btn btn-outline-primary btn-sm" data-key="{{key}}">{{text}}<span class="close" style="font-size:1rem;padding-left: 0.5rem;font-weight: normal;line-height: initial">x</span></button>';
-
-    function addCheckedInfo($target) {
-        var htmlStr = checked_template.replace('{{key}}', $target.attr('id')).replace("{{text}}", $target.next().text()),
-            $htmlStr = $(htmlStr);
-        $htmlStr.find('.close').one('click', function () {
-            var $this = $(this), $button = $this.parent(), key = $button.data('key');
-            $button.remove();
-            $('#' + key).prop("checked", false);
+        var htmlStr = template('properties_checkbox', {properties: sortedMappingArry});
+        $propertiesBox.html(htmlStr);
+        $properties = $propertiesBox.find('input[name=dsiProperties]');
+        UTILS.getCheckedProperties($properties).each(function () {
+            UTILS.addCheckedInfo($(this));
         })
-        $checkedInfo.append($htmlStr);
-    }
 
-    function addSelectedInfo($target) {
-        var htmlStr = checked_template.replace('{{key}}', $target.attr('id')).replace("{{text}}", $target.next().text()),
-            $htmlStr = $(htmlStr);
-        $htmlStr.find('.close').one('click', function () {
-            var $this = $(this), $button = $this.parent(), key = $button.data('key');
-            $button.remove();
-            $('#' + key).prop("checked", false);
-        })
-        $checkedInfo.append($htmlStr);
-    }
-
-    function drawChart1(data) {
-        var chart = null;
-        $('#chart1').highcharts({
-            chart: {
-                style: {fontFamily: 'Helvetica Neue,Roboto,Arial,Droid Sans,sans-serif'},
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false
-            },
-            colors: ['#3956ca', '#77e8cf', '#0083a9', '#27b9fa', '#fa9218', '#fad318', '#041698', '#00bb94', '#a0569a', '#90ed7d', '#5bc0de', '#00bb94', '#049fd9'],
-            credits: {
-                enabled: false
-            },
-            legend: {
-                enabled: true,
-                align: 'right',
-                verticalAlign: 'middle',
-                layout: 'vertical',
-                itemStyle: {fontWeight: 'nomarl', textTransform: 'capitalize'},
-                itemMarginTop: 4
-            },
-            title: {
-                floating: true,
-                useHTML: true,
-                style: {fontSize: '1rem', textAlign: 'center'},
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '<b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    showInLegend: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false,
-                        format: '{point.percentage:.1f} %',
-                    },
-                    point: {
-                        events: {
-                            select: function () {
-                                chart.setTitle({
-                                    text: '<b>' + this.name + '</br>' + Highcharts.numberFormat(this.percentage, 1, '.', ',') + '%</b>'
-                                });
-                            }
-                        }
-                    }
-                }
-            },
-            series: [{
-                type: 'pie',
-                innerSize: '50%',
-                data: data
-            }]
-        }, function (c) {
-            var centerY = c.series[0].center[1],
-                legendWidth = c.legend.legendWidth,
-                titleHeight = parseInt(c.title.styles.fontSize) * 2;
-            c.setTitle({
-                y: centerY + titleHeight / 2,
-                x: -legendWidth / 2 - 5
-            });
-            chart = c;
-            chart.getSelectedPoints()[0].select(true);
-        });
-    }
-
-    function drawChart2(series) {
-        $('#chart2').highcharts({
-            chart: {
-                style: {fontFamily: 'Helvetica Neue,Roboto,Arial,Droid Sans,sans-serif'},
-                type: 'column'
-            },
-            credits: {
-                enabled: false
-            },
-            title: {
-                text: '',
-                float: true
-            },
-            xAxis: {
-                type: 'category',
-                crosshair: true
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: ''
-                }
-            },
-            legend: {
-                enabled: true,
-                align: 'center',
-                verticalAlign: 'top',
-                itemStyle: {fontWeight: 'nomarl', textTransform: 'capitalize'},
-                itemMarginTop: 4
-            },
-            tooltip: {
-                headerFormat: '<b style="font-size:1rem">{point.key}</b><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    borderWidth: 0,
-                    dataLabels: {
-                        enabled: true,
-                        allowOverlap: true,
-                        useHTML: true,
-                        style: {fontWeight: 'nomarl', color: '#6c757d'}
-                    }
-                }
-            },
-            series: series
-        });
-    }
-
-    function drawChart3(data, total) {
-        $('#chart3').highcharts({
-            chart: {
-                style: {fontFamily: 'Helvetica Neue,Roboto,Arial,Droid Sans,sans-serif'},
-                type: 'bar'
-            },
-            credits: {
-                enabled: false
-            },
-            title: {
-                float: true,
-                text: ''
-            },
-            xAxis: {
-                type: 'category',
-                crosshair: true,
-                title: {
-                    text: null
-                }
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: '',
-                    align: 'high'
-                },
-                labels: {
-                    overflow: 'justify'
-                }
-            },
-            tooltip: {
-                enabled: false
-            },
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        enabled: true,
-                        allowOverlap: true,
-                        style: {fontWeight: 'nomarl', color: '#6c757d'},
-                        useHTML: true,
-                        formatter: function () {
-                            return Highcharts.numberFormat(this.y, 0, '.', ',') + '<b style="padding-left: 0.5rem">' + Highcharts.numberFormat(this.y / total * 100, 2, '.', ',') + '%</b>'
-                        }
-                    }
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            series: [{
-                data: data
-            }]
-        });
-    }
-
-    function buildTable(columns, data) {
-        $('#table').bootstrapTable({
-            columns: columns,
-            pagination: true,
-            pageSize: 20,
-            pageList: [20],
-            sortOrder: 'desc',
-            filterControl: true,
-            data: data
-        });
-    }
-
-
-    function Page() {
-
-    }
-
-
-    Page.prototype.init = function () {
-
-        $properties.each(function () {
+        $properties.change(function () {
             var $this = $(this);
             if ($this.is(':checked')) {
-                addCheckedInfo($this);
+                UTILS.addCheckedInfo($this);
+            } else {
+                $checkedInfo.find('button[data-key=' + $this.attr('id') + ']').remove();
             }
         });
+    }
 
-        $selectFilter.find('select').each(function () {
-            var $this = $(this), id = $this.attr('id'), text = $this.find('option:selected').text();
-            $selectedInfo.find('.' + id).text(text);
-        });
-
+    Page.prototype.initPageEvent = function () {
+        var _this = this;
         $queryBtn.click(function () {
+            _this.destroyPage();
             $('.wrapper').busyLoad("show", {
                 text: "正在拼命计算结果中，请稍后，大概需要3分钟...",
                 textPosition: "top"
             });
             var dsiProperties = [], prodType = $prodType.val(), account = $department.val(),
                 seasonYear = $season.val() + $year.val();
-            $properties.each(function () {
-                var $this = $(this);
-                if ($this.is(':checked')) {
-                    dsiProperties.push($this.val());
-                }
+            UTILS.getCheckedProperties($properties).each(function () {
+                dsiProperties.push($(this).val());
             });
-            $.ajax({
-                url: POST_URL,
+            var dataHandler = function (data) {
+                if (data.message) {
+                    console.log('error message, to do');
+                } else {
+                    $('.wrapper').busyLoad("hide");
+                    var propIncidenceObj = data.propIncidenceMapJson[0],
+                        sampleDisOutputArray = data.sampleDisOutputListJson,
+                        tableData = data.rows,
+                        columns = data.columns[0],
+                        propertiesDisObj = data.propertiesDisMapJson[0],
+                        chart1Data = [],
+                        bootstrapColumns = [],
+                        chart2DataMap = {},
+                        chart3Data = [], total = 0, clusterC = 0, checkedTotalPercentage = 0;
+
+                    $properties.each(function () {
+                        var $this = $(this);
+                        if ($this.is(':checked')) {
+                            checkedTotalPercentage += $this.data('importance');
+                            chart1Data.push({name: $this.data('label'), y: $this.data('importance')});
+                        }
+                    });
+
+                    if (checkedTotalPercentage !== 1) {
+                        chart1Data.push({name: '其它', y: 1 - checkedTotalPercentage, selected: true});
+                    }
+                    /*
+                    if (propIncidenceObj) {
+                        for (var key in propIncidenceObj) {
+                            var text = DEFAULT.KEY_TEXT_MAPPING[key].text, value = propIncidenceObj[key];
+                            chart1Data.push({name: text, y: value});
+                        }
+                    }*/
+
+                    if (propertiesDisObj) {
+                        for (var property in propertiesDisObj) {
+                            var propertiesObj = propertiesDisObj[property], tempMap = {};
+                            chart2DataMap[property] = [];
+                            for (var type in propertiesObj) {
+                                var typeDataObj = propertiesObj[type][0];
+                                for (var cluster in typeDataObj) {
+                                    if (tempMap[cluster] && tempMap[cluster][type]) {
+                                        tempMap[cluster][type] = typeDataObj[cluster];
+                                    } else {
+                                        if (!tempMap[cluster]) {
+                                            tempMap[cluster] = {};
+                                        }
+                                        tempMap[cluster][type] = typeDataObj[cluster];
+                                    }
+                                }
+                            }
+                            for (var key in tempMap) {
+                                var item = tempMap[key], dataArray = [];
+                                for (var s in item) {
+                                    dataArray.push({name: s, y: item[s]});
+                                }
+                                chart2DataMap[property].push({
+                                    name: DEFAULT.CLUSTER_TEXT_MAPPING[key].text,
+                                    data: dataArray,
+                                    color: DEFAULT.CLUSTER_TEXT_MAPPING[key].color
+                                });
+                            }
+                        }
+                    }
+
+
+                    if (sampleDisOutputArray) {
+                        for (var i = 0; i < sampleDisOutputArray.length; i++) {
+                            var sampleDisOutputObj = sampleDisOutputArray[i];
+                            for (var cluster in sampleDisOutputObj) {
+                                total += sampleDisOutputObj[cluster];
+                                chart3Data.push({
+                                    name: DEFAULT.CLUSTER_TEXT_MAPPING[cluster].text,
+                                    y: sampleDisOutputObj[cluster],
+                                    color: DEFAULT.CLUSTER_TEXT_MAPPING[cluster].color
+                                });
+
+                                if (cluster === 'Cluster C') {
+                                    clusterC = sampleDisOutputObj[cluster];
+                                }
+                            }
+                        }
+                    }
+
+                    var selectProperties = [];
+                    for (var property in chart2DataMap) {
+                        selectProperties.push({key: property, text: DEFAULT.KEY_TEXT_MAPPING[property].text});
+                    }
+
+                    var chartBoxHtml = template('chart_box_content', {
+                        percentage: (data.default2s / clusterC * 100).toFixed(2),
+                        default2c: data.default2c,
+                        default2s: data.default2s,
+                        properties: selectProperties,
+                        clusterC: clusterC
+                    });
+                    var detailBoxHtml = template('detail_box_content');
+
+                    $chartBox.html(chartBoxHtml);
+                    $detailBox.html(detailBoxHtml);
+
+                    $('#exportBtn').click(function () {
+                        window.open(EXPORT_PATH, '_blank');
+                    })
+
+                    $('#showDetail').click(function () {
+                        $('.collapse').collapse('show');
+                    })
+
+                    $('#myCollapsible').click(function () {
+                        $('.collapse').collapse('toggle');
+                    })
+
+                    $('.collapse').on('hidden.bs.collapse', function () {
+                        $('#myCollapsible').text('展开表单');
+                    })
+
+                    $('.collapse').on('show.bs.collapse', function () {
+                        $('#myCollapsible').text('收起表单');
+                    })
+
+                    $('#propertiesSelect').change(function () {
+                        UTILS.drawChart2(chart2DataMap[$(this).val()]);
+                    })
+
+                    for (var k = 0; k < columns.length; k++) {
+                        var column = columns[k];
+                        bootstrapColumns.push({
+                            field: column.field,
+                            title: column.title,
+                            sortable: true,
+                            filterStrictSearch: true,
+                            filterStartsWithSearch: true,
+                            filterControl: "select"
+                        });
+                    }
+
+                    UTILS.drawChart1(chart1Data);
+                    UTILS.drawChart2(chart2DataMap[$('#propertiesSelect').val()]);
+                    UTILS.drawChart3(chart3Data, total);
+                    UTILS.buildTable(bootstrapColumns.concat(DEFAULT.DEFAULT_COLUMN), tableData);
+
+                }
+            }
+
+            var generateAjax = $.ajax({
+                url: POST_URLS.GENERATE_PATH,
                 data: {
                     dsiProperties: dsiProperties.join(','),
                     prodType: prodType,
@@ -350,176 +485,51 @@ $(function () {
                 },
                 type: 'post',
                 dataType: 'json'
-            }).done(function (data) {
-                $('.wrapper').busyLoad("hide");
-                var propIncidenceObj = data.propIncidenceMapJson[0],
-                    sampleDisOutputArray = data.sampleDisOutputListJson,
-                    tableData = data.rows,
-                    columns = data.columns[0],
-                    propertiesDisObj = data.propertiesDisMapJson[0],
-                    chart1Data = [],
-                    bootstrapColumns = [],
-                    chart2DataMap = {},
-                    chart3Data = [], total = 0, clusterC = 0, checkedTotalPercentage = 0;
+            });
 
-                $properties.each(function () {
-                    var $this = $(this);
-                    if ($this.is(':checked')) {
-                        checkedTotalPercentage += $this.data('importance');
-                        chart1Data.push({name: $this.data('label'), y: $this.data('importance')});
-                    }
-                });
-
-                if (checkedTotalPercentage !== 1) {
-                    chart1Data.push({name: '其它', y: 1 - checkedTotalPercentage, selected: true});
-                }
-                /*
-                if (propIncidenceObj) {
-                    for (var key in propIncidenceObj) {
-                        var text = DEFAULT.KEY_TEXT_MAPPING[key].text, value = propIncidenceObj[key];
-                        chart1Data.push({name: text, y: value});
-                    }
-                }*/
-
-                if (propertiesDisObj) {
-                    for (var property in propertiesDisObj) {
-                        var propertiesObj = propertiesDisObj[property], tempMap = {};
-                        chart2DataMap[property] = [];
-                        for (var type in propertiesObj) {
-                            var typeDataObj = propertiesObj[type][0];
-                            for (var cluster in typeDataObj) {
-                                if (tempMap[cluster] && tempMap[cluster][type]) {
-                                    tempMap[cluster][type] = typeDataObj[cluster];
-                                } else {
-                                    if (!tempMap[cluster]) {
-                                        tempMap[cluster] = {};
-                                    }
-                                    tempMap[cluster][type] = typeDataObj[cluster];
-                                }
-                            }
-                        }
-                        for (var key in tempMap) {
-                            var item = tempMap[key], dataArray = [];
-                            for (var s in item) {
-                                dataArray.push({name: s, y: item[s]});
-                            }
-                            chart2DataMap[property].push({
-                                name: DEFAULT.CLUSTER_TEXT_MAPPING[key].text,
-                                data: dataArray,
-                                color: DEFAULT.CLUSTER_TEXT_MAPPING[key].color
-                            });
-                        }
-                    }
-                }
-
-
-                if (sampleDisOutputArray) {
-                    for (var i = 0; i < sampleDisOutputArray.length; i++) {
-                        var sampleDisOutputObj = sampleDisOutputArray[i];
-                        for (var cluster in sampleDisOutputObj) {
-                            total += sampleDisOutputObj[cluster];
-                            chart3Data.push({
-                                name: DEFAULT.CLUSTER_TEXT_MAPPING[cluster].text,
-                                y: sampleDisOutputObj[cluster],
-                                color: DEFAULT.CLUSTER_TEXT_MAPPING[cluster].color
-                            });
-
-                            if (cluster === 'Cluster C') {
-                                clusterC = sampleDisOutputObj[cluster];
-                            }
-                        }
-                    }
-                }
-
-                var selectProperties = [];
-                for (var property in chart2DataMap) {
-                    selectProperties.push({key: property, text: DEFAULT.KEY_TEXT_MAPPING[property].text});
-                }
-
-                var chartBoxHtml = template('chart_box_content', {
-                    percentage: (data.default2s / clusterC * 100).toFixed(2),
-                    default2c: data.default2c,
-                    default2s: data.default2s,
-                    properties: selectProperties,
-                    clusterC: clusterC
-                });
-                var detailBoxHtml = template('detail_box_content');
-
-                $('#chartBox').html(chartBoxHtml);
-                $('#detailBox').html(detailBoxHtml);
-
-                $('#exportBtn').click(function () {
-                    window.open(EXPORT_PATH, '_blank');
-                })
-
-                $('#showDetail').click(function () {
-                    $('.collapse').collapse('show');
-                })
-
-                $('#myCollapsible').click(function () {
-                    $('.collapse').collapse('toggle');
-                })
-
-                $('.collapse').on('hidden.bs.collapse', function () {
-                    $('#myCollapsible').text('展开表单');
-                })
-
-                $('.collapse').on('show.bs.collapse', function () {
-                    $('#myCollapsible').text('收起表单');
-                })
-
-
-                $('#propertiesSelect').change(function () {
-                    drawChart2(chart2DataMap[$(this).val()]);
-                })
-
-                drawChart1(chart1Data);
-                drawChart2(chart2DataMap[$('#propertiesSelect').val()]);
-                drawChart3(chart3Data, total);
-
-                for (var k = 0; k < columns.length; k++) {
-                    var column = columns[k];
-                    bootstrapColumns.push({
-                        field: column.field,
-                        title: column.title,
-                        sortable: true,
-                        filterStrictSearch: true,
-                        filterStartsWithSearch: true,
-                        filterControl: "select"
-                    });
-                }
-
-                buildTable(bootstrapColumns.concat(DEFAULT.DEFAULT_COLUMN), tableData);
-
+            generateAjax.done(function (data) {
+                dataHandler(data);
             });
         });
 
         $clearBtn.click(function () {
-            $checkedInfo.find('button').each(function () {
-                $(this).find('.close').trigger('click');
-            })
-        });
-
-        $properties.change(function () {
-            var $this = $(this);
-            if ($this.is(':checked')) {
-                addCheckedInfo($this);
-            } else {
-                $checkedInfo.find('button[data-key=' + $this.attr('id') + ']').remove();
-            }
+            _this.destroyPage();
+            _this.initProperties($prodType.val());
         });
 
         $selectFilter.find('select').change(function () {
             var $this = $(this), id = $this.attr('id'), text = $this.find('option:selected').text();
             if (id === 'prodType') {
-                initProperties($this.val());
+                _this.initProperties($this.val());
             }
             $selectedInfo.find('.' + id).text(text);
         });
+
+
+    }
+
+
+    function Page() {
+    }
+
+
+    Page.prototype.destroyPage = function () {
+        $chartBox.html('');
+        $detailBox.html('');
+    }
+
+    Page.prototype.initPage = function () {
+        this.initProperties($prodType.val());
+        this.initPageEvent();
+        $selectFilter.find('select').each(function () {
+            var $this = $(this), id = $this.attr('id'), text = $this.find('option:selected').text();
+            $selectedInfo.find('.' + id).text(text);
+        });
+
     }
 
 
     var page = new Page();
-    page.init();
+    page.initPage();
 
 });

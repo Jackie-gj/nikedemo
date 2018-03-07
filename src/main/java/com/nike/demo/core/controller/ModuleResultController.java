@@ -402,16 +402,17 @@ public class ModuleResultController {
 
         // start construct output json
         // 1. properties incidence
+        Map<String, Double> propIncidenceMap = new HashMap<String, Double>();
+        /*
         ExecutorService rfThreadPool = Executors.newCachedThreadPool();
         RandomForestProcessor randomForestProcessor = new RandomForestProcessor(propsArray, extractDataFullPath);
         Future<double[]> importanceFeature = rfThreadPool.submit(randomForestProcessor);
         double[] importances = importanceFeature.get();
-        Map<String, Double> propIncidenceMap = new HashMap<String, Double>();
         for (int i = 0; i < propsArray.length; i++) {
             propIncidenceMap.put(propsArray[i], importances[i]);
         }
         rfThreadPool.shutdown();
-        System.out.println((System.currentTimeMillis() - start) / 1000 + "s, random forest calc finished");
+        System.out.println((System.currentTimeMillis() - start) / 1000 + "s, random forest calc finished");*/
         // 2.sample distribution
         List<Map<String, Integer>> sampleDisOutputList = outputList.stream()
                 .collect(Collectors.groupingBy(DSIData::getCluster)).entrySet().stream().map(item -> {
